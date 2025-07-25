@@ -15,4 +15,3 @@ class Service1Activity : AppCompatActivity() {
         setContentView(binding.root)
     }
 }
-//good!!!
