@@ -13,6 +13,9 @@ class OnboardingPagerAdapter (fragmentActivity: FragmentActivity) : FragmentStat
     }
 
     override fun createFragment(position: Int): Fragment {
-        return OnboardingPageFragment.newInstance(position)
+        return when (position) {
+            pageCount - 1 -> OnboardingLastPageFragment.newInstance()
+            else ->OnboardingPageFragment.newInstance(position)
+        }
     }
 }

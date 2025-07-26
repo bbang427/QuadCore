@@ -29,7 +29,27 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintVertical_bias="0.75"/>
+        app:layout_constraintVertical_bias="0.78"/>
 
 
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_google_login"
+        android:layout_width="320dp"
+        android:layout_height="50dp"
+        android:background="@drawable/google_signin_button"
+        android:drawableStart="@drawable/ic_google_logo_resized"
+        android:gravity="center_vertical"
+        android:paddingStart="32dp"
+        android:drawablePadding="45dp"
+        android:text="Google로 시작하기"
+        android:fontFamily="@font/pretendard_gov_medium"
+        android:letterSpacing="-0.03"
+        android:textSize="20sp"
+        android:textColor="#010101"
+        android:textAllCaps="false"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintVertical_bias="0.85" />
 </androidx.constraintlayout.widget.ConstraintLayout>

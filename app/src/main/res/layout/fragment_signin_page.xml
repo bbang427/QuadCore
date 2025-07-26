@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+
+    android:id="@+id/signInPage"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FEFEFE"
+    android:padding="20dp"
+    tools:context=".sign_inPage" >
+
+    <ImageView
+        android:id="@+id/iv_3dIcon"
+        android:src="@drawable/ic_rocket"
+        android:layout_width="224dp"
+        android:layout_height="224dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintVertical_bias="0.3"/>
+    <!-- layout_constraintStart_toStartOf : 왼쪽을 부모 레이아웃의 왼쪽과 연결
+         layout_constraintEnd_toEndOf : 오른쪽을 부모 레이아웃의 오른쪽과 연결
+         layout_constraintTop_toTopOf : 위쪽을 부모 레이아웃의 위쪽과 연결
+         layout_constraintBottom_toBottomOf : 아래쪽을 부모 레이아웃의 아래쪽과 연결
+         layout_constraintVertical_bias : 세로 위치의 비율 설정 -->
+
+    <TextView
+        android:id="@+id/tv_mainT"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/pretendard_gov_bold"
+        android:text="이제 시작해 볼까요?"
+        android:textSize="32sp"
+        android:textColor="#010101"
+        android:letterSpacing="-0.03"
+        android:layout_marginTop="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintVertical_bias="0.55" />
+
+    <TextView
+        android:id="@+id/tv_subT"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="계속하게 되면, 개인정보 처리방침 및\n이용약관에 동의하게 돼요."
+        android:fontFamily="@font/pretendard_gov_medium"
+        android:textSize="14sp"
+        android:textColor="#666666"
+        android:letterSpacing="-0.03"
+        android:lineSpacingExtra="3sp"
+        android:layout_marginTop="13dp"
+        android:gravity="center"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintVertical_bias="0.63" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
