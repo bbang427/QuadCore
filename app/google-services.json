@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "587604470952",
+    "project_id": "mhkt-a6cfc",
+    "storage_bucket": "mhkt-a6cfc.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:587604470952:android:eaee0f62da29ca77f3269d",
+        "android_client_info": {
+          "package_name": "com.example.mokathon"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "587604470952-o0i6ln6buc2c57n2i8d7lda399gk5lkj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDYCJKcmplsv0N6k_D6wyGYPsveZki4WQQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "587604470952-o0i6ln6buc2c57n2i8d7lda399gk5lkj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
