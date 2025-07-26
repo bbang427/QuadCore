@@ -17,21 +17,23 @@ class OnboardingActivity : AppCompatActivity() {
         val tabLayout: TabLayout = findViewById(R.id.tab_layout)
 
         // 어댑터 연결
-        viewPager.adapter = OnBoardingPagerAdapter(this)
+        viewPager.adapter = OnboardingPagerAdapter(this)
 
         // ViewPager2 <-> TabLayout 연결
         TabLayoutMediator(tabLayout, viewPager) { _, _ -> }.attach()
 
+        /*
         // 🔥 핵심! tabView의 사이즈를 강제로 정사각형으로 설정해서 원형 drawable이 눌리지 않게 함
         tabLayout.post {
             for (i in 0 until tabLayout.tabCount) {
                 val tabView = (tabLayout.getChildAt(0) as ViewGroup).getChildAt(i)
                 val params = tabView.layoutParams as ViewGroup.MarginLayoutParams
-                params.width = dpToPx(16)   // 원하는 원 사이즈
-                params.height = dpToPx(16)
+                params.width = dpToPx(8)   // 원하는 원 사이즈
+                params.height = dpToPx(8)
                 tabView.layoutParams = params
             }
         }
+        */
     }
 
     // dp -> px 변환 함수

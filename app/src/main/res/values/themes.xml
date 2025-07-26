@@ -5,5 +5,12 @@
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
     </style>
 
+    <style name="CustomTabIndicator" parent="Widget.Design.TabLayout">
+        <item name="tabIndicatorHeight">0dp</item>
+        <item name="tabPaddingStart">7dp</item>
+        <item name="tabPaddingEnd">7dp</item>
+        <item name="tabBackground">@drawable/tab_indicator_selector</item>
+    </style>
+
     <style name="Theme.Mokathon" parent="Base.Theme.Mokathon" />
 </resources>
