@@ -14,7 +14,39 @@
       },
       "oauth_client": [
         {
-          "client_id": "587604470952-o0i6ln6buc2c57n2i8d7lda399gk5lkj.apps.googleusercontent.com",
+          "client_id": "587604470952-45l1evuukiecbhk52ltfg5hp9knmpao6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.mokathon",
+            "certificate_hash": "7897313ec77ee57778cfc2b2360a4300e51340c4"
+          }
+        },
+        {
+          "client_id": "587604470952-7vgb90o0fl84oeeg685kk6k78gtfjps5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.mokathon",
+            "certificate_hash": "4b627b3dc35aa682368a27d4e4f1199aed232b59"
+          }
+        },
+        {
+          "client_id": "587604470952-oe9l16fbviastfdkambf6q1vg5fa1qqn.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.mokathon",
+            "certificate_hash": "cc7cbe12e8976cc701755575ea876a408bdaad9d"
+          }
+        },
+        {
+          "client_id": "587604470952-p1rfil51e34sel8qpia7tfvaokttnbg6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.mokathon",
+            "certificate_hash": "714595f98cd68014e00464ba2e0fb5bf72cbf485"
+          }
+        },
+        {
+          "client_id": "587604470952-5nf3d82t09nbqg68tqmtic6j1c14ro69.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
@@ -27,7 +59,7 @@
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "587604470952-o0i6ln6buc2c57n2i8d7lda399gk5lkj.apps.googleusercontent.com",
+              "client_id": "587604470952-5nf3d82t09nbqg68tqmtic6j1c14ro69.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
