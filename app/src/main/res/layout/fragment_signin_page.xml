@@ -10,7 +10,7 @@
     android:layout_height="match_parent"
     android:background="#FEFEFE"
     android:padding="20dp"
-    tools:context=".sign_inPage" >
+    tools:context=".SignInActivity" >
 
     <ImageView
         android:id="@+id/iv_3dIcon"

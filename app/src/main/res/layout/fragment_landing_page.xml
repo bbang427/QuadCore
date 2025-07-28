@@ -5,12 +5,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
 
-    android:id="@+id/signInPage"
+    android:id="@+id/landingPage"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FEFEFE"
     android:padding="20dp"
-    tools:context=".sign_inPage" >
+    tools:context=".SignInActivity" >
 
     <ImageView
         android:id="@+id/iv_3dIcon"
