@@ -1,10 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
+
+    android:id="@+id/home"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".home">
+    android:background="#FEFEFE"
+    android:fitsSystemWindows="true"
+    tools:context=".HomeActivity">
+
+    <TextView
+        android:id="@+id/tv_greeting"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="안녕하세요, 님"
+        android:fontFamily="@font/pretendard_gov_semibold"
+        android:textSize="20sp"
+        android:textColor="#010101"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="9dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/iv_helloIcon"
+        android:src="@drawable/ic_hello"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:layout_marginTop="7dp"
+        android:layout_marginStart="4dp"
+        app:layout_constraintStart_toEndOf="@id/tv_greeting"
+        app:layout_constraintTop_toTopOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

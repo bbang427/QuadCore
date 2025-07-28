@@ -5,7 +5,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 
 
-class OnBoardingPagerAdapter (fragmentActivity: FragmentActivity) : FragmentStateAdapter(fragmentActivity) {
+class OnboardingPagerAdapter (fragmentActivity: FragmentActivity) : FragmentStateAdapter(fragmentActivity) {
     private val pageCount = 6
 
     override fun getItemCount(): Int {
@@ -13,6 +13,9 @@ class OnBoardingPagerAdapter (fragmentActivity: FragmentActivity) : FragmentStat
     }
 
     override fun createFragment(position: Int): Fragment {
-        return OnboardingPageFragment.newInstance(position)
+        return when (position) {
+            pageCount - 1 -> OnboardingLastPageFragment.newInstance()
+            else ->OnboardingPageFragment.newInstance(position)
+        }
     }
 }

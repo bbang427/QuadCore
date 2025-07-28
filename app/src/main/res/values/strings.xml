@@ -1,5 +1,8 @@
 <resources>
     <string name="app_name">Mokathon</string>
 
-
+    <!--
+    <string name="default_web_client_id">
+        587604470952-5nf3d82t09nbqg68tqmtic6j1c14ro69.apps.googleusercontent.com </string>
+        -->
 </resources>
