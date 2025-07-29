@@ -38,6 +38,8 @@ class HomeActivity : AppCompatActivity() {
         val name = user?.displayName ?: user?.email?.substringBefore("@") ?: "사용자"
 
         tvGreeting.text = "안녕하세요, $name 님"
+
+        // Fragment change
     }
 }
 //안녕하세요 반가워요 잘있어요 다시만나요.

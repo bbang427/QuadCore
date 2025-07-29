@@ -9,7 +9,7 @@
         <item name="tabIndicatorHeight">0dp</item>
         <item name="tabPaddingStart">7dp</item>
         <item name="tabPaddingEnd">7dp</item>
-        <item name="tabBackground">@drawable/tab_indicator_selector</item>
+        <item name="tabBackground">@drawable/selector_tab_indicator</item>
     </style>
 
     <style name="Theme.Mokathon" parent="Base.Theme.Mokathon" />

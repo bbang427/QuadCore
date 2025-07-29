@@ -22,7 +22,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@android:color/transparent"
-        app:tabBackground="@drawable/tab_indicator_selector"
+        app:tabBackground="@drawable/selector_tab_indicator"
         app:tabGravity="center"
         app:tabIndicatorHeight="0dp"
         app:tabRippleColor="@null"
