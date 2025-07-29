@@ -12,17 +12,5 @@
         <item name="tabBackground">@drawable/selector_tab_indicator</item>
     </style>
 
-    <!-- 선택된 탭 라벨용 텍스트 스타일 -->
-    <style name="TextAppearance.BottomNav.Active" parent="TextAppearance.MaterialComponents.Caption">
-        <item name="fontFamily">@font/pretendard_gov_medium</item>
-        <item name="android:textSize">12sp</item>
-    </style>
-
-    <!-- 미선택된 탭 라벨용 텍스트 스타일 -->
-    <style name="TextAppearance.BottomNav.Inactive" parent="TextAppearance.MaterialComponents.Caption">
-        <item name="fontFamily">@font/pretendard_gov_medium</item>
-        <item name="android:textSize">12sp</item>
-    </style>
-
     <style name="Theme.Mokathon" parent="Base.Theme.Mokathon" />
 </resources>

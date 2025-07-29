@@ -21,7 +21,7 @@
         android:textSize="20sp"
         android:textColor="#010101"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="9dp"
+        android:layout_marginTop="12dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -30,7 +30,7 @@
         android:src="@drawable/ic_hello"
         android:layout_width="28dp"
         android:layout_height="28dp"
-        android:layout_marginTop="7dp"
+        android:layout_marginTop="10dp"
         android:layout_marginStart="4dp"
         app:layout_constraintStart_toEndOf="@id/tv_greeting"
         app:layout_constraintTop_toTopOf="parent"/>
@@ -40,11 +40,9 @@
         android:layout_width="0dp"
         android:layout_height="65dp"
         android:background="@drawable/bg_bottom_nav"
-        app:itemTextAppearanceActive="@style/TextAppearance.BottomNav.Active"
-        app:itemTextAppearanceInactive="@style/TextAppearance.BottomNav.Inactive"
-        app:itemActiveIndicatorStyle="@null"
         app:itemIconTint="@color/selector_bottom_nav"
         app:itemTextColor="@color/selector_bottom_nav"
+        app:itemActiveIndicatorStyle="@null"
         app:menu="@menu/bottom_nav_menu"
         app:labelVisibilityMode="labeled"
         app:layout_constraintStart_toStartOf="parent"
