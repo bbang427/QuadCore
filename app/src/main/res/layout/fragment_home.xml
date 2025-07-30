@@ -5,24 +5,32 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
 
-    android:id="@+id/chatbot"
+    android:id="@+id/home_fragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FEFEFE"
     android:fitsSystemWindows="true"
-    tools:context=".ChatbotFragment">
+    tools:context=".HomeFragment">
 
     <TextView
         android:id="@+id/tv_greeting"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="챗봇"
+        android:text="안녕하세요, 님"
         android:fontFamily="@font/pretendard_gov_semibold"
         android:textSize="20sp"
         android:textColor="#010101"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="12dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <ImageView
+        android:id="@+id/iv_helloIcon"
+        android:src="@drawable/ic_hello"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:layout_marginStart="4dp"
+        app:layout_constraintStart_toEndOf="@id/tv_greeting"
+        app:layout_constraintTop_toTopOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

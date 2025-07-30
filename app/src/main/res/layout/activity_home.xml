@@ -5,48 +5,28 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
 
-    android:id="@+id/home"
+    android:id="@+id/homeactivity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FEFEFE"
     android:fitsSystemWindows="true"
     tools:context=".HomeActivity">
 
-    <TextView
-        android:id="@+id/tv_greeting"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="안녕하세요, 님"
-        android:fontFamily="@font/pretendard_gov_semibold"
-        android:textSize="20sp"
-        android:textColor="#010101"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="12dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/iv_helloIcon"
-        android:src="@drawable/ic_hello"
-        android:layout_width="28dp"
-        android:layout_height="28dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginStart="4dp"
-        app:layout_constraintStart_toEndOf="@id/tv_greeting"
-        app:layout_constraintTop_toTopOf="parent"/>
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/content_container"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/bottom_nav" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_nav"
-        android:layout_width="0dp"
-        android:layout_height="65dp"
-        android:background="@drawable/bg_bottom_nav"
-        app:itemIconTint="@color/selector_bottom_nav"
-        app:itemTextColor="@color/selector_bottom_nav"
-        app:itemActiveIndicatorStyle="@null"
-        app:menu="@menu/bottom_nav_menu"
-        app:labelVisibilityMode="labeled"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:menu="@menu/bottom_nav_menu"
+        style="@style/CustomNavigationView" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
