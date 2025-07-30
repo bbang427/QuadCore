@@ -9,7 +9,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FEFEFE"
-    android:fitsSystemWindows="true"
     tools:context=".HomeFragment">
 
     <TextView
@@ -21,6 +20,7 @@
         android:textSize="20sp"
         android:textColor="#010101"
         android:layout_marginStart="24dp"
+        android:layout_marginTop="12dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
 
@@ -30,6 +30,7 @@
         android:layout_width="28dp"
         android:layout_height="28dp"
         android:layout_marginStart="4dp"
+        android:layout_marginTop="10dp"
         app:layout_constraintStart_toEndOf="@id/tv_greeting"
         app:layout_constraintTop_toTopOf="parent"/>
 

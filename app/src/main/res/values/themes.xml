@@ -13,7 +13,7 @@
     </style>
 
     <style name="CustomNavigationView" parent="Widget.Material3.BottomNavigationView">
-        <item name="itemIconSize">24dp</item>
+        <item name="itemIconSize">30dp</item>
         <item name="itemIconTint">@color/selector_bottom_nav</item>
         <item name="itemTextColor">@color/selector_bottom_nav</item>
         <item name="android:background">@drawable/bg_bottom_nav</item>

@@ -34,7 +34,7 @@
         android:fontFamily="@font/pretendard_gov_bold"
         android:textSize="32sp"
         android:textColor="#010101"
-        android:letterSpacing="-0.03"
+        android:letterSpacing="-0.02"
         android:layout_marginTop="20dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

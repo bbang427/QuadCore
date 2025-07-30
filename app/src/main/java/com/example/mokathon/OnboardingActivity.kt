@@ -336,7 +336,6 @@ class OnboardingActivity : AppCompatActivity() {
                 super.onPageSelected(position)
                 if (position == viewPager.adapter!!.itemCount - 1) {
                     googleLoginButton.visibility = View.VISIBLE
-                    tabLayout.visibility = View.GONE
                 } else {
                     googleLoginButton.visibility = View.GONE
                     tabLayout.visibility = View.VISIBLE
