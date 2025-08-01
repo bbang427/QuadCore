@@ -50,6 +50,11 @@
         android:layout_height="95dp"
         android:layout_marginTop="21dp"
         android:background="@drawable/bg_menu_topcorner"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackground"
+        android:clipToOutline="true"
+        android:elevation="1dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/iv_temp">
@@ -62,6 +67,7 @@
             android:layout_marginStart="18dp"
             android:src="@drawable/ic_menu_recorder"
             android:scaleType="centerInside"
+            android:elevation="0dp"
             app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.RoundedSquare"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -73,9 +79,9 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:text="통화 녹음 업로드"
-            android:textSize="20sp"
+            android:textSize="18sp"
             android:textColor="#010101"
-            android:fontFamily="@font/pretendard_gov_semibold"
+            android:fontFamily="@font/pretendard_gov_medium"
             app:layout_constraintEnd_toStartOf="@+id/iv_arrow_first"
             app:layout_constraintStart_toEndOf="@+id/iv_menu_icon_first"
             app:layout_constraintTop_toTopOf="parent"
@@ -83,8 +89,8 @@
 
         <ImageView
             android:id="@+id/iv_arrow_first"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
             android:src="@drawable/ic_chevron_right"
             android:layout_marginEnd="20dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -93,12 +99,28 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+
+    <com.google.android.material.divider.MaterialDivider
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:elevation="2dp"
+        app:dividerInsetStart="30dp"
+        app:dividerInsetEnd="30dp"
+        app:dividerColor="#D9D9D9"
+        app:layout_constraintTop_toBottomOf="@id/cl_menu_first"
+        app:layout_constraintStart_toStartOf="@id/cl_menu_first"
+        app:layout_constraintEnd_toEndOf="@id/cl_menu_first" />
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_menu_second"
         android:layout_width="320dp"
         android:layout_height="95dp"
         android:layout_marginTop="0dp"
         android:background="#FAF6F5"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackground"
+        android:elevation="1dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/cl_menu_first">
@@ -111,6 +133,7 @@
             android:layout_marginStart="18dp"
             android:src="@drawable/ic_menu_magnifier"
             android:scaleType="centerInside"
+            android:elevation="0dp"
             app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.RoundedSquare"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -122,9 +145,9 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:text="계좌번호 조회"
-            android:textSize="20sp"
+            android:textSize="18sp"
             android:textColor="#010101"
-            android:fontFamily="@font/pretendard_gov_semibold"
+            android:fontFamily="@font/pretendard_gov_medium"
             app:layout_constraintEnd_toStartOf="@+id/iv_arrow_second"
             app:layout_constraintStart_toEndOf="@+id/iv_menu_icon_second"
             app:layout_constraintTop_toTopOf="parent"
@@ -132,8 +155,8 @@
 
         <ImageView
             android:id="@+id/iv_arrow_second"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
             android:src="@drawable/ic_chevron_right"
             android:layout_marginEnd="20dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -142,12 +165,27 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <com.google.android.material.divider.MaterialDivider
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:elevation="2dp"
+        app:dividerInsetStart="30dp"
+        app:dividerInsetEnd="30dp"
+        app:dividerColor="#D9D9D9"
+        app:layout_constraintTop_toBottomOf="@id/cl_menu_second"
+        app:layout_constraintStart_toStartOf="@id/cl_menu_second"
+        app:layout_constraintEnd_toEndOf="@id/cl_menu_second" />
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_menu_third"
         android:layout_width="320dp"
         android:layout_height="95dp"
         android:layout_marginTop="0dp"
         android:background="#FAF6F5"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackground"
+        android:elevation="1dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/cl_menu_second">
@@ -160,6 +198,7 @@
             android:layout_marginStart="18dp"
             android:src="@drawable/ic_menu_phone"
             android:scaleType="centerInside"
+            android:elevation="0dp"
             app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.RoundedSquare"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -171,9 +210,9 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:text="전화번호 조회"
-            android:textSize="20sp"
+            android:textSize="18sp"
             android:textColor="#010101"
-            android:fontFamily="@font/pretendard_gov_semibold"
+            android:fontFamily="@font/pretendard_gov_medium"
             app:layout_constraintEnd_toStartOf="@+id/iv_arrow_third"
             app:layout_constraintStart_toEndOf="@+id/iv_menu_icon_third"
             app:layout_constraintTop_toTopOf="parent"
@@ -181,8 +220,8 @@
 
         <ImageView
             android:id="@+id/iv_arrow_third"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
             android:src="@drawable/ic_chevron_right"
             android:layout_marginEnd="20dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -191,12 +230,28 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <com.google.android.material.divider.MaterialDivider
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:elevation="2dp"
+        app:dividerInsetStart="30dp"
+        app:dividerInsetEnd="30dp"
+        app:dividerColor="#D9D9D9"
+        app:layout_constraintTop_toBottomOf="@id/cl_menu_third"
+        app:layout_constraintStart_toStartOf="@id/cl_menu_third"
+        app:layout_constraintEnd_toEndOf="@id/cl_menu_third" />
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_menu_fourth"
         android:layout_width="320dp"
         android:layout_height="95dp"
         android:layout_marginTop="0dp"
         android:background="@drawable/bg_menu_bottomcorner"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackground"
+        android:clipToOutline="true"
+        android:elevation="1dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/cl_menu_third">
@@ -209,6 +264,7 @@
             android:layout_marginStart="18dp"
             android:src="@drawable/ic_menu_megaphone"
             android:scaleType="centerInside"
+            android:elevation="0dp"
             app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.RoundedSquare"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -220,9 +276,9 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:text="의심 번호 제보"
-            android:textSize="20sp"
+            android:textSize="18sp"
             android:textColor="#010101"
-            android:fontFamily="@font/pretendard_gov_semibold"
+            android:fontFamily="@font/pretendard_gov_medium"
             app:layout_constraintEnd_toStartOf="@+id/iv_arrow_fourth"
             app:layout_constraintStart_toEndOf="@+id/iv_menu_icon_fourth"
             app:layout_constraintTop_toTopOf="parent"
@@ -230,8 +286,8 @@
 
         <ImageView
             android:id="@+id/iv_arrow_fourth"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
             android:src="@drawable/ic_chevron_right"
             android:layout_marginEnd="20dp"
             app:layout_constraintEnd_toEndOf="parent"
