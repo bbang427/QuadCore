@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+
+    android:id="@+id/home_fragment"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F0F0F0"
+    tools:context=".HomeFragment">
+
+    <TextView
+        android:id="@+id/tv_greeting"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="안녕하세요, 님"
+        android:fontFamily="@font/pretendard_gov_semibold"
+        android:textSize="20sp"
+        android:textColor="#010101"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="12dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <ImageView
+        android:id="@+id/iv_helloIcon"
+        android:src="@drawable/ic_hello"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintStart_toEndOf="@id/tv_greeting"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <ImageView
+        android:id="@+id/iv_temp"
+        android:src="@drawable/temp"
+        android:layout_width="300dp"
+        android:layout_height="190dp"
+        android:layout_marginTop="46dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tv_greeting" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_menu_first"
+        android:layout_width="320dp"
+        android:layout_height="95dp"
+        android:layout_marginTop="21dp"
+        android:background="@drawable/bg_menu_topcorner"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/iv_temp">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/iv_menu_icon_first"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:background="#F0F0F0"
+            android:layout_marginStart="18dp"
+            android:src="@drawable/ic_menu_recorder"
+            android:scaleType="centerInside"
+            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.RoundedSquare"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_menu_text_first"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="통화 녹음 업로드"
+            android:textSize="20sp"
+            android:textColor="#010101"
+            android:fontFamily="@font/pretendard_gov_semibold"
+            app:layout_constraintEnd_toStartOf="@+id/iv_arrow_first"
+            app:layout_constraintStart_toEndOf="@+id/iv_menu_icon_first"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <ImageView
+            android:id="@+id/iv_arrow_first"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_chevron_right"
+            android:layout_marginEnd="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_menu_second"
+        android:layout_width="320dp"
+        android:layout_height="95dp"
+        android:layout_marginTop="0dp"
+        android:background="#FAF6F5"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cl_menu_first">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/iv_menu_icon_second"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:background="#F0F0F0"
+            android:layout_marginStart="18dp"
+            android:src="@drawable/ic_menu_magnifier"
+            android:scaleType="centerInside"
+            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.RoundedSquare"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_menu_text_second"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="계좌번호 조회"
+            android:textSize="20sp"
+            android:textColor="#010101"
+            android:fontFamily="@font/pretendard_gov_semibold"
+            app:layout_constraintEnd_toStartOf="@+id/iv_arrow_second"
+            app:layout_constraintStart_toEndOf="@+id/iv_menu_icon_second"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <ImageView
+            android:id="@+id/iv_arrow_second"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_chevron_right"
+            android:layout_marginEnd="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_menu_third"
+        android:layout_width="320dp"
+        android:layout_height="95dp"
+        android:layout_marginTop="0dp"
+        android:background="#FAF6F5"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cl_menu_second">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/iv_menu_icon_third"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:background="#F0F0F0"
+            android:layout_marginStart="18dp"
+            android:src="@drawable/ic_menu_phone"
+            android:scaleType="centerInside"
+            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.RoundedSquare"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_menu_text_third"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="전화번호 조회"
+            android:textSize="20sp"
+            android:textColor="#010101"
+            android:fontFamily="@font/pretendard_gov_semibold"
+            app:layout_constraintEnd_toStartOf="@+id/iv_arrow_third"
+            app:layout_constraintStart_toEndOf="@+id/iv_menu_icon_third"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <ImageView
+            android:id="@+id/iv_arrow_third"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_chevron_right"
+            android:layout_marginEnd="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_menu_fourth"
+        android:layout_width="320dp"
+        android:layout_height="95dp"
+        android:layout_marginTop="0dp"
+        android:background="@drawable/bg_menu_bottomcorner"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cl_menu_third">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/iv_menu_icon_fourth"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:background="#F0F0F0"
+            android:layout_marginStart="18dp"
+            android:src="@drawable/ic_menu_megaphone"
+            android:scaleType="centerInside"
+            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.RoundedSquare"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_menu_text_fourth"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="의심 번호 제보"
+            android:textSize="20sp"
+            android:textColor="#010101"
+            android:fontFamily="@font/pretendard_gov_semibold"
+            app:layout_constraintEnd_toStartOf="@+id/iv_arrow_fourth"
+            app:layout_constraintStart_toEndOf="@+id/iv_menu_icon_fourth"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <ImageView
+            android:id="@+id/iv_arrow_fourth"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_chevron_right"
+            android:layout_marginEnd="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+

@@ -10,12 +10,13 @@
     android:layout_height="match_parent"
     android:background="#FEFEFE"
     android:padding="20dp"
-    tools:context=".sign_inPage" >
+    tools:context=".SignInActivity" >
 
     <ImageView
         android:id="@+id/iv_3dIcon"
-        android:layout_width="256dp"
-        android:layout_height="256dp"
+        android:src="@drawable/ic_rocket"
+        android:layout_width="224dp"
+        android:layout_height="224dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -32,23 +33,22 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/pretendard_gov_bold"
+        android:text="이제 시작해 볼까요?"
         android:textSize="32sp"
         android:textColor="#010101"
-        android:letterSpacing="-0.03"
+        android:letterSpacing="-0.02"
         android:layout_marginTop="20dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintVertical_bias="0.55" />
-    <!-- app:layout_constraintTop_toBottomOf="@+id/iv_3dIcon"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" -->
 
     <TextView
         android:id="@+id/tv_subT"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="계속하게 되면, 개인정보 처리방침 및\n이용약관에 동의하게 돼요."
         android:fontFamily="@font/pretendard_gov_medium"
         android:textSize="14sp"
         android:textColor="#666666"
@@ -60,6 +60,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintVertical_bias="0.62" />
+        app:layout_constraintVertical_bias="0.63" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
