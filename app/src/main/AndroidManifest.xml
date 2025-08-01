@@ -29,7 +29,9 @@
         <activity
             android:name=".WritePostActivity"
             android:exported="false" />
-
+        <activity
+            android:name=".PostDetailActivity"
+            android:exported="false" />
         <activity
             android:name=".SignInActivity"
             android:exported="false" />
