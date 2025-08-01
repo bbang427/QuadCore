@@ -11,89 +11,127 @@
     android:background="#F0F0F0"
     tools:context=".HomeFragment">
 
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_text_greeting_v"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.05" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_text_greeting_h"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.015" />
+
     <TextView
         android:id="@+id/tv_greeting"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:text="안녕하세요, 님"
+        tools:text="안녕하세요, 권관우 님"
         android:fontFamily="@font/pretendard_gov_semibold"
         android:textSize="20sp"
         android:textColor="#010101"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="12dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintStart_toStartOf="@id/guideline_text_greeting_v"
+        app:layout_constraintTop_toTopOf="@id/guideline_text_greeting_h"/>
 
     <ImageView
         android:id="@+id/iv_helloIcon"
         android:src="@drawable/ic_hello"
-        android:layout_width="28dp"
-        android:layout_height="28dp"
-        android:layout_marginStart="4dp"
-        android:layout_marginTop="10dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintWidth_percent="0.068"
+        app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintStart_toEndOf="@id/tv_greeting"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.02"
+        app:layout_constraintTop_toTopOf="@id/guideline_text_greeting_h"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_text_greeting_h_end"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.053" />
 
     <ImageView
         android:id="@+id/iv_temp"
         android:src="@drawable/temp"
-        android:layout_width="300dp"
-        android:layout_height="190dp"
-        android:layout_marginTop="46dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintWidth_percent="0.83"
+        app:layout_constraintHeight_percent="0.3"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/tv_greeting" />
+        app:layout_constraintTop_toTopOf="@id/tv_greeting"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintVertical_bias="0.09"/>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_menu_first"
-        android:layout_width="320dp"
-        android:layout_height="95dp"
-        android:layout_marginTop="21dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:background="@drawable/bg_menu_topcorner"
         android:clickable="true"
         android:focusable="true"
         android:foreground="?attr/selectableItemBackground"
         android:clipToOutline="true"
         android:elevation="1dp"
+        app:layout_constraintWidth_percent="0.9"
+        app:layout_constraintHeight_percent="0.14"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/iv_temp">
+        app:layout_constraintTop_toBottomOf="@id/iv_temp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintVertical_bias="0.06">
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/iv_menu_icon_first"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:background="#F0F0F0"
-            android:layout_marginStart="18dp"
             android:src="@drawable/ic_menu_recorder"
             android:scaleType="centerInside"
-            android:elevation="0dp"
+            android:elevation="0.5dp"
             app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.RoundedSquare"
+            app:layout_constraintWidth_percent="0.18"
+            app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.065"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent" />
 
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_text_start_first"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.3" />
+
         <TextView
             android:id="@+id/tv_menu_text_first"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
             android:text="통화 녹음 업로드"
             android:textSize="18sp"
             android:textColor="#010101"
             android:fontFamily="@font/pretendard_gov_medium"
-            app:layout_constraintEnd_toStartOf="@+id/iv_arrow_first"
-            app:layout_constraintStart_toEndOf="@+id/iv_menu_icon_first"
+            app:layout_constraintStart_toStartOf="@id/guideline_text_start_first"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent" />
 
         <ImageView
             android:id="@+id/iv_arrow_first"
-            android:layout_width="16dp"
-            android:layout_height="16dp"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:src="@drawable/ic_chevron_right"
-            android:layout_marginEnd="20dp"
+            app:layout_constraintWidth_percent="0.05"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintStart_toStartOf="@id/tv_menu_text_first"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.9"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent" />
 
@@ -102,64 +140,78 @@
 
     <com.google.android.material.divider.MaterialDivider
         android:layout_width="0dp"
-        android:layout_height="1dp"
+        android:layout_height="0dp"
         android:elevation="2dp"
-        app:dividerInsetStart="30dp"
-        app:dividerInsetEnd="30dp"
         app:dividerColor="#D9D9D9"
+        app:layout_constraintWidth_percent="0.8"
+        app:layout_constraintHeight_percent="0.00137"
         app:layout_constraintTop_toBottomOf="@id/cl_menu_first"
         app:layout_constraintStart_toStartOf="@id/cl_menu_first"
         app:layout_constraintEnd_toEndOf="@id/cl_menu_first" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_menu_second"
-        android:layout_width="320dp"
-        android:layout_height="95dp"
-        android:layout_marginTop="0dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:background="#FAF6F5"
         android:clickable="true"
         android:focusable="true"
         android:foreground="?attr/selectableItemBackground"
         android:elevation="1dp"
+        app:layout_constraintWidth_percent="0.9"
+        app:layout_constraintHeight_percent="0.14"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/cl_menu_first">
+        app:layout_constraintTop_toBottomOf="@id/cl_menu_first"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintVertical_bias="0">
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/iv_menu_icon_second"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:background="#F0F0F0"
-            android:layout_marginStart="18dp"
             android:src="@drawable/ic_menu_magnifier"
             android:scaleType="centerInside"
-            android:elevation="0dp"
+            android:elevation="0.5dp"
             app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.RoundedSquare"
+            app:layout_constraintWidth_percent="0.18"
+            app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.065"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent" />
 
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_text_start_second"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.3" />
+
         <TextView
             android:id="@+id/tv_menu_text_second"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
             android:text="계좌번호 조회"
             android:textSize="18sp"
             android:textColor="#010101"
             android:fontFamily="@font/pretendard_gov_medium"
-            app:layout_constraintEnd_toStartOf="@+id/iv_arrow_second"
-            app:layout_constraintStart_toEndOf="@+id/iv_menu_icon_second"
+            app:layout_constraintStart_toStartOf="@id/guideline_text_start_second"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent" />
 
         <ImageView
             android:id="@+id/iv_arrow_second"
-            android:layout_width="16dp"
-            android:layout_height="16dp"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:src="@drawable/ic_chevron_right"
-            android:layout_marginEnd="20dp"
+            app:layout_constraintWidth_percent="0.05"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintStart_toStartOf="@id/tv_menu_text_second"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.9"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent" />
 
@@ -167,64 +219,78 @@
 
     <com.google.android.material.divider.MaterialDivider
         android:layout_width="0dp"
-        android:layout_height="1dp"
+        android:layout_height="0dp"
         android:elevation="2dp"
-        app:dividerInsetStart="30dp"
-        app:dividerInsetEnd="30dp"
         app:dividerColor="#D9D9D9"
+        app:layout_constraintWidth_percent="0.8"
+        app:layout_constraintHeight_percent="0.00137"
         app:layout_constraintTop_toBottomOf="@id/cl_menu_second"
         app:layout_constraintStart_toStartOf="@id/cl_menu_second"
         app:layout_constraintEnd_toEndOf="@id/cl_menu_second" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_menu_third"
-        android:layout_width="320dp"
-        android:layout_height="95dp"
-        android:layout_marginTop="0dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:background="#FAF6F5"
         android:clickable="true"
         android:focusable="true"
         android:foreground="?attr/selectableItemBackground"
         android:elevation="1dp"
+        app:layout_constraintWidth_percent="0.9"
+        app:layout_constraintHeight_percent="0.14"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/cl_menu_second">
+        app:layout_constraintTop_toBottomOf="@id/cl_menu_second"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintVertical_bias="0">
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/iv_menu_icon_third"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:background="#F0F0F0"
-            android:layout_marginStart="18dp"
             android:src="@drawable/ic_menu_phone"
             android:scaleType="centerInside"
-            android:elevation="0dp"
+            android:elevation="0.5dp"
             app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.RoundedSquare"
+            app:layout_constraintWidth_percent="0.18"
+            app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.065"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent" />
 
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_text_start_third"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.3" />
+
         <TextView
             android:id="@+id/tv_menu_text_third"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
             android:text="전화번호 조회"
             android:textSize="18sp"
             android:textColor="#010101"
             android:fontFamily="@font/pretendard_gov_medium"
-            app:layout_constraintEnd_toStartOf="@+id/iv_arrow_third"
-            app:layout_constraintStart_toEndOf="@+id/iv_menu_icon_third"
+            app:layout_constraintStart_toStartOf="@id/guideline_text_start_third"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent" />
 
         <ImageView
             android:id="@+id/iv_arrow_third"
-            android:layout_width="16dp"
-            android:layout_height="16dp"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:src="@drawable/ic_chevron_right"
-            android:layout_marginEnd="20dp"
+            app:layout_constraintWidth_percent="0.05"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintStart_toStartOf="@id/tv_menu_text_third"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.9"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent" />
 
@@ -232,65 +298,79 @@
 
     <com.google.android.material.divider.MaterialDivider
         android:layout_width="0dp"
-        android:layout_height="1dp"
+        android:layout_height="0dp"
         android:elevation="2dp"
-        app:dividerInsetStart="30dp"
-        app:dividerInsetEnd="30dp"
         app:dividerColor="#D9D9D9"
+        app:layout_constraintWidth_percent="0.8"
+        app:layout_constraintHeight_percent="0.00137"
         app:layout_constraintTop_toBottomOf="@id/cl_menu_third"
         app:layout_constraintStart_toStartOf="@id/cl_menu_third"
         app:layout_constraintEnd_toEndOf="@id/cl_menu_third" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_menu_fourth"
-        android:layout_width="320dp"
-        android:layout_height="95dp"
-        android:layout_marginTop="0dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:background="@drawable/bg_menu_bottomcorner"
         android:clickable="true"
         android:focusable="true"
         android:foreground="?attr/selectableItemBackground"
         android:clipToOutline="true"
         android:elevation="1dp"
+        app:layout_constraintWidth_percent="0.9"
+        app:layout_constraintHeight_percent="0.14"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/cl_menu_third">
+        app:layout_constraintTop_toBottomOf="@id/cl_menu_third"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintVertical_bias="0">
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/iv_menu_icon_fourth"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:background="#F0F0F0"
-            android:layout_marginStart="18dp"
             android:src="@drawable/ic_menu_megaphone"
             android:scaleType="centerInside"
-            android:elevation="0dp"
+            android:elevation="0.5dp"
             app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.RoundedSquare"
+            app:layout_constraintWidth_percent="0.18"
+            app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.065"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent" />
 
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_text_start_fourth"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.3" />
+
         <TextView
             android:id="@+id/tv_menu_text_fourth"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
             android:text="의심 번호 제보"
             android:textSize="18sp"
             android:textColor="#010101"
             android:fontFamily="@font/pretendard_gov_medium"
-            app:layout_constraintEnd_toStartOf="@+id/iv_arrow_fourth"
-            app:layout_constraintStart_toEndOf="@+id/iv_menu_icon_fourth"
+            app:layout_constraintStart_toStartOf="@id/guideline_text_start_fourth"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent" />
 
         <ImageView
             android:id="@+id/iv_arrow_fourth"
-            android:layout_width="16dp"
-            android:layout_height="16dp"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:src="@drawable/ic_chevron_right"
-            android:layout_marginEnd="20dp"
+            app:layout_constraintWidth_percent="0.05"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintStart_toStartOf="@id/tv_menu_text_fourth"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.9"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent" />
 

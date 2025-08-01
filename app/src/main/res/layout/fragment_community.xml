@@ -11,6 +11,20 @@
     android:background="#F0F0F0"
     tools:context=".CommunityFragment">
 
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_text_greeting_v"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.05" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_text_greeting_h"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.015" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_posts"
         android:layout_width="0dp"
@@ -32,10 +46,15 @@
         android:fontFamily="@font/pretendard_gov_semibold"
         android:textSize="20sp"
         android:textColor="#010101"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="12dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toStartOf="@id/guideline_text_greeting_v"
+        app:layout_constraintTop_toTopOf="@id/guideline_text_greeting_h"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_text_greeting_h_end"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.053" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_add_post"
