@@ -1,11 +1,13 @@
 package com.example.mokathon
 
 import android.os.Bundle
+import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.appcompat.widget.TooltipCompat
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class HomeActivity : AppCompatActivity() {
@@ -45,6 +47,19 @@ class HomeActivity : AppCompatActivity() {
                     .commit()
                 true
             } ?: false
+        }
+
+        // Tooltip text delete
+        listOf(
+            R.id.nav_home,
+            R.id.nav_chatbot,
+            R.id.nav_community,
+            R.id.nav_profile
+        ).forEach { itemId ->
+            bottomNav.findViewById<View>(itemId)?.let { itemView ->
+                TooltipCompat.setTooltipText(itemView, null)
+                itemView.setOnLongClickListener { true }
+            }
         }
     }
 }
