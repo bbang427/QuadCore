@@ -27,6 +27,10 @@
             android:name=".UploadActivity"
             android:exported="false" />
         <activity
+            android:name=".WritePostActivity"
+            android:exported="false" />
+
+        <activity
             android:name=".SignInActivity"
             android:exported="false" />
         <activity
