@@ -1,7 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -13,29 +14,37 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Mokathon"
         tools:targetApi="31">
-
+        <activity
+            android:name=".ReportActivity"
+            android:exported="false" />
+        <activity
+            android:name=".SearchAccActivity"
+            android:exported="false" />
+        <activity
+            android:name=".SearchNumActivity"
+            android:exported="false" />
+        <activity
+            android:name=".UploadActivity"
+            android:exported="false" />
         <activity
             android:name=".WritePostActivity"
             android:exported="false" />
 
         <activity
             android:name=".SignInActivity"
-            android:exported="false">
-        </activity>
-
+            android:exported="false" />
         <activity
             android:name=".HomeActivity"
-            android:exported="false">
-        </activity>
-
+            android:exported="false" />
         <activity
             android:name=".OnboardingActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
     </application>
+
 </manifest>

@@ -16,13 +16,17 @@
         <item name="itemIconSize">30dp</item>
         <item name="itemIconTint">@color/selector_bottom_nav</item>
         <item name="itemTextColor">@color/selector_bottom_nav</item>
-        <item name="android:background">@drawable/bg_bottom_nav</item>
         <item name="labelVisibilityMode">labeled</item>
     </style>
 
     <style name="ShapeAppearanceOverlay.App.RoundedSquare" parent="">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">16dp</item>
+    </style>
+
+    <style name="CircleImageView" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
     </style>
 
     <style name="Theme.Mokathon" parent="Base.Theme.Mokathon" />
