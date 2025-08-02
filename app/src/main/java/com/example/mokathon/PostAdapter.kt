@@ -15,7 +15,8 @@ import java.util.concurrent.TimeUnit
 
 class PostAdapter(
     private val postList: MutableList<Post>,
-    private val onLikeClickListener: OnLikeClickListener // 클릭 리스너 인터페이스 추가
+    private val onLikeClickListener: OnLikeClickListener, // 기존 좋아요 클릭 리스너
+    private val onCommentClickListener: OnCommentClickListener // 새로운 댓글 클릭 리스너 추가
 ) : RecyclerView.Adapter<PostAdapter.PostViewHolder>() {
 
     // 좋아요 버튼 클릭 이벤트를 전달하기 위한 인터페이스
@@ -23,14 +24,24 @@ class PostAdapter(
         fun onLikeClick(position: Int, post: Post)
     }
 
+    // 댓글 버튼 클릭 이벤트를 전달하기 위한 인터페이스 (추가)
+    interface OnCommentClickListener {
+        fun onCommentClick(post: Post)
+    }
+
     class PostViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val titleTextView: TextView = itemView.findViewById(R.id.tv_post_title)
         val contentTextView: TextView = itemView.findViewById(R.id.tv_post_content)
         val timestampTextView: TextView = itemView.findViewById(R.id.tv_post_timestamp)
         val authorTextView: TextView = itemView.findViewById(R.id.tv_post_author)
-        // 좋아요 관련 뷰 추가
+
+        // 좋아요 관련 뷰
         val likeButton: ImageView = itemView.findViewById(R.id.iv_like)
         val likeCountTextView: TextView = itemView.findViewById(R.id.tv_like_count)
+
+        // 댓글 관련 뷰 (추가)
+        val commentButton: ImageView = itemView.findViewById(R.id.iv_comment)
+        val commentCountTextView: TextView = itemView.findViewById(R.id.tv_comment_count)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
@@ -64,6 +75,14 @@ class PostAdapter(
             onLikeClickListener.onLikeClick(position, post)
         }
 
+        // 댓글 수 업데이트 (Post 데이터 클래스에 commentCount 필드가 추가되어야 합니다.)
+        holder.commentCountTextView.text = post.commentCount.toString()
+
+        // 댓글 버튼 클릭 리스너 설정 (추가)
+        holder.commentButton.setOnClickListener {
+            onCommentClickListener.onCommentClick(post)
+        }
+
         // 아이템 전체 클릭 리스너
         holder.itemView.setOnClickListener {
             val intent = Intent(holder.itemView.context, PostDetailActivity::class.java)
@@ -73,8 +92,6 @@ class PostAdapter(
     }
 
     override fun getItemCount(): Int = postList.size
-
-    // ... (formatRelativeTime 함수는 동일)
 
     private fun formatRelativeTime(date: Date): String {
         val now = Date()

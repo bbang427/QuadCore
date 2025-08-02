@@ -1,0 +1,13 @@
+package com.example.mokathon
+
+import java.io.Serializable
+import java.util.Date
+
+data class Comment(
+    val commentId: String = "",
+    val postId: String = "",
+    val authorId: String = "",
+    val authorName: String = "",
+    val content: String = "",
+    val createdAt: Date? = null
+) : Serializable

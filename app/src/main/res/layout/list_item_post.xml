@@ -85,6 +85,24 @@
                 android:text="0"
                 android:textSize="12sp"
                 android:textColor="@color/black" />
+            <ImageView
+                android:id="@+id/iv_comment"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:layout_marginStart="16dp"  android:src="@drawable/ic_comment"  android:clickable="true"
+                android:focusable="true"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                app:tint="@color/black"
+                android:contentDescription="댓글 버튼" />
+
+            <TextView
+                android:id="@+id/tv_comment_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:text="0"
+                android:textSize="12sp"
+                android:textColor="@color/black" />
         </LinearLayout>
     </LinearLayout>
 </androidx.cardview.widget.CardView>

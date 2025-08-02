@@ -2,9 +2,17 @@ package com.example.mokathon
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.MenuItem // MenuItem import 추가
+import android.view.MenuItem
+import android.widget.EditText
+import android.widget.ImageView
 import android.widget.TextView
-import androidx.appcompat.widget.Toolbar // Toolbar import 추가
+import androidx.appcompat.widget.Toolbar
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.Query
 import java.io.Serializable
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -12,6 +20,21 @@ import java.util.Locale
 import java.util.concurrent.TimeUnit
 
 class PostDetailActivity : AppCompatActivity() {
+
+    // Firebase Firestore 및 Authentication 인스턴스
+    private val db = Firebase.firestore
+    private val auth = FirebaseAuth.getInstance()
+
+    // 댓글 기능 관련 UI 요소 및 데이터
+    private lateinit var rvComments: RecyclerView
+    private lateinit var etCommentInput: EditText
+    private lateinit var ivSendComment: ImageView
+    private lateinit var commentAdapter: CommentAdapter
+    private val commentList = mutableListOf<Comment>()
+
+    // 현재 게시글 ID를 저장할 변수
+    private var currentPostId: String? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_post_detail)
@@ -22,12 +45,13 @@ class PostDetailActivity : AppCompatActivity() {
 
         // 뒤로가기 버튼(Up Button) 활성화
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.title = "게시글 상세" // 툴바 제목 설정
+        supportActionBar?.title = "게시글 상세"
 
-        // Intent에서 Post 객체를 가져와 화면에 표시
+        // Intent에서 Post 객체와 postId를 가져와 화면에 표시
         val post = intent.getSerializableExtra("post") as? Post
+        currentPostId = intent.getStringExtra("postId") // postId를 Intent에서 가져옴
 
-        if (post != null) {
+        if (post != null && currentPostId != null) {
             val titleTextView: TextView = findViewById(R.id.tv_detail_title)
             val authorTextView: TextView = findViewById(R.id.tv_detail_author)
             val timestampTextView: TextView = findViewById(R.id.tv_detail_timestamp)
@@ -41,13 +65,89 @@ class PostDetailActivity : AppCompatActivity() {
                 timestampTextView.text = formatRelativeTime(it)
             }
         }
+
+        // 댓글 기능 UI 요소 바인딩 및 리스너 설정
+        rvComments = findViewById(R.id.rv_comments)
+        etCommentInput = findViewById(R.id.et_comment_input)
+        ivSendComment = findViewById(R.id.iv_send_comment)
+
+        // RecyclerView 설정
+        rvComments.layoutManager = LinearLayoutManager(this)
+        commentAdapter = CommentAdapter(commentList)
+        rvComments.adapter = commentAdapter
+
+        // 댓글 작성 버튼 클릭 리스너
+        ivSendComment.setOnClickListener {
+            val commentText = etCommentInput.text.toString().trim()
+            if (commentText.isNotEmpty() && currentPostId != null && auth.currentUser != null) {
+                addCommentToFirestore(currentPostId!!, commentText)
+                etCommentInput.text.clear()
+            }
+        }
+
+        // 댓글 데이터 실시간 로드
+        if (currentPostId != null) {
+            loadComments(currentPostId!!)
+        }
+    }
+
+    private fun loadComments(postId: String) {
+        // Firestore의 posts 컬렉션 아래에 있는 comments 서브컬렉션에서 댓글을 가져옴
+        db.collection("posts").document(postId).collection("comments")
+            .orderBy("createdAt", Query.Direction.ASCENDING)
+            .addSnapshotListener { snapshots, e ->
+                if (e != null) {
+                    // 오류 처리
+                    return@addSnapshotListener
+                }
+
+                if (snapshots != null) {
+                    commentList.clear()
+                    for (doc in snapshots.documents) {
+                        val comment = doc.toObject(Comment::class.java)
+                        if (comment != null) {
+                            commentList.add(comment)
+                        }
+                    }
+                    commentAdapter.notifyDataSetChanged()
+                    rvComments.scrollToPosition(commentList.size - 1) // 최신 댓글로 스크롤
+                }
+            }
+    }
+
+    private fun addCommentToFirestore(postId: String, content: String) {
+        val currentUser = auth.currentUser
+        if (currentUser == null) {
+            // TODO: 사용자에게 로그인 필요 메시지 표시
+            return
+        }
+
+        // 사용자의 이름을 Firestore에서 조회하거나, 다른 방식으로 가져오는 로직이 필요
+        val authorName = currentUser.displayName ?: "익명"
+
+        val newComment = Comment(
+            postId = postId,
+            authorId = currentUser.uid,
+            authorName = authorName,
+            content = content,
+            createdAt = Date()
+        )
+
+        db.collection("posts").document(postId).collection("comments")
+            .add(newComment)
+            .addOnSuccessListener {
+                // 댓글이 성공적으로 추가됨
+            }
+            .addOnFailureListener {
+                // 댓글 추가 실패
+            }
     }
 
     // 뒤로가기 버튼 클릭 이벤트 처리
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             android.R.id.home -> {
-                finish() // 현재 액티비티를 종료하고 이전 화면으로 돌아감
+                finish()
                 true
             }
             else -> super.onOptionsItemSelected(item)

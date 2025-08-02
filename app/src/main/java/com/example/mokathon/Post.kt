@@ -1,8 +1,8 @@
 package com.example.mokathon
 
+import com.google.firebase.firestore.Exclude // 이 한 줄을 추가합니다.
 import java.io.Serializable
 import java.util.Date
-import com.google.firebase.firestore.Exclude
 
 data class Post (
     val title: String = "",
@@ -11,5 +11,7 @@ data class Post (
     val authorName: String = "",
     val createdAt: Date? = null,
     var likeCount: Int = 0,
-    @Exclude var isLiked: Boolean = false
-)   : Serializable
+    var commentCount: Int = 0,
+    @Exclude var isLiked: Boolean = false,
+    @Exclude var postId: String = ""
+) : Serializable

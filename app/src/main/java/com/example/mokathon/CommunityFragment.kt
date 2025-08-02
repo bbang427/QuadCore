@@ -19,7 +19,7 @@ class CommunityFragment : Fragment() {
 
     private lateinit var recyclerView: RecyclerView
     private val db = Firebase.firestore
-    private var postList = mutableListOf<Post>() // mutableList로 변경
+    private var postList = mutableListOf<Post>()
     private lateinit var postAdapter: PostAdapter
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
 
@@ -44,27 +44,36 @@ class CommunityFragment : Fragment() {
         val layoutManager = LinearLayoutManager(context)
         recyclerView.layoutManager = layoutManager
 
-        // OnLikeClickListener 구현체를 전달하여 어댑터 초기화
-        postAdapter = PostAdapter(postList, object : PostAdapter.OnLikeClickListener {
-            override fun onLikeClick(position: Int, post: Post) {
-                // 1. UI를 먼저 업데이트하여 사용자에게 즉각적인 피드백 제공
-                post.isLiked = !post.isLiked
-                if (post.isLiked) {
-                    post.likeCount++
-                } else {
-                    post.likeCount--
-                }
-                postAdapter.notifyItemChanged(position)
+        // PostAdapter 초기화 시 좋아요 및 댓글 클릭 리스너 모두 전달
+        postAdapter = PostAdapter(postList,
+            // 좋아요 클릭 리스너 구현
+            object : PostAdapter.OnLikeClickListener {
+                override fun onLikeClick(position: Int, post: Post) {
+                    // UI를 먼저 업데이트하여 사용자에게 즉각적인 피드백 제공
+                    post.isLiked = !post.isLiked
+                    if (post.isLiked) {
+                        post.likeCount++
+                    } else {
+                        post.likeCount--
+                    }
+                    postAdapter.notifyItemChanged(position)
 
-                // 2. 서버에 좋아요/좋아요 취소 요청 (Firebase Firestore 업데이트)
-                // 실제 구현 시에는 Firestore 업데이트 로직을 추가해야 합니다.
-                // 예시:
-                // val postRef = db.collection("posts").document(post.postId)
-                // postRef.update("likeCount", post.likeCount, "isLiked", post.isLiked)
-                //    .addOnSuccessListener { /* 성공적으로 업데이트됨 */ }
-                //    .addOnFailureListener { /* 업데이트 실패 시 UI 롤백 또는 오류 메시지 표시 */ }
+                    // Firebase Firestore 업데이트 로직 (실제 구현 필요)
+                }
+            },
+            // 댓글 클릭 리스너 구현 (PostDetailActivity로 이동하도록 수정)
+            object : PostAdapter.OnCommentClickListener {
+                override fun onCommentClick(post: Post) {
+                    // PostDetailActivity로 이동하는 Intent 생성
+                    val intent = Intent(activity, PostDetailActivity::class.java)
+
+                    // 게시글 전체 데이터를 Intent에 담아 전달
+                    intent.putExtra("post", post)
+
+                    startActivity(intent)
+                }
             }
-        })
+        )
         recyclerView.adapter = postAdapter
 
         // SwipeRefreshLayout 초기화 및 리스너 설정
@@ -73,7 +82,7 @@ class CommunityFragment : Fragment() {
             resetAndFetchPosts()
         }
 
-        // 스크롤 리스너 추가 (기존 무한 스크롤 로직)
+        // 스크롤 리스너 추가 (무한 스크롤 로직)
         recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
@@ -103,7 +112,6 @@ class CommunityFragment : Fragment() {
 
     private fun resetAndFetchPosts() {
         postList.clear()
-        // 어댑터에 변경 사항을 알리는 notifyDataSetChanged()를 호출하기 전에 postList.clear() 후에 호출해야합니다.
         postAdapter.notifyDataSetChanged()
         lastVisible = null
         isLastPage = false
@@ -137,8 +145,7 @@ class CommunityFragment : Fragment() {
 
                 for (document in result) {
                     val post = document.toObject(Post::class.java)
-                    // Firestore에서 좋아요 개수와 사용자의 좋아요 여부 데이터를 함께 가져와야 합니다.
-                    // 현재 코드로는 isLiked 상태를 알 수 없으므로, 이 부분은 백엔드 로직에 따라 추가 구현이 필요합니다.
+                    post.postId = document.id
                     postList.add(post)
                 }
                 postAdapter.notifyDataSetChanged()
