@@ -13,12 +13,12 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.Query
-import java.io.Serializable
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 import java.util.concurrent.TimeUnit
 import com.google.firebase.firestore.FieldValue
+import android.os.Build
 
 class PostDetailActivity : AppCompatActivity() {
 
@@ -49,8 +49,13 @@ class PostDetailActivity : AppCompatActivity() {
         supportActionBar?.title = "게시글 상세"
 
         // Intent에서 Post 객체와 postId를 가져와 화면에 표시
-        val post = intent.getSerializableExtra("post") as? Post
-        currentPostId = post?.postId // postId를 post 객체에서 직접 가져옴
+        val post = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            intent.getSerializableExtra("post", Post::class.java)
+        } else {
+            @Suppress("DEPRECATION")
+            intent.getSerializableExtra("post") as? Post
+        }
+        currentPostId = post?.postId // postId는 post 객체에서 직접 가져옴
 
         android.util.Log.d("PostDetailActivity", "post: $post")
         android.util.Log.d("PostDetailActivity", "postId: $currentPostId")

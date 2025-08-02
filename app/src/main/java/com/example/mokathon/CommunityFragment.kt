@@ -68,7 +68,6 @@ class CommunityFragment : Fragment() {
 
                     // 게시글 전체 데이터를 Intent에 담아 전달
                     intent.putExtra("post", post)
-                    intent.putExtra("postId", post.postId)
 
                     startActivity(intent)
                 }
