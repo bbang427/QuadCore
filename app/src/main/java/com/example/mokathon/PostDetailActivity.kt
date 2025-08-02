@@ -18,6 +18,7 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 import java.util.concurrent.TimeUnit
+import com.google.firebase.firestore.FieldValue
 
 class PostDetailActivity : AppCompatActivity() {
 
@@ -49,9 +50,12 @@ class PostDetailActivity : AppCompatActivity() {
 
         // Intent에서 Post 객체와 postId를 가져와 화면에 표시
         val post = intent.getSerializableExtra("post") as? Post
-        currentPostId = intent.getStringExtra("postId") // postId를 Intent에서 가져옴
+        currentPostId = post?.postId // postId를 post 객체에서 직접 가져옴
 
-        if (post != null && currentPostId != null) {
+        android.util.Log.d("PostDetailActivity", "post: $post")
+        android.util.Log.d("PostDetailActivity", "postId: $currentPostId")
+
+        if (post != null) {
             val titleTextView: TextView = findViewById(R.id.tv_detail_title)
             val authorTextView: TextView = findViewById(R.id.tv_detail_author)
             val timestampTextView: TextView = findViewById(R.id.tv_detail_timestamp)
@@ -133,10 +137,13 @@ class PostDetailActivity : AppCompatActivity() {
             createdAt = Date()
         )
 
+        val postRef = db.collection("posts").document(postId)
+
         db.collection("posts").document(postId).collection("comments")
             .add(newComment)
             .addOnSuccessListener {
-                // 댓글이 성공적으로 추가됨
+                // 댓글이 성공적으로 추가되면 게시물의 commentCount를 1 증가시킴
+                postRef.update("commentCount", FieldValue.increment(1))
             }
             .addOnFailureListener {
                 // 댓글 추가 실패

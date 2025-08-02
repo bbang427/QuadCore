@@ -64,11 +64,11 @@ class CommunityFragment : Fragment() {
             // 댓글 클릭 리스너 구현 (PostDetailActivity로 이동하도록 수정)
             object : PostAdapter.OnCommentClickListener {
                 override fun onCommentClick(post: Post) {
-                    // PostDetailActivity로 이동하는 Intent 생성
                     val intent = Intent(activity, PostDetailActivity::class.java)
 
                     // 게시글 전체 데이터를 Intent에 담아 전달
                     intent.putExtra("post", post)
+                    intent.putExtra("postId", post.postId)
 
                     startActivity(intent)
                 }
@@ -107,6 +107,12 @@ class CommunityFragment : Fragment() {
         }
 
         // 초기 데이터 로드
+        resetAndFetchPosts()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        // 화면에 다시 돌아올 때마다 데이터를 새로고침
         resetAndFetchPosts()
     }
 
