@@ -39,28 +39,31 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.053" />
+        app:layout_constraintGuide_percent="0.07" />
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipe_refresh_layout"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="12dp"
-        app:layout_constraintBottom_toTopOf="@+id/fab_add_post"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_greeting">
+        app:layout_constraintTop_toBottomOf="@+id/tv_greeting"
+        app:layout_constraintVertical_bias="0.0">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_posts"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scrollbars="vertical"
-            android:scrollbarStyle="outsideOverlay"
-            android:scrollbarSize="4dp"
-            android:scrollbarThumbVertical="@color/dark_gray"
+            android:clipToPadding="false"
             android:paddingBottom="80dp"
-            android:clipToPadding="false"  app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            android:scrollbarSize="4dp"
+            android:scrollbarStyle="outsideOverlay"
+            android:scrollbarThumbVertical="@color/dark_gray"
+            android:scrollbars="vertical"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:listitem="@layout/list_item_post" />
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

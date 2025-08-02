@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout // 이 부분을 import 해주세요.
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.Query
@@ -19,9 +19,9 @@ class CommunityFragment : Fragment() {
 
     private lateinit var recyclerView: RecyclerView
     private val db = Firebase.firestore
-    private var postList = mutableListOf<Post>()
+    private var postList = mutableListOf<Post>() // mutableList로 변경
     private lateinit var postAdapter: PostAdapter
-    private lateinit var swipeRefreshLayout: SwipeRefreshLayout // SwipeRefreshLayout 변수 추가
+    private lateinit var swipeRefreshLayout: SwipeRefreshLayout
 
     // 페이지네이션을 위한 변수들
     private var lastVisible: DocumentSnapshot? = null
@@ -44,13 +44,32 @@ class CommunityFragment : Fragment() {
         val layoutManager = LinearLayoutManager(context)
         recyclerView.layoutManager = layoutManager
 
-        postAdapter = PostAdapter(postList)
+        // OnLikeClickListener 구현체를 전달하여 어댑터 초기화
+        postAdapter = PostAdapter(postList, object : PostAdapter.OnLikeClickListener {
+            override fun onLikeClick(position: Int, post: Post) {
+                // 1. UI를 먼저 업데이트하여 사용자에게 즉각적인 피드백 제공
+                post.isLiked = !post.isLiked
+                if (post.isLiked) {
+                    post.likeCount++
+                } else {
+                    post.likeCount--
+                }
+                postAdapter.notifyItemChanged(position)
+
+                // 2. 서버에 좋아요/좋아요 취소 요청 (Firebase Firestore 업데이트)
+                // 실제 구현 시에는 Firestore 업데이트 로직을 추가해야 합니다.
+                // 예시:
+                // val postRef = db.collection("posts").document(post.postId)
+                // postRef.update("likeCount", post.likeCount, "isLiked", post.isLiked)
+                //    .addOnSuccessListener { /* 성공적으로 업데이트됨 */ }
+                //    .addOnFailureListener { /* 업데이트 실패 시 UI 롤백 또는 오류 메시지 표시 */ }
+            }
+        })
         recyclerView.adapter = postAdapter
 
         // SwipeRefreshLayout 초기화 및 리스너 설정
         swipeRefreshLayout = view.findViewById(R.id.swipe_refresh_layout)
         swipeRefreshLayout.setOnRefreshListener {
-            // 새로고침 로직
             resetAndFetchPosts()
         }
 
@@ -65,7 +84,7 @@ class CommunityFragment : Fragment() {
 
                 if (!isLoading && !isLastPage) {
                     if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount && firstVisibleItemPosition >= 0) {
-                        fetchPostsFromFirestore() // 다음 게시글 로드
+                        fetchPostsFromFirestore()
                     }
                 }
             }
@@ -82,22 +101,14 @@ class CommunityFragment : Fragment() {
         resetAndFetchPosts()
     }
 
-    // onResume() 메서드는 `resetAndFetchPosts()`로 대체
-    // 화면이 다시 활성화될 때마다 게시글을 새로 불러오고 싶다면, onResume()에서 `resetAndFetchPosts()`를 호출할 수 있습니다.
-    // override fun onResume() {
-    //     super.onResume()
-    //     resetAndFetchPosts()
-    // }
-
-    // 새로고침을 위한 새로운 메서드
     private fun resetAndFetchPosts() {
-        postList.clear() // 기존 리스트를 비웁니다.
-        postAdapter.notifyDataSetChanged() // 어댑터에게 변경 사항을 알립니다.
-        lastVisible = null // 페이지네이션 상태를 초기화합니다.
+        postList.clear()
+        // 어댑터에 변경 사항을 알리는 notifyDataSetChanged()를 호출하기 전에 postList.clear() 후에 호출해야합니다.
+        postAdapter.notifyDataSetChanged()
+        lastVisible = null
         isLastPage = false
         isLoading = false
-
-        fetchPostsFromFirestore() // 첫 페이지부터 다시 로드합니다.
+        fetchPostsFromFirestore()
     }
 
     private fun fetchPostsFromFirestore() {
@@ -115,7 +126,7 @@ class CommunityFragment : Fragment() {
         query.get()
             .addOnSuccessListener { result ->
                 isLoading = false
-                swipeRefreshLayout.isRefreshing = false // 새로고침 애니메이션 중단
+                swipeRefreshLayout.isRefreshing = false
 
                 if (result.isEmpty) {
                     isLastPage = true
@@ -126,13 +137,15 @@ class CommunityFragment : Fragment() {
 
                 for (document in result) {
                     val post = document.toObject(Post::class.java)
+                    // Firestore에서 좋아요 개수와 사용자의 좋아요 여부 데이터를 함께 가져와야 합니다.
+                    // 현재 코드로는 isLiked 상태를 알 수 없으므로, 이 부분은 백엔드 로직에 따라 추가 구현이 필요합니다.
                     postList.add(post)
                 }
                 postAdapter.notifyDataSetChanged()
             }
             .addOnFailureListener { e ->
                 isLoading = false
-                swipeRefreshLayout.isRefreshing = false // 실패 시에도 애니메이션 중단
+                swipeRefreshLayout.isRefreshing = false
                 // 오류 처리
             }
     }

@@ -1,25 +1,36 @@
 package com.example.mokathon
 
-// Intent import 추가
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 import java.util.concurrent.TimeUnit
 
-class PostAdapter(private val postList: List<Post>) :
-    RecyclerView.Adapter<PostAdapter.PostViewHolder>() {
+class PostAdapter(
+    private val postList: MutableList<Post>,
+    private val onLikeClickListener: OnLikeClickListener // 클릭 리스너 인터페이스 추가
+) : RecyclerView.Adapter<PostAdapter.PostViewHolder>() {
+
+    // 좋아요 버튼 클릭 이벤트를 전달하기 위한 인터페이스
+    interface OnLikeClickListener {
+        fun onLikeClick(position: Int, post: Post)
+    }
 
     class PostViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val titleTextView: TextView = itemView.findViewById(R.id.tv_post_title)
         val contentTextView: TextView = itemView.findViewById(R.id.tv_post_content)
         val timestampTextView: TextView = itemView.findViewById(R.id.tv_post_timestamp)
         val authorTextView: TextView = itemView.findViewById(R.id.tv_post_author)
+        // 좋아요 관련 뷰 추가
+        val likeButton: ImageView = itemView.findViewById(R.id.iv_like)
+        val likeCountTextView: TextView = itemView.findViewById(R.id.tv_like_count)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
@@ -38,16 +49,32 @@ class PostAdapter(private val postList: List<Post>) :
             holder.timestampTextView.text = formatRelativeTime(it)
         }
 
-        // 아이템 클릭 리스너 추가
+        // 좋아요 상태에 따라 아이콘 및 텍스트 업데이트
+        holder.likeCountTextView.text = post.likeCount.toString()
+        if (post.isLiked) {
+            holder.likeButton.setImageResource(R.drawable.ic_like_filled)
+            holder.likeButton.setColorFilter(ContextCompat.getColor(holder.itemView.context, R.color.red))
+        } else {
+            holder.likeButton.setImageResource(R.drawable.ic_like_border)
+            holder.likeButton.setColorFilter(ContextCompat.getColor(holder.itemView.context, R.color.dark_gray))
+        }
+
+        // 좋아요 버튼 클릭 리스너 설정
+        holder.likeButton.setOnClickListener {
+            onLikeClickListener.onLikeClick(position, post)
+        }
+
+        // 아이템 전체 클릭 리스너
         holder.itemView.setOnClickListener {
             val intent = Intent(holder.itemView.context, PostDetailActivity::class.java)
-            // Post 객체를 Intent에 담아 상세 화면으로 전달
             intent.putExtra("post", post)
             holder.itemView.context.startActivity(intent)
         }
     }
 
     override fun getItemCount(): Int = postList.size
+
+    // ... (formatRelativeTime 함수는 동일)
 
     private fun formatRelativeTime(date: Date): String {
         val now = Date()

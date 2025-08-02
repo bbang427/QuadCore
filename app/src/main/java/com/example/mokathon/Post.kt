@@ -2,6 +2,7 @@ package com.example.mokathon
 
 import java.io.Serializable
 import java.util.Date
+import com.google.firebase.firestore.Exclude
 
 data class Post (
     val title: String = "",
@@ -9,5 +10,6 @@ data class Post (
     val authorId: String = "",
     val authorName: String = "",
     val createdAt: Date? = null,
-    val likes: Int = 0
+    var likeCount: Int = 0,
+    @Exclude var isLiked: Boolean = false
 )   : Serializable
