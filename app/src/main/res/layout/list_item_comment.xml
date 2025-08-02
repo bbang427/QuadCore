@@ -26,13 +26,38 @@
 
         <TextView
             android:id="@+id/tv_comment_timestamp"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:layout_marginStart="8dp"
             android:textSize="12sp"
             android:textColor="@android:color/darker_gray"
             tools:text="1분 전" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <TextView
+            android:id="@+id/tv_edit_comment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="수정"
+            android:textColor="@color/purple_500"
+            android:textSize="12sp"
+            android:layout_marginEnd="8dp"
+            android:clickable="true"
+            android:focusable="true"/>
+
+        <TextView
+            android:id="@+id/tv_delete_comment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="삭제"
+            android:textColor="@android:color/holo_red_dark"
+            android:textSize="12sp"
+            android:clickable="true"
+            android:focusable="true"/>
 
     </LinearLayout>
 

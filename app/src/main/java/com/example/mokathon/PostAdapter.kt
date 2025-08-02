@@ -5,9 +5,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.auth.FirebaseAuth
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -15,18 +17,26 @@ import java.util.concurrent.TimeUnit
 
 class PostAdapter(
     private val postList: MutableList<Post>,
-    private val onLikeClickListener: OnLikeClickListener, // 기존 좋아요 클릭 리스너
-    private val onCommentClickListener: OnCommentClickListener // 새로운 댓글 클릭 리스너 추가
+    private val onLikeClickListener: OnLikeClickListener,
+    private val onCommentClickListener: OnCommentClickListener,
+    private val onEditClickListener: OnEditClickListener,
+    private val onDeleteClickListener: OnDeleteClickListener
 ) : RecyclerView.Adapter<PostAdapter.PostViewHolder>() {
 
-    // 좋아요 버튼 클릭 이벤트를 전달하기 위한 인터페이스
     interface OnLikeClickListener {
         fun onLikeClick(position: Int, post: Post)
     }
 
-    // 댓글 버튼 클릭 이벤트를 전달하기 위한 인터페이스 (추가)
     interface OnCommentClickListener {
         fun onCommentClick(post: Post)
+    }
+
+    interface OnEditClickListener {
+        fun onEditClick(post: Post)
+    }
+
+    interface OnDeleteClickListener {
+        fun onDeleteClick(post: Post)
     }
 
     class PostViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -34,14 +44,13 @@ class PostAdapter(
         val contentTextView: TextView = itemView.findViewById(R.id.tv_post_content)
         val timestampTextView: TextView = itemView.findViewById(R.id.tv_post_timestamp)
         val authorTextView: TextView = itemView.findViewById(R.id.tv_post_author)
-
-        // 좋아요 관련 뷰
         val likeButton: ImageView = itemView.findViewById(R.id.iv_like)
         val likeCountTextView: TextView = itemView.findViewById(R.id.tv_like_count)
-
-        // 댓글 관련 뷰 (추가)
         val commentButton: ImageView = itemView.findViewById(R.id.iv_comment)
         val commentCountTextView: TextView = itemView.findViewById(R.id.tv_comment_count)
+        val editDeleteLayout: LinearLayout = itemView.findViewById(R.id.ll_edit_delete)
+        val editButton: TextView = itemView.findViewById(R.id.tv_edit_post)
+        val deleteButton: TextView = itemView.findViewById(R.id.tv_delete_post)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
@@ -52,6 +61,7 @@ class PostAdapter(
 
     override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
         val post = postList[position]
+
         holder.titleTextView.text = post.title
         holder.contentTextView.text = post.content
         holder.authorTextView.text = post.authorName
@@ -81,6 +91,16 @@ class PostAdapter(
         // 댓글 버튼 클릭 리스너 설정 (추가)
         holder.commentButton.setOnClickListener {
             onCommentClickListener.onCommentClick(post)
+        }
+
+        // Show/hide edit/delete buttons
+        val currentUserId = FirebaseAuth.getInstance().currentUser?.uid
+        if (post.authorId == currentUserId) {
+            holder.editDeleteLayout.visibility = View.VISIBLE
+            holder.editButton.setOnClickListener { onEditClickListener.onEditClick(post) }
+            holder.deleteButton.setOnClickListener { onDeleteClickListener.onDeleteClick(post) }
+        } else {
+            holder.editDeleteLayout.visibility = View.GONE
         }
 
         // 아이템 전체 클릭 리스너

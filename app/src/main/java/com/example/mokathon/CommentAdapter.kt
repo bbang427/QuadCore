@@ -5,18 +5,27 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.auth.FirebaseAuth
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 import java.util.concurrent.TimeUnit
 
-class CommentAdapter(private val commentList: MutableList<Comment>) :
+class CommentAdapter(
+    private val commentList: MutableList<Comment>,
+    private val onEditClick: (Comment) -> Unit,
+    private val onDeleteClick: (Comment) -> Unit
+) :
     RecyclerView.Adapter<CommentAdapter.CommentViewHolder>() {
+
+    private val currentUserId = FirebaseAuth.getInstance().currentUser?.uid
 
     class CommentViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val authorTextView: TextView = itemView.findViewById(R.id.tv_comment_author)
         val timestampTextView: TextView = itemView.findViewById(R.id.tv_comment_timestamp)
         val contentTextView: TextView = itemView.findViewById(R.id.tv_comment_content)
+        val editButton: TextView = itemView.findViewById(R.id.tv_edit_comment)
+        val deleteButton: TextView = itemView.findViewById(R.id.tv_delete_comment)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CommentViewHolder {
@@ -32,6 +41,16 @@ class CommentAdapter(private val commentList: MutableList<Comment>) :
 
         comment.createdAt?.let {
             holder.timestampTextView.text = formatRelativeTime(it)
+        }
+
+        if (comment.authorId == currentUserId) {
+            holder.editButton.visibility = View.VISIBLE
+            holder.deleteButton.visibility = View.VISIBLE
+            holder.editButton.setOnClickListener { onEditClick(comment) }
+            holder.deleteButton.setOnClickListener { onDeleteClick(comment) }
+        } else {
+            holder.editButton.visibility = View.GONE
+            holder.deleteButton.visibility = View.GONE
         }
     }
 

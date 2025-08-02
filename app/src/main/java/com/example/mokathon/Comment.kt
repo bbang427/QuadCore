@@ -4,7 +4,7 @@ import java.io.Serializable
 import java.util.Date
 
 data class Comment(
-    val commentId: String = "",
+    var commentId: String = "",
     val postId: String = "",
     val authorId: String = "",
     val authorName: String = "",

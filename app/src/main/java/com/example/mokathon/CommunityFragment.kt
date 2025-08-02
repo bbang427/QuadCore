@@ -1,5 +1,6 @@
 package com.example.mokathon
 
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -71,6 +72,26 @@ class CommunityFragment : Fragment() {
 
                     startActivity(intent)
                 }
+            },
+            object : PostAdapter.OnEditClickListener {
+                override fun onEditClick(post: Post) {
+                    val intent = Intent(activity, WritePostActivity::class.java)
+                    intent.putExtra("post", post)
+                    startActivity(intent)
+                }
+            },
+            object : PostAdapter.OnDeleteClickListener {
+                override fun onDeleteClick(post: Post) {
+                    // 삭제 확인 다이얼로그 표시
+                    AlertDialog.Builder(requireContext())
+                        .setTitle("게시물 삭제")
+                        .setMessage("정말로 이 게시물을 삭제하시겠습니까?")
+                        .setPositiveButton("삭제") { _, _ ->
+                            deletePostFromFirestore(post)
+                        }
+                        .setNegativeButton("취소", null)
+                        .show()
+                }
             }
         )
         recyclerView.adapter = postAdapter
@@ -124,6 +145,21 @@ class CommunityFragment : Fragment() {
         fetchPostsFromFirestore()
     }
 
+    private fun deletePostFromFirestore(post: Post) {
+        db.collection("posts").document(post.postId)
+            .delete()
+            .addOnSuccessListener {
+                // 로컬 목록에서 게시물 제거 및 UI 업데이트
+                val position = postList.indexOf(post)
+                if (position != -1) {
+                    postList.removeAt(position)
+                    postAdapter.notifyItemRemoved(position)
+                }
+            }
+            .addOnFailureListener { e ->
+                // 오류 처리
+            }
+    }
     private fun fetchPostsFromFirestore() {
         if (isLoading) return
         isLoading = true

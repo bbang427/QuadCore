@@ -5,4 +5,6 @@
     <color name="dark_gray">#333333</color>
     <color name="red">#FF0000</color>
     <color name="purple_500">#FF6200EE</color>
+    <color name="blue">#FF0000FF</color>
+    <color name="light_blue">#FFADD8E6</color>
 </resources>
