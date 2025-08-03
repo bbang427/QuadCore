@@ -12,6 +12,7 @@ data class Post (
     val createdAt: Date? = null,
     var likeCount: Int = 0,
     var commentCount: Int = 0,
+    val likers: List<String> = emptyList(),
     @Exclude var isLiked: Boolean = false,
     @Exclude var postId: String = ""
 ) : Serializable

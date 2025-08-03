@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
@@ -20,6 +21,7 @@ class CommunityFragment : Fragment() {
 
     private lateinit var recyclerView: RecyclerView
     private val db = Firebase.firestore
+    private val auth = FirebaseAuth.getInstance()
     private var postList = mutableListOf<Post>()
     private lateinit var postAdapter: PostAdapter
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
@@ -50,16 +52,10 @@ class CommunityFragment : Fragment() {
             // 좋아요 클릭 리스너 구현
             object : PostAdapter.OnLikeClickListener {
                 override fun onLikeClick(position: Int, post: Post) {
-                    // UI를 먼저 업데이트하여 사용자에게 즉각적인 피드백 제공
-                    post.isLiked = !post.isLiked
-                    if (post.isLiked) {
-                        post.likeCount++
-                    } else {
-                        post.likeCount--
-                    }
-                    postAdapter.notifyItemChanged(position)
+                    val currentUser = auth.currentUser ?: return
+                    val isLiked = !post.likers.contains(currentUser.uid)
 
-                    // Firebase Firestore 업데이트 로직 (실제 구현 필요)
+                    updateLikeInFirestore(post.postId, isLiked, currentUser.uid)
                 }
             },
             // 댓글 클릭 리스너 구현 (PostDetailActivity로 이동하도록 수정)
@@ -126,8 +122,7 @@ class CommunityFragment : Fragment() {
             startActivity(intent)
         }
 
-        // 초기 데이터 로드
-        resetAndFetchPosts()
+        // 초기 데이터 로드는 onResume에서 처리됩니다.
     }
 
     override fun onResume() {
@@ -184,9 +179,11 @@ class CommunityFragment : Fragment() {
 
                 lastVisible = result.documents[result.size() - 1]
 
+                val currentUser = auth.currentUser
                 for (document in result) {
                     val post = document.toObject(Post::class.java)
                     post.postId = document.id
+                    post.isLiked = currentUser?.uid?.let { post.likers.contains(it) } ?: false
                     postList.add(post)
                 }
                 postAdapter.notifyDataSetChanged()
@@ -196,5 +193,24 @@ class CommunityFragment : Fragment() {
                 swipeRefreshLayout.isRefreshing = false
                 // 오류 처리
             }
+    }
+
+    private fun updateLikeInFirestore(postId: String, isLiked: Boolean, userId: String) {
+        val postRef = db.collection("posts").document(postId)
+        db.runTransaction {
+            transaction ->
+            val snapshot = transaction.get(postRef)
+            val likers = snapshot.get("likers") as? MutableList<String> ?: mutableListOf()
+            if (isLiked) {
+                likers.add(userId)
+            } else {
+                likers.remove(userId)
+            }
+            transaction.update(postRef, "likers", likers)
+            transaction.update(postRef, "likeCount", likers.size)
+            null
+        }.addOnSuccessListener {
+            resetAndFetchPosts()
+        }
     }
 }
