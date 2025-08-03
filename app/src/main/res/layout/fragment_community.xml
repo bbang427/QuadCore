@@ -77,7 +77,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@drawable/ic_write"
-        app:backgroundTint="#FF5722"
+        app:backgroundTint="#FF922B"
         app:tint="@android:color/white"
         android:contentDescription="글쓰기" />
 
