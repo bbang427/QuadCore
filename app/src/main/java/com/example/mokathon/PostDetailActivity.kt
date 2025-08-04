@@ -1,6 +1,5 @@
 package com.example.mokathon
 
-import android.content.DialogInterface
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -110,7 +109,6 @@ class PostDetailActivity : AppCompatActivity() {
     }
 
     private fun loadComments(postId: String) {
-        // Firestore의 posts 컬렉션 아래에 있는 comments 서브컬렉션에서 댓글을 가져옴
         db.collection("posts").document(postId).collection("comments")
             .orderBy("createdAt", Query.Direction.ASCENDING)
             .addSnapshotListener { snapshots, e ->
@@ -120,16 +118,42 @@ class PostDetailActivity : AppCompatActivity() {
                 }
 
                 if (snapshots != null) {
-                    commentList.clear()
-                    for (doc in snapshots.documents) {
-                        val comment = doc.toObject(Comment::class.java)
-                        if (comment != null) {
-                            comment.commentId = doc.id // Firestore 문서 ID를 commentId에 저장
-                            commentList.add(comment)
+                    for (change in snapshots.documentChanges) {
+                        when (change.type) {
+                            com.google.firebase.firestore.DocumentChange.Type.ADDED -> {
+                                // 새 댓글이 추가되었을 때
+                                val comment = change.document.toObject(Comment::class.java).apply {
+                                    commentId = change.document.id
+                                }
+                                commentList.add(change.newIndex, comment)
+                                commentAdapter.notifyItemInserted(change.newIndex)
+                            }
+                            com.google.firebase.firestore.DocumentChange.Type.MODIFIED -> {
+                                // 댓글이 수정되었을 때
+                                val comment = change.document.toObject(Comment::class.java).apply {
+                                    commentId = change.document.id
+                                }
+                                if (change.oldIndex == change.newIndex) {
+                                    // 위치가 변경되지 않은 경우
+                                    commentList[change.oldIndex] = comment
+                                    commentAdapter.notifyItemChanged(change.oldIndex)
+                                } else {
+                                    // 위치가 변경된 경우
+                                    commentList.removeAt(change.oldIndex)
+                                    commentList.add(change.newIndex, comment)
+                                    commentAdapter.notifyItemMoved(change.oldIndex, change.newIndex)
+                                    commentAdapter.notifyItemChanged(change.newIndex)
+                                }
+                            }
+                            com.google.firebase.firestore.DocumentChange.Type.REMOVED -> {
+                                // 댓글이 삭제되었을 때
+                                commentList.removeAt(change.oldIndex)
+                                commentAdapter.notifyItemRemoved(change.oldIndex)
+                            }
                         }
                     }
-                    commentAdapter.notifyDataSetChanged()
-                    rvComments.scrollToPosition(commentList.size - 1) // 최신 댓글로 스크롤
+                    // 모든 변경 사항이 처리된 후 스크롤
+                    rvComments.scrollToPosition(commentList.size - 1)
                 }
             }
     }
