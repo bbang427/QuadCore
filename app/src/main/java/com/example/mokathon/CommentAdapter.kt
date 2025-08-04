@@ -3,7 +3,9 @@ package com.example.mokathon
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageButton
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.PopupMenu
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
@@ -27,11 +29,15 @@ class CommentAdapter(
         val authorTextView: TextView = itemView.findViewById(R.id.tv_comment_author)
         val timestampTextView: TextView = itemView.findViewById(R.id.tv_comment_timestamp)
         val contentTextView: TextView = itemView.findViewById(R.id.tv_comment_content)
-        val editButton: TextView = itemView.findViewById(R.id.tv_edit_comment)
-        val deleteButton: TextView = itemView.findViewById(R.id.tv_delete_comment)
-        val likeButton: ImageButton = itemView.findViewById(R.id.button_like)
+
+        // 수정/삭제 버튼을 대체하는 '...' 아이콘
+        val optionsButton: ImageView = itemView.findViewById(R.id.iv_comment_options)
+
+        val likeButton: ImageView = itemView.findViewById(R.id.button_like)
         val likeCountTextView: TextView = itemView.findViewById(R.id.text_like_count)
-        val replyButton: ImageButton = itemView.findViewById(R.id.button_reply)
+
+        // 답글 달기 버튼 (아이콘 + 텍스트)
+        val replyActionLayout: LinearLayout = itemView.findViewById(R.id.reply_action_layout)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CommentViewHolder {
@@ -42,6 +48,8 @@ class CommentAdapter(
 
     override fun onBindViewHolder(holder: CommentViewHolder, position: Int) {
         val comment = commentList[position]
+        val context = holder.itemView.context
+
         holder.authorTextView.text = comment.authorName
         holder.contentTextView.text = comment.content
         holder.likeCountTextView.text = comment.likes.toString()
@@ -50,23 +58,41 @@ class CommentAdapter(
             holder.timestampTextView.text = formatRelativeTime(it)
         }
 
+        // '...' 아이콘으로 수정/삭제 기능 통합
         if (comment.authorId == currentUserId) {
-            holder.editButton.visibility = View.VISIBLE
-            holder.deleteButton.visibility = View.VISIBLE
-            holder.editButton.setOnClickListener { onEditClick(comment) }
-            holder.deleteButton.setOnClickListener { onDeleteClick(comment) }
+            holder.optionsButton.visibility = View.VISIBLE
+            holder.optionsButton.setOnClickListener { view ->
+                val popup = PopupMenu(context, view)
+                popup.menuInflater.inflate(R.menu.post_options_menu, popup.menu)
+
+                popup.setOnMenuItemClickListener { menuItem ->
+                    when (menuItem.itemId) {
+                        R.id.action_edit_post -> {
+                            // 팝업 메뉴 대신 onEditClick 리스너를 직접 호출
+                            onEditClick(comment)
+                            true
+                        }
+                        R.id.action_delete_post -> {
+                            onDeleteClick(comment)
+                            true
+                        }
+                        else -> false
+                    }
+                }
+                popup.show()
+            }
         } else {
-            holder.editButton.visibility = View.GONE
-            holder.deleteButton.visibility = View.GONE
+            holder.optionsButton.visibility = View.GONE
         }
 
         holder.likeButton.setOnClickListener { onLikeClick(comment) }
-        holder.replyButton.setOnClickListener { onReplyClick(comment) }
+
+        // 답글 달기 버튼 클릭 리스너 (LinearLayout에 연결)
+        holder.replyActionLayout.setOnClickListener { onReplyClick(comment) }
     }
 
     override fun getItemCount(): Int = commentList.size
 
-    // 시간 포맷팅 함수 (PostAdapter와 동일)
     private fun formatRelativeTime(date: Date): String {
         val now = Date()
         val diffInMillis = now.time - date.time

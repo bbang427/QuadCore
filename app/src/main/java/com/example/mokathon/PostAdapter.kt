@@ -1,11 +1,10 @@
 package com.example.mokathon
 
-import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.LinearLayout
+import android.widget.PopupMenu
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
@@ -14,6 +13,7 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 import java.util.concurrent.TimeUnit
+import android.view.ContextThemeWrapper
 
 class PostAdapter(
     private val postList: MutableList<Post>,
@@ -48,9 +48,9 @@ class PostAdapter(
         val likeCountTextView: TextView = itemView.findViewById(R.id.tv_like_count)
         val commentButton: ImageView = itemView.findViewById(R.id.iv_comment)
         val commentCountTextView: TextView = itemView.findViewById(R.id.tv_comment_count)
-        val editDeleteLayout: LinearLayout = itemView.findViewById(R.id.ll_edit_delete)
-        val editButton: TextView = itemView.findViewById(R.id.tv_edit_post)
-        val deleteButton: TextView = itemView.findViewById(R.id.tv_delete_post)
+
+        // 수정/삭제 버튼을 대체하는 '...' 아이콘
+        val optionsButton: ImageView = itemView.findViewById(R.id.iv_post_options)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
@@ -62,6 +62,7 @@ class PostAdapter(
     override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
         val post = postList[position]
         val context = holder.itemView.context
+        val currentUserId = FirebaseAuth.getInstance().currentUser?.uid
 
         holder.titleTextView.text = post.title
         holder.contentTextView.text = post.content
@@ -100,14 +101,33 @@ class PostAdapter(
             onCommentClickListener.onCommentClick(post)
         }
 
-        // 수정/삭제 버튼 표시 및 리스너 설정
-        val currentUserId = FirebaseAuth.getInstance().currentUser?.uid
+        // '...' 아이콘으로 수정/삭제 기능 통합
         if (post.authorId == currentUserId) {
-            holder.editDeleteLayout.visibility = View.VISIBLE
-            holder.editButton.setOnClickListener { onEditClickListener.onEditClick(post) }
-            holder.deleteButton.setOnClickListener { onDeleteClickListener.onDeleteClick(post) }
+            holder.optionsButton.visibility = View.VISIBLE
+            holder.optionsButton.setOnClickListener { view ->
+                // Context에 커스텀 스타일을 적용하여 PopupMenu를 생성합니다.
+                val contextThemeWrapper = ContextThemeWrapper(context, R.style.CustomPopupMenuStyle)
+                val popup = PopupMenu(contextThemeWrapper, view)
+
+                popup.menuInflater.inflate(R.menu.post_options_menu, popup.menu)
+
+                popup.setOnMenuItemClickListener { menuItem ->
+                    when (menuItem.itemId) {
+                        R.id.action_edit_post -> {
+                            onEditClickListener.onEditClick(post)
+                            true
+                        }
+                        R.id.action_delete_post -> {
+                            onDeleteClickListener.onDeleteClick(post)
+                            true
+                        }
+                        else -> false
+                    }
+                }
+                popup.show()
+            }
         } else {
-            holder.editDeleteLayout.visibility = View.GONE
+            holder.optionsButton.visibility = View.GONE
         }
     }
 

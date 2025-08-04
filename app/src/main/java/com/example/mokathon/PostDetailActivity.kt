@@ -2,7 +2,6 @@ package com.example.mokathon
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.MenuItem
 import android.widget.EditText
 import android.widget.ImageView
@@ -24,6 +23,10 @@ import java.util.concurrent.TimeUnit
 import com.google.firebase.firestore.FieldValue
 import android.os.Build
 import android.util.Log
+import android.content.Context
+import android.view.inputmethod.InputMethodManager
+import android.widget.LinearLayout
+import android.view.View
 
 class PostDetailActivity : AppCompatActivity() {
 
@@ -33,18 +36,27 @@ class PostDetailActivity : AppCompatActivity() {
     private lateinit var rvComments: RecyclerView
     private lateinit var etCommentInput: EditText
     private lateinit var ivSendComment: ImageView
-    private lateinit var tvCommentHeaderCount: TextView // 댓글 목록 헤더의 댓글 수 TextView
+    private lateinit var tvCommentHeaderCount: TextView
 
     private lateinit var commentAdapter: CommentAdapter
     private val commentList = mutableListOf<Comment>()
 
-    // 추가된 UI 요소
     private lateinit var tvDetailLikeCount: TextView
     private lateinit var ivDetailLikeIcon: ImageView
-    private lateinit var tvDetailCommentCount: TextView // 본문 하단 댓글 수
+    private lateinit var tvDetailCommentCount: TextView
 
     private var currentPost: Post? = null
     private var currentPostId: String? = null
+
+    // 수정 및 답글 모드 관련 변수
+    private var isEditingComment = false
+    private var editingCommentId: String? = null
+    private var isReplyingToComment = false
+    private var replyingToCommentId: String? = null
+
+    // 댓글 수정 UI 관련 변수
+    private lateinit var editModeHeader: LinearLayout
+    private lateinit var editCancelButton: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,22 +67,23 @@ class PostDetailActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.title = "게시글 상세"
 
-        // 게시글 본문 UI 요소 바인딩
         val titleTextView: TextView = findViewById(R.id.tv_detail_title)
         val authorTextView: TextView = findViewById(R.id.tv_detail_author)
         val timestampTextView: TextView = findViewById(R.id.tv_detail_timestamp)
         val contentTextView: TextView = findViewById(R.id.tv_detail_content)
 
-        // 좋아요/댓글 UI 요소 바인딩
         tvDetailLikeCount = findViewById(R.id.tv_detail_like_count)
         ivDetailLikeIcon = findViewById(R.id.iv_detail_like_icon)
         tvDetailCommentCount = findViewById(R.id.tv_detail_comment_count)
 
-        // 댓글 관련 UI 요소 바인딩
         rvComments = findViewById(R.id.rv_comments)
         etCommentInput = findViewById(R.id.et_comment_input)
         ivSendComment = findViewById(R.id.iv_send_comment)
-        tvCommentHeaderCount = findViewById(R.id.tv_comment_count) // 댓글 목록 헤더
+        tvCommentHeaderCount = findViewById(R.id.tv_comment_count)
+
+        // 새로 추가된 UI 요소 바인딩
+        editModeHeader = findViewById(R.id.edit_mode_header)
+        editCancelButton = findViewById(R.id.tv_edit_cancel)
 
         val post = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             intent.getSerializableExtra("post", Post::class.java)
@@ -92,31 +105,14 @@ class PostDetailActivity : AppCompatActivity() {
             updateCommentCountUI(post)
         }
 
-        // 좋아요 버튼 클릭 리스너
         ivDetailLikeIcon.setOnClickListener {
             currentPost?.let { post ->
                 toggleLike(post)
             }
         }
 
-        rvComments.layoutManager = LinearLayoutManager(this)
-        commentAdapter = CommentAdapter(
-            commentList,
-            onEditClick = { comment -> showEditCommentDialog(comment) },
-            onDeleteClick = { comment -> showDeleteCommentDialog(comment) },
-            onLikeClick = { comment -> toggleLike(comment) },
-            onReplyClick = { comment -> showReplyDialog(comment) }
-        )
-        rvComments.adapter = commentAdapter
-
-        // 댓글 작성 버튼 클릭 리스너
-        ivSendComment.setOnClickListener {
-            val commentText = etCommentInput.text.toString().trim()
-            if (commentText.isNotEmpty() && currentPostId != null && auth.currentUser != null) {
-                addCommentToFirestore(currentPostId!!, commentText)
-                etCommentInput.text.clear()
-            }
-        }
+        setupCommentsRecyclerView()
+        setupCommentInput()
 
         if (currentPostId != null) {
             listenForPostChanges(currentPostId!!)
@@ -132,6 +128,93 @@ class PostDetailActivity : AppCompatActivity() {
             }
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    private fun setupCommentsRecyclerView() {
+        val onEditClick: (Comment) -> Unit = { comment ->
+            // 댓글 수정 모드 활성화 및 상태 저장
+            isEditingComment = true
+            editingCommentId = comment.commentId
+            isReplyingToComment = false
+            replyingToCommentId = null
+
+            // UI 변경: 수정 모드 헤더 보이기
+            editModeHeader.visibility = View.VISIBLE
+            etCommentInput.setText(comment.content)
+            etCommentInput.hint = "댓글을 수정하세요."
+
+            etCommentInput.requestFocus()
+            val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.showSoftInput(etCommentInput, InputMethodManager.SHOW_IMPLICIT)
+        }
+
+        val onReplyClick: (Comment) -> Unit = { comment ->
+            isReplyingToComment = true
+            replyingToCommentId = comment.commentId
+            isEditingComment = false
+            editingCommentId = null
+
+            etCommentInput.text.clear()
+            etCommentInput.hint = "${comment.authorName}님에게 답글을 남겨주세요."
+
+            // 답글 모드에서는 수정 모드 헤더 숨기기
+            editModeHeader.visibility = View.GONE
+
+            etCommentInput.requestFocus()
+            val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.showSoftInput(etCommentInput, InputMethodManager.SHOW_IMPLICIT)
+        }
+
+        val onDeleteClick: (Comment) -> Unit = { comment -> showDeleteCommentDialog(comment) }
+        val onLikeClick: (Comment) -> Unit = { comment -> toggleLike(comment) }
+
+        rvComments.layoutManager = LinearLayoutManager(this)
+        commentAdapter = CommentAdapter(
+            commentList,
+            onEditClick = onEditClick,
+            onDeleteClick = onDeleteClick,
+            onLikeClick = onLikeClick,
+            onReplyClick = onReplyClick
+        )
+        rvComments.adapter = commentAdapter
+
+        // '취소' 버튼 클릭 리스너 추가
+        editCancelButton.setOnClickListener {
+            resetCommentInputUI()
+        }
+    }
+
+    private fun setupCommentInput() {
+        ivSendComment.setOnClickListener {
+            val commentText = etCommentInput.text.toString().trim()
+            if (commentText.isNotEmpty() && currentPostId != null && auth.currentUser != null) {
+                if (isEditingComment) {
+                    updateComment(editingCommentId!!, commentText)
+                } else if (isReplyingToComment) {
+                    addReplyToComment(replyingToCommentId!!, commentText)
+                } else {
+                    addCommentToFirestore(currentPostId!!, commentText)
+                }
+
+                // 작업 완료 후 UI 및 상태 초기화
+                resetCommentInputUI()
+            }
+        }
+    }
+
+    // UI 및 상태를 초기화하는 새로운 함수 추가
+    private fun resetCommentInputUI() {
+        isEditingComment = false
+        editingCommentId = null
+        isReplyingToComment = false
+        replyingToCommentId = null
+
+        editModeHeader.visibility = View.GONE
+        etCommentInput.hint = "댓글을 입력하세요."
+        etCommentInput.text.clear()
+
+        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(etCommentInput.windowToken, 0)
     }
 
     private fun listenForPostChanges(postId: String) {
@@ -272,23 +355,16 @@ class PostDetailActivity : AppCompatActivity() {
         }
     }
 
-    private fun showEditCommentDialog(comment: Comment) {
-        val builder = AlertDialog.Builder(this)
-        val inflater = LayoutInflater.from(this)
-        val dialogLayout = inflater.inflate(R.layout.dialog_edit_comment, null)
-        val editText = dialogLayout.findViewById<EditText>(R.id.et_edit_comment_input)
-        editText.setText(comment.content)
-
-        builder.setTitle("댓글 수정")
-            .setView(dialogLayout)
-            .setPositiveButton("수정") { dialog, which ->
-                val updatedContent = editText.text.toString().trim()
-                if (updatedContent.isNotEmpty()) {
-                    updateComment(comment, updatedContent)
-                }
+    private fun updateComment(commentId: String, updatedContent: String) {
+        db.collection("posts").document(currentPostId!!).collection("comments")
+            .document(commentId)
+            .update("content", updatedContent)
+            .addOnSuccessListener {
+                Log.d("PostDetailActivity", "Comment updated successfully")
             }
-            .setNegativeButton("취소", null)
-            .show()
+            .addOnFailureListener { e ->
+                Log.e("PostDetailActivity", "Error updating comment", e)
+            }
     }
 
     private fun showDeleteCommentDialog(comment: Comment) {
@@ -300,17 +376,6 @@ class PostDetailActivity : AppCompatActivity() {
             }
             .setNegativeButton("취소", null)
             .show()
-    }
-
-    private fun updateComment(comment: Comment, updatedContent: String) {
-        if (comment.commentId.isEmpty()) return
-        db.collection("posts").document(comment.postId).collection("comments")
-            .document(comment.commentId)
-            .update("content", updatedContent)
-            .addOnSuccessListener {
-            }
-            .addOnFailureListener {
-            }
     }
 
     private fun deleteComment(comment: Comment) {
@@ -339,37 +404,19 @@ class PostDetailActivity : AppCompatActivity() {
             .addOnFailureListener {  }
     }
 
-    private fun showReplyDialog(comment: Comment) {
-        val builder = AlertDialog.Builder(this)
-        val inflater = LayoutInflater.from(this)
-        val dialogLayout = inflater.inflate(R.layout.dialog_edit_comment, null)
-        val editText = dialogLayout.findViewById<EditText>(R.id.et_edit_comment_input)
-
-        builder.setTitle("대댓글 작성")
-            .setView(dialogLayout)
-            .setPositiveButton("작성") { _, _ ->
-                val replyText = editText.text.toString().trim()
-                if (replyText.isNotEmpty()) {
-                    addReplyToComment(comment, replyText)
-                }
-            }
-            .setNegativeButton("취소", null)
-            .show()
-    }
-
-    private fun addReplyToComment(comment: Comment, replyText: String) {
+    private fun addReplyToComment(commentId: String, replyText: String) {
         val currentUser = auth.currentUser ?: return
         val authorName = currentUser.displayName ?: "익명"
 
         val reply = Comment(
-            postId = comment.postId,
+            postId = currentPostId!!,
             authorId = currentUser.uid,
             authorName = authorName,
             content = replyText,
             createdAt = Date()
         )
 
-        val commentRef = db.collection("posts").document(comment.postId).collection("comments").document(comment.commentId)
+        val commentRef = db.collection("posts").document(currentPostId!!).collection("comments").document(commentId)
         commentRef.update("replies", FieldValue.arrayUnion(reply))
     }
 
