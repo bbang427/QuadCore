@@ -10,6 +10,21 @@
     tools:context=".ChatbotFragment">
 
     <TextView
+        android:id="@+id/tv_start_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="대화를 시작해보세요!"
+        android:textSize="36sp"
+        android:textColor="#808080"
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@id/tv_greeting"
+        app:layout_constraintBottom_toTopOf="@+id/view_input_divider"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="32dp"
+        android:layout_marginBottom="32dp" />
+
+    <TextView
         android:id="@+id/tv_greeting"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -69,7 +84,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:hint="@string/message_input_hint"
+            android:hint="@string/chatbot_msg_input_hint"
             android:inputType="textMultiLine"
             android:maxLines="4"
             android:background="@android:color/transparent"

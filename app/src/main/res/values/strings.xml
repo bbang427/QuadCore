@@ -5,6 +5,7 @@
     <string name="comment_send_description">댓글 작성</string>
     <string name="chatbot">챗봇</string>
     <string name="message_input_hint">메시지를 입력하세요</string>
+    <string name="chatbot_msg_input_hint">AI에게 물어보세요</string>
     <string name="edit">수정</string>
     <string name="delete">삭제</string>
     <!--
