@@ -42,8 +42,8 @@ class PostAdapter(
     class PostViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val titleTextView: TextView = itemView.findViewById(R.id.tv_post_title)
         val contentTextView: TextView = itemView.findViewById(R.id.tv_post_content)
-        val timestampTextView: TextView = itemView.findViewById(R.id.tv_post_timestamp)
         val authorTextView: TextView = itemView.findViewById(R.id.tv_post_author)
+        val timestampTextView: TextView = itemView.findViewById(R.id.tv_post_timestamp)
         val likeButton: ImageView = itemView.findViewById(R.id.iv_like)
         val likeCountTextView: TextView = itemView.findViewById(R.id.tv_like_count)
         val commentButton: ImageView = itemView.findViewById(R.id.iv_comment)
@@ -61,41 +61,46 @@ class PostAdapter(
 
     override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
         val post = postList[position]
+        val context = holder.itemView.context
 
         holder.titleTextView.text = post.title
         holder.contentTextView.text = post.content
         holder.authorTextView.text = post.authorName
-
         post.createdAt?.let {
             holder.timestampTextView.text = formatRelativeTime(it)
         }
 
-        // 좋아요 상태에 따라 아이콘 및 텍스트 업데이트
+        // 좋아요 상태에 따라 아이콘과 텍스트 색상 변경
         holder.likeCountTextView.text = post.likeCount.toString()
         if (post.isLiked) {
             holder.likeButton.setImageResource(R.drawable.ic_like_filled)
-            holder.likeButton.setColorFilter(ContextCompat.getColor(holder.itemView.context, R.color.red))
-            holder.likeCountTextView.setTextColor(ContextCompat.getColor(holder.itemView.context, R.color.red))
+            holder.likeButton.setColorFilter(ContextCompat.getColor(context, R.color.red))
+            holder.likeCountTextView.setTextColor(ContextCompat.getColor(context, R.color.red))
         } else {
             holder.likeButton.setImageResource(R.drawable.ic_like_border)
-            holder.likeButton.setColorFilter(ContextCompat.getColor(holder.itemView.context, R.color.dark_gray))
-            holder.likeCountTextView.setTextColor(ContextCompat.getColor(holder.itemView.context, R.color.dark_gray))
+            holder.likeButton.setColorFilter(ContextCompat.getColor(context, R.color.black))
+            holder.likeCountTextView.setTextColor(ContextCompat.getColor(context, R.color.black))
         }
 
-        // 좋아요 버튼 클릭 리스너 설정
+        // 댓글 수 업데이트
+        holder.commentCountTextView.text = post.commentCount.toString()
+
+        // 좋아요 버튼 클릭 리스너
         holder.likeButton.setOnClickListener {
             onLikeClickListener.onLikeClick(position, post)
         }
 
-        // 댓글 수 업데이트 (Post 데이터 클래스에 commentCount 필드가 추가되어야 합니다.)
-        holder.commentCountTextView.text = post.commentCount.toString()
-
-        // 댓글 버튼 클릭 리스너 설정 (추가)
+        // 댓글 버튼 클릭 리스너 (PostDetailActivity로 이동)
         holder.commentButton.setOnClickListener {
             onCommentClickListener.onCommentClick(post)
         }
 
-        // Show/hide edit/delete buttons
+        // 아이템 전체 클릭 시 PostDetailActivity로 이동
+        holder.itemView.setOnClickListener {
+            onCommentClickListener.onCommentClick(post)
+        }
+
+        // 수정/삭제 버튼 표시 및 리스너 설정
         val currentUserId = FirebaseAuth.getInstance().currentUser?.uid
         if (post.authorId == currentUserId) {
             holder.editDeleteLayout.visibility = View.VISIBLE
@@ -103,13 +108,6 @@ class PostAdapter(
             holder.deleteButton.setOnClickListener { onDeleteClickListener.onDeleteClick(post) }
         } else {
             holder.editDeleteLayout.visibility = View.GONE
-        }
-
-        // 아이템 전체 클릭 리스너
-        holder.itemView.setOnClickListener {
-            val intent = Intent(holder.itemView.context, PostDetailActivity::class.java)
-            intent.putExtra("post", post)
-            holder.itemView.context.startActivity(intent)
         }
     }
 

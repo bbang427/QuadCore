@@ -88,7 +88,7 @@
                     android:focusable="true"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     app:tint="@color/black"
-                    android:contentDescription="좋아요 버튼" />
+                    android:contentDescription="@string/like_icon_description" />
 
                 <TextView
                     android:id="@+id/tv_like_count"
@@ -109,7 +109,7 @@
                     android:focusable="true"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     app:tint="@color/black"
-                    android:contentDescription="댓글 버튼" />
+                    android:contentDescription="@string/comment_icon_description" />
 
                 <TextView
                     android:id="@+id/tv_comment_count"
