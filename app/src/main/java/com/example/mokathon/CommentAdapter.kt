@@ -3,6 +3,7 @@ package com.example.mokathon
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
@@ -14,7 +15,9 @@ import java.util.concurrent.TimeUnit
 class CommentAdapter(
     private val commentList: MutableList<Comment>,
     private val onEditClick: (Comment) -> Unit,
-    private val onDeleteClick: (Comment) -> Unit
+    private val onDeleteClick: (Comment) -> Unit,
+    private val onLikeClick: (Comment) -> Unit,
+    private val onReplyClick: (Comment) -> Unit
 ) :
     RecyclerView.Adapter<CommentAdapter.CommentViewHolder>() {
 
@@ -26,6 +29,9 @@ class CommentAdapter(
         val contentTextView: TextView = itemView.findViewById(R.id.tv_comment_content)
         val editButton: TextView = itemView.findViewById(R.id.tv_edit_comment)
         val deleteButton: TextView = itemView.findViewById(R.id.tv_delete_comment)
+        val likeButton: ImageButton = itemView.findViewById(R.id.button_like)
+        val likeCountTextView: TextView = itemView.findViewById(R.id.text_like_count)
+        val replyButton: ImageButton = itemView.findViewById(R.id.button_reply)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CommentViewHolder {
@@ -38,6 +44,7 @@ class CommentAdapter(
         val comment = commentList[position]
         holder.authorTextView.text = comment.authorName
         holder.contentTextView.text = comment.content
+        holder.likeCountTextView.text = comment.likes.toString()
 
         comment.createdAt?.let {
             holder.timestampTextView.text = formatRelativeTime(it)
@@ -52,6 +59,9 @@ class CommentAdapter(
             holder.editButton.visibility = View.GONE
             holder.deleteButton.visibility = View.GONE
         }
+
+        holder.likeButton.setOnClickListener { onLikeClick(comment) }
+        holder.replyButton.setOnClickListener { onReplyClick(comment) }
     }
 
     override fun getItemCount(): Int = commentList.size

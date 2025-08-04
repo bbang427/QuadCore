@@ -88,7 +88,9 @@ class PostDetailActivity : AppCompatActivity() {
         commentAdapter = CommentAdapter(
             commentList,
             onEditClick = { comment -> showEditCommentDialog(comment) },
-            onDeleteClick = { comment -> showDeleteCommentDialog(comment) }
+            onDeleteClick = { comment -> showDeleteCommentDialog(comment) },
+            onLikeClick = { comment -> toggleLike(comment) },
+            onReplyClick = { comment -> showReplyDialog(comment) }
         )
         rvComments.adapter = commentAdapter
 
@@ -218,6 +220,54 @@ class PostDetailActivity : AppCompatActivity() {
             .addOnFailureListener {
                 // 실패
             }
+    }
+
+    private fun toggleLike(comment: Comment) {
+        if (comment.commentId.isEmpty()) return
+        val commentRef = db.collection("posts").document(comment.postId).collection("comments").document(comment.commentId)
+
+        db.runTransaction {
+            transaction ->
+            val snapshot = transaction.get(commentRef)
+            val newLikes = snapshot.getDouble("likes")!! + 1
+            transaction.update(commentRef, "likes", newLikes)
+            null
+        }.addOnSuccessListener {  }
+            .addOnFailureListener {  }
+    }
+
+    private fun showReplyDialog(comment: Comment) {
+        val builder = AlertDialog.Builder(this)
+        val inflater = LayoutInflater.from(this)
+        val dialogLayout = inflater.inflate(R.layout.dialog_edit_comment, null)
+        val editText = dialogLayout.findViewById<EditText>(R.id.et_edit_comment_input)
+
+        builder.setTitle("대댓글 작성")
+            .setView(dialogLayout)
+            .setPositiveButton("작성") { dialog, which ->
+                val replyText = editText.text.toString().trim()
+                if (replyText.isNotEmpty()) {
+                    addReplyToComment(comment, replyText)
+                }
+            }
+            .setNegativeButton("취소", null)
+            .show()
+    }
+
+    private fun addReplyToComment(comment: Comment, replyText: String) {
+        val currentUser = auth.currentUser ?: return
+        val authorName = currentUser.displayName ?: "익명"
+
+        val reply = Comment(
+            postId = comment.postId,
+            authorId = currentUser.uid,
+            authorName = authorName,
+            content = replyText,
+            createdAt = Date()
+        )
+
+        val commentRef = db.collection("posts").document(comment.postId).collection("comments").document(comment.commentId)
+        commentRef.update("replies", FieldValue.arrayUnion(reply))
     }
 
     // 뒤로가기 버튼 클릭 이벤트 처리
