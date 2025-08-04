@@ -42,7 +42,7 @@
             android:id="@+id/tv_edit_comment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="수정"
+            android:text="@string/edit"
             android:textColor="@color/purple_500"
             android:textSize="12sp"
             android:layout_marginEnd="8dp"
@@ -53,7 +53,7 @@
             android:id="@+id/tv_delete_comment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="삭제"
+            android:text="@string/delete"
             android:textColor="@android:color/holo_red_dark"
             android:textSize="12sp"
             android:clickable="true"
@@ -68,5 +68,38 @@
         android:layout_marginTop="4dp"
         android:textSize="14sp"
         tools:text="이것은 댓글 내용입니다." />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="8dp">
+
+        <ImageButton
+            android:id="@+id/button_like"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_like_border"
+            android:background="?attr/selectableItemBackgroundBorderless" />
+
+        <TextView
+            android:id="@+id/text_like_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:text="0"
+            android:textColor="@android:color/darker_gray" />
+
+        <ImageButton
+            android:id="@+id/button_reply"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:scaleType="fitCenter"
+            android:layout_marginStart="16dp"
+            android:src="@drawable/ic_reply"
+            android:background="?attr/selectableItemBackgroundBorderless" />
+
+    </LinearLayout>
 
 </LinearLayout>

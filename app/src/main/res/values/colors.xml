@@ -7,4 +7,7 @@
     <color name="purple_500">#FF6200EE</color>
     <color name="blue">#FF0000FF</color>
     <color name="light_blue">#FFADD8E6</color>
+    <color name="my_orange">#FF922B</color>
+    <color name="gradient_blue_start">#4FC3F7</color>
+    <color name="gradient_blue_end">#0D47A1</color>
 </resources>

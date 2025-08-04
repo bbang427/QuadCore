@@ -1,6 +1,15 @@
 <resources>
     <string name="app_name">Mokathon</string>
-
+    <string name="comments_label">댓글</string>
+    <string name="view_comment_detail">댓글 상세 보기</string>
+    <string name="comment_input_hint">댓글을 입력하세요</string>
+    <string name="comment_send_description">댓글 작성</string>
+    <string name="chatbot">챗봇</string>
+    <string name="message_input_hint">메시지를 입력하세요</string>
+    <string name="chatbot_msg_input_hint">AI에게 물어보세요</string>
+    <string name="edit">수정</string>
+    <string name="delete">삭제</string>
+    <string name="chatbot_greeting">대화를 시작해보세요!</string>
     <!--
     <string name="default_web_client_id">
         587604470952-5nf3d82t09nbqg68tqmtic6j1c14ro69.apps.googleusercontent.com </string>

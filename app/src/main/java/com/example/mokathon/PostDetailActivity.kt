@@ -1,6 +1,5 @@
 package com.example.mokathon
 
-import android.content.DialogInterface
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -29,10 +28,13 @@ class PostDetailActivity : AppCompatActivity() {
     private val db = Firebase.firestore
     private val auth = FirebaseAuth.getInstance()
 
-    // 댓글 기능 관련 UI 요소 및 데이터
+    // UI 요소 바인딩 변수
     private lateinit var rvComments: RecyclerView
     private lateinit var etCommentInput: EditText
     private lateinit var ivSendComment: ImageView
+    private lateinit var tvCommentCount: TextView // 댓글 수 TextView
+
+    // 댓글 기능 관련 데이터
     private lateinit var commentAdapter: CommentAdapter
     private val commentList = mutableListOf<Comment>()
 
@@ -58,10 +60,7 @@ class PostDetailActivity : AppCompatActivity() {
             @Suppress("DEPRECATION")
             intent.getSerializableExtra("post") as? Post
         }
-        currentPostId = post?.postId // postId는 post 객체에서 직접 가져옴
-
-        android.util.Log.d("PostDetailActivity", "post: $post")
-        android.util.Log.d("PostDetailActivity", "postId: $currentPostId")
+        currentPostId = post?.postId
 
         if (post != null) {
             val titleTextView: TextView = findViewById(R.id.tv_detail_title)
@@ -82,13 +81,16 @@ class PostDetailActivity : AppCompatActivity() {
         rvComments = findViewById(R.id.rv_comments)
         etCommentInput = findViewById(R.id.et_comment_input)
         ivSendComment = findViewById(R.id.iv_send_comment)
+        tvCommentCount = findViewById(R.id.tv_comment_count) // 댓글 수 TextView 바인딩
 
         // RecyclerView 설정
         rvComments.layoutManager = LinearLayoutManager(this)
         commentAdapter = CommentAdapter(
             commentList,
             onEditClick = { comment -> showEditCommentDialog(comment) },
-            onDeleteClick = { comment -> showDeleteCommentDialog(comment) }
+            onDeleteClick = { comment -> showDeleteCommentDialog(comment) },
+            onLikeClick = { comment -> toggleLike(comment) },
+            onReplyClick = { comment -> showReplyDialog(comment) }
         )
         rvComments.adapter = commentAdapter
 
@@ -107,8 +109,17 @@ class PostDetailActivity : AppCompatActivity() {
         }
     }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            android.R.id.home -> {
+                finish()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
     private fun loadComments(postId: String) {
-        // Firestore의 posts 컬렉션 아래에 있는 comments 서브컬렉션에서 댓글을 가져옴
         db.collection("posts").document(postId).collection("comments")
             .orderBy("createdAt", Query.Direction.ASCENDING)
             .addSnapshotListener { snapshots, e ->
@@ -118,24 +129,54 @@ class PostDetailActivity : AppCompatActivity() {
                 }
 
                 if (snapshots != null) {
-                    commentList.clear()
-                    for (doc in snapshots.documents) {
-                        val comment = doc.toObject(Comment::class.java)
-                        if (comment != null) {
-                            comment.commentId = doc.id // Firestore 문서 ID를 commentId에 저장
-                            commentList.add(comment)
+                    // 댓글 목록 변경 사항 처리
+                    for (change in snapshots.documentChanges) {
+                        when (change.type) {
+                            com.google.firebase.firestore.DocumentChange.Type.ADDED -> {
+                                val comment = change.document.toObject(Comment::class.java).apply {
+                                    commentId = change.document.id
+                                }
+                                commentList.add(change.newIndex, comment)
+                                commentAdapter.notifyItemInserted(change.newIndex)
+                            }
+                            com.google.firebase.firestore.DocumentChange.Type.MODIFIED -> {
+                                val comment = change.document.toObject(Comment::class.java).apply {
+                                    commentId = change.document.id
+                                }
+                                if (change.oldIndex == change.newIndex) {
+                                    commentList[change.oldIndex] = comment
+                                    commentAdapter.notifyItemChanged(change.oldIndex)
+                                } else {
+                                    commentList.removeAt(change.oldIndex)
+                                    commentList.add(change.newIndex, comment)
+                                    commentAdapter.notifyItemMoved(change.oldIndex, change.newIndex)
+                                    commentAdapter.notifyItemChanged(change.newIndex)
+                                }
+                            }
+                            com.google.firebase.firestore.DocumentChange.Type.REMOVED -> {
+                                commentList.removeAt(change.oldIndex)
+                                commentAdapter.notifyItemRemoved(change.oldIndex)
+                            }
                         }
                     }
-                    commentAdapter.notifyDataSetChanged()
-                    rvComments.scrollToPosition(commentList.size - 1) // 최신 댓글로 스크롤
+
+                    // 모든 변경 사항이 처리된 후 스크롤 및 댓글 수 업데이트
+                    if (commentList.isNotEmpty()) {
+                        rvComments.scrollToPosition(commentList.size - 1)
+                    }
+                    updateCommentCount(commentList.size)
                 }
             }
+    }
+
+    private fun updateCommentCount(count: Int) {
+        tvCommentCount.text = "($count)"
     }
 
     private fun addCommentToFirestore(postId: String, content: String) {
         val currentUser = auth.currentUser
         if (currentUser == null) {
-            // TODO: 사용자에게 로그인 필요 메시지 표시
+            // 사용자에게 로그인 필요 메시지 표시
             return
         }
 
@@ -155,11 +196,10 @@ class PostDetailActivity : AppCompatActivity() {
         db.collection("posts").document(postId).collection("comments")
             .add(newComment)
             .addOnSuccessListener {
-                // 댓글이 성공적으로 추가되면 게시물의 commentCount를 1 증가시킴
                 postRef.update("commentCount", FieldValue.increment(1))
             }
             .addOnFailureListener {
-                // 댓글 추가 실패
+                // 실패
             }
     }
 
@@ -220,15 +260,51 @@ class PostDetailActivity : AppCompatActivity() {
             }
     }
 
-    // 뒤로가기 버튼 클릭 이벤트 처리
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            android.R.id.home -> {
-                finish()
-                true
+    private fun toggleLike(comment: Comment) {
+        if (comment.commentId.isEmpty()) return
+        val commentRef = db.collection("posts").document(comment.postId).collection("comments").document(comment.commentId)
+
+        db.runTransaction { transaction ->
+            val snapshot = transaction.get(commentRef)
+            val newLikes = (snapshot.getDouble("likes") ?: 0.0) + 1
+            transaction.update(commentRef, "likes", newLikes)
+            null
+        }.addOnSuccessListener {  }
+            .addOnFailureListener {  }
+    }
+
+    private fun showReplyDialog(comment: Comment) {
+        val builder = AlertDialog.Builder(this)
+        val inflater = LayoutInflater.from(this)
+        val dialogLayout = inflater.inflate(R.layout.dialog_edit_comment, null)
+        val editText = dialogLayout.findViewById<EditText>(R.id.et_edit_comment_input)
+
+        builder.setTitle("대댓글 작성")
+            .setView(dialogLayout)
+            .setPositiveButton("작성") { _, _ ->
+                val replyText = editText.text.toString().trim()
+                if (replyText.isNotEmpty()) {
+                    addReplyToComment(comment, replyText)
+                }
             }
-            else -> super.onOptionsItemSelected(item)
-        }
+            .setNegativeButton("취소", null)
+            .show()
+    }
+
+    private fun addReplyToComment(comment: Comment, replyText: String) {
+        val currentUser = auth.currentUser ?: return
+        val authorName = currentUser.displayName ?: "익명"
+
+        val reply = Comment(
+            postId = comment.postId,
+            authorId = currentUser.uid,
+            authorName = authorName,
+            content = replyText,
+            createdAt = Date()
+        )
+
+        val commentRef = db.collection("posts").document(comment.postId).collection("comments").document(comment.commentId)
+        commentRef.update("replies", FieldValue.arrayUnion(reply))
     }
 
     private fun formatRelativeTime(date: Date): String {

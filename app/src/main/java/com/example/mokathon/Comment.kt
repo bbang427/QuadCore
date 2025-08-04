@@ -9,5 +9,7 @@ data class Comment(
     val authorId: String = "",
     val authorName: String = "",
     val content: String = "",
-    val createdAt: Date? = null
+    val createdAt: Date? = null,
+    var likes: Int = 0,
+    val replies: MutableList<Comment> = mutableListOf()
 ) : Serializable
