@@ -31,10 +31,11 @@
         android:layout_height="wrap_content"
         tools:text="안녕하세요, 권관우 님"
         android:fontFamily="@font/pretendard_gov_semibold"
-        android:textSize="20sp"
+        android:textSize="24sp"
         android:textColor="#010101"
         app:layout_constraintStart_toStartOf="@id/guideline_text_greeting_v"
-        app:layout_constraintTop_toTopOf="@id/guideline_text_greeting_h"/>
+        app:layout_constraintTop_toTopOf="@id/guideline_text_greeting_h"
+        app:layout_constraintBottom_toBottomOf="@id/guideline_text_greeting_h_end"/>
 
     <ImageView
         android:id="@+id/iv_helloIcon"
@@ -42,11 +43,12 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintWidth_percent="0.068"
-        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintHeight_percent="0.04"
         app:layout_constraintStart_toEndOf="@id/tv_greeting"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.02"
-        app:layout_constraintTop_toTopOf="@id/guideline_text_greeting_h"/>
+        app:layout_constraintHorizontal_bias="0.03"
+        app:layout_constraintTop_toTopOf="@id/guideline_text_greeting_h"
+        app:layout_constraintBottom_toBottomOf="@id/guideline_text_greeting_h_end"/>
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline_text_greeting_h_end"

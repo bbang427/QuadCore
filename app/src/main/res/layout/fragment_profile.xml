@@ -38,10 +38,27 @@
         android:layout_height="wrap_content"
         android:text="프로필"
         android:fontFamily="@font/pretendard_gov_semibold"
-        android:textSize="20sp"
+        android:textSize="24sp"
         android:textColor="#010101"
         app:layout_constraintStart_toStartOf="@id/guideline_text_greeting_v"
-        app:layout_constraintTop_toTopOf="@id/guideline_text_greeting_h"/>
+        app:layout_constraintTop_toTopOf="@id/guideline_text_greeting_h"
+        app:layout_constraintBottom_toBottomOf="@id/guideline_text_greeting_h_end"/>
+
+    <ImageView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:src="@drawable/ic_logout"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackground"
+        app:layout_constraintWidth_percent="0.07"
+        app:layout_constraintHeight_percent="0.04"
+        app:layout_constraintTop_toTopOf="@id/guideline_text_greeting_h"
+        app:layout_constraintBottom_toBottomOf="@id/guideline_text_greeting_h_end"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.95"
+        />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline_text_greeting_h_end"
@@ -337,7 +354,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintVertical_bias="0.07">
+        app:layout_constraintVertical_bias="0.08">
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline_text_settings"

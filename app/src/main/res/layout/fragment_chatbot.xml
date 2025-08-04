@@ -31,10 +31,11 @@
         android:layout_height="wrap_content"
         android:text="챗봇"
         android:fontFamily="@font/pretendard_gov_semibold"
-        android:textSize="20sp"
+        android:textSize="24sp"
         android:textColor="#010101"
         app:layout_constraintStart_toStartOf="@id/guideline_text_greeting_v"
-        app:layout_constraintTop_toTopOf="@id/guideline_text_greeting_h"/>
+        app:layout_constraintTop_toTopOf="@id/guideline_text_greeting_h"
+        app:layout_constraintBottom_toBottomOf="@id/guideline_text_greeting_h_end"/>
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline_text_greeting_h_end"
