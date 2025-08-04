@@ -143,10 +143,9 @@
 
         <ImageView
             android:id="@+id/iv_send_comment"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:src="@drawable/ic_send"
-            app:tint="@color/purple_500"
             android:contentDescription="댓글 작성"
             android:clickable="true"
             android:focusable="true"
