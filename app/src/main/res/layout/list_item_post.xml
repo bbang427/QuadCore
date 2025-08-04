@@ -121,41 +121,16 @@
                     android:textColor="@color/black" />
             </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/ll_edit_delete"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+            <ImageView
+                android:id="@+id/iv_post_options"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
                 android:layout_alignParentEnd="true"
-                android:orientation="horizontal"
+                android:src="@drawable/ic_more_horiz"
+                app:tint="@color/dark_gray"
+                android:contentDescription="게시글 옵션"
                 android:visibility="gone"
-                android:gravity="center_vertical"
-                tools:visibility="visible">
-
-                <TextView
-                    android:id="@+id/tv_edit_post"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="수정"
-                    android:textColor="@color/light_blue"
-                    android:textSize="12sp"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:background="?attr/selectableItemBackground"
-                    android:padding="4dp"/>
-
-                <TextView
-                    android:id="@+id/tv_delete_post"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:text="삭제"
-                    android:textColor="@color/light_blue"
-                    android:textSize="12sp"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:background="?attr/selectableItemBackground"
-                    android:padding="4dp"/>
-            </LinearLayout>
+                tools:visibility="visible" />
         </RelativeLayout>
     </LinearLayout>
 </androidx.cardview.widget.CardView>

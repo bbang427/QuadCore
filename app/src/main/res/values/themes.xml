@@ -29,5 +29,9 @@
         <item name="cornerSize">50%</item>
     </style>
 
+    <style name="CustomPopupMenuStyle" parent="Widget.AppCompat.PopupMenu">
+        <item name="android:popupBackground">@drawable/rounded_menu_background</item>
+    </style>
+
     <style name="Theme.Mokathon" parent="Base.Theme.Mokathon" />
 </resources>
