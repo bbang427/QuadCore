@@ -16,6 +16,7 @@ import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import androidx.core.content.ContextCompat
 
 class CommunityFragment : Fragment() {
 
@@ -55,17 +56,36 @@ class CommunityFragment : Fragment() {
                     val currentUser = auth.currentUser ?: return
                     val isLiked = !post.likers.contains(currentUser.uid)
 
-                    updateLikeInFirestore(post.postId, isLiked, currentUser.uid)
+                    // 좋아요 상태를 Firestore에 업데이트하고, 성공 시 UI 갱신
+                    updateLikeInFirestore(post.postId, isLiked, currentUser.uid) {
+                        // Firestore 업데이트 성공 시 로컬 데이터와 UI 업데이트
+                        val currentLikers = post.likers.toMutableList() // 불변 리스트를 가변 리스트로 변환
+                        if (isLiked) {
+                            currentLikers.add(currentUser.uid)
+                        } else {
+                            currentLikers.remove(currentUser.uid)
+                        }
+
+                        // Post 객체의 `likers` 필드에 변경사항을 반영 (Post 객체는 var 필드가 있어야 함)
+                        // `Post` 데이터 클래스의 `likers` 필드가 `val`이면 직접 할당이 불가능합니다.
+                        // 이 경우, `postList`에서 해당 아이템을 제거하고 새로운 객체로 대체해야 합니다.
+                        // 현재 `Post`의 `likers`가 `val`이라고 가정하고 아래와 같이 처리합니다.
+                        val updatedPost = post.copy(
+                            likers = currentLikers,
+                            likeCount = currentLikers.size,
+                            isLiked = isLiked
+                        )
+
+                        postList[position] = updatedPost // 새 객체로 대체
+                        postAdapter.notifyItemChanged(position)
+                    }
                 }
             },
             // 댓글 클릭 리스너 구현 (PostDetailActivity로 이동하도록 수정)
             object : PostAdapter.OnCommentClickListener {
                 override fun onCommentClick(post: Post) {
                     val intent = Intent(activity, PostDetailActivity::class.java)
-
-                    // 게시글 전체 데이터를 Intent에 담아 전달
                     intent.putExtra("post", post)
-
                     startActivity(intent)
                 }
             },
@@ -78,7 +98,6 @@ class CommunityFragment : Fragment() {
             },
             object : PostAdapter.OnDeleteClickListener {
                 override fun onDeleteClick(post: Post) {
-                    // 삭제 확인 다이얼로그 표시
                     AlertDialog.Builder(requireContext())
                         .setTitle("게시물 삭제")
                         .setMessage("정말로 이 게시물을 삭제하시겠습니까?")
@@ -121,8 +140,6 @@ class CommunityFragment : Fragment() {
             val intent = Intent(activity, WritePostActivity::class.java)
             startActivity(intent)
         }
-
-        // 초기 데이터 로드는 onResume에서 처리됩니다.
     }
 
     override fun onResume() {
@@ -144,7 +161,6 @@ class CommunityFragment : Fragment() {
         db.collection("posts").document(post.postId)
             .delete()
             .addOnSuccessListener {
-                // 로컬 목록에서 게시물 제거 및 UI 업데이트
                 val position = postList.indexOf(post)
                 if (position != -1) {
                     postList.removeAt(position)
@@ -155,6 +171,7 @@ class CommunityFragment : Fragment() {
                 // 오류 처리
             }
     }
+
     private fun fetchPostsFromFirestore() {
         if (isLoading) return
         isLoading = true
@@ -195,10 +212,16 @@ class CommunityFragment : Fragment() {
             }
     }
 
-    private fun updateLikeInFirestore(postId: String, isLiked: Boolean, userId: String) {
+    /**
+     * Firestore에서 좋아요 상태를 업데이트하고, 완료 후 콜백을 실행하는 함수
+     * @param postId 게시글 ID
+     * @param isLiked 좋아요를 누를지(true) 취소할지(false) 여부
+     * @param userId 현재 사용자 ID
+     * @param onComplete 좋아요 업데이트 성공 시 실행될 콜백 함수
+     */
+    private fun updateLikeInFirestore(postId: String, isLiked: Boolean, userId: String, onComplete: () -> Unit) {
         val postRef = db.collection("posts").document(postId)
-        db.runTransaction {
-            transaction ->
+        db.runTransaction { transaction ->
             val snapshot = transaction.get(postRef)
             val likers = snapshot.get("likers") as? MutableList<String> ?: mutableListOf()
             if (isLiked) {
@@ -207,10 +230,12 @@ class CommunityFragment : Fragment() {
                 likers.remove(userId)
             }
             transaction.update(postRef, "likers", likers)
-            transaction.update(postRef, "likeCount", likers.size)
+            transaction.update(postRef, "likeCount", likers.size.toLong())
             null
         }.addOnSuccessListener {
-            resetAndFetchPosts()
+            onComplete() // 트랜잭션 성공 시 콜백 호출
+        }.addOnFailureListener { e ->
+            // 오류 처리
         }
     }
 }

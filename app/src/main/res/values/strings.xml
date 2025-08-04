@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Mokathon</string>
     <string name="comments_label">댓글</string>
+    <string name="view_comment_detail">댓글 상세 보기</string>
     <string name="comment_input_hint">댓글을 입력하세요</string>
     <string name="comment_send_description">댓글 작성</string>
     <string name="chatbot">챗봇</string>

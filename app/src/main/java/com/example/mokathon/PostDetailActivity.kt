@@ -28,10 +28,13 @@ class PostDetailActivity : AppCompatActivity() {
     private val db = Firebase.firestore
     private val auth = FirebaseAuth.getInstance()
 
-    // 댓글 기능 관련 UI 요소 및 데이터
+    // UI 요소 바인딩 변수
     private lateinit var rvComments: RecyclerView
     private lateinit var etCommentInput: EditText
     private lateinit var ivSendComment: ImageView
+    private lateinit var tvCommentCount: TextView // 댓글 수 TextView
+
+    // 댓글 기능 관련 데이터
     private lateinit var commentAdapter: CommentAdapter
     private val commentList = mutableListOf<Comment>()
 
@@ -57,10 +60,7 @@ class PostDetailActivity : AppCompatActivity() {
             @Suppress("DEPRECATION")
             intent.getSerializableExtra("post") as? Post
         }
-        currentPostId = post?.postId // postId는 post 객체에서 직접 가져옴
-
-        android.util.Log.d("PostDetailActivity", "post: $post")
-        android.util.Log.d("PostDetailActivity", "postId: $currentPostId")
+        currentPostId = post?.postId
 
         if (post != null) {
             val titleTextView: TextView = findViewById(R.id.tv_detail_title)
@@ -81,6 +81,7 @@ class PostDetailActivity : AppCompatActivity() {
         rvComments = findViewById(R.id.rv_comments)
         etCommentInput = findViewById(R.id.et_comment_input)
         ivSendComment = findViewById(R.id.iv_send_comment)
+        tvCommentCount = findViewById(R.id.tv_comment_count) // 댓글 수 TextView 바인딩
 
         // RecyclerView 설정
         rvComments.layoutManager = LinearLayoutManager(this)
@@ -108,6 +109,16 @@ class PostDetailActivity : AppCompatActivity() {
         }
     }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            android.R.id.home -> {
+                finish()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
     private fun loadComments(postId: String) {
         db.collection("posts").document(postId).collection("comments")
             .orderBy("createdAt", Query.Direction.ASCENDING)
@@ -118,10 +129,10 @@ class PostDetailActivity : AppCompatActivity() {
                 }
 
                 if (snapshots != null) {
+                    // 댓글 목록 변경 사항 처리
                     for (change in snapshots.documentChanges) {
                         when (change.type) {
                             com.google.firebase.firestore.DocumentChange.Type.ADDED -> {
-                                // 새 댓글이 추가되었을 때
                                 val comment = change.document.toObject(Comment::class.java).apply {
                                     commentId = change.document.id
                                 }
@@ -129,16 +140,13 @@ class PostDetailActivity : AppCompatActivity() {
                                 commentAdapter.notifyItemInserted(change.newIndex)
                             }
                             com.google.firebase.firestore.DocumentChange.Type.MODIFIED -> {
-                                // 댓글이 수정되었을 때
                                 val comment = change.document.toObject(Comment::class.java).apply {
                                     commentId = change.document.id
                                 }
                                 if (change.oldIndex == change.newIndex) {
-                                    // 위치가 변경되지 않은 경우
                                     commentList[change.oldIndex] = comment
                                     commentAdapter.notifyItemChanged(change.oldIndex)
                                 } else {
-                                    // 위치가 변경된 경우
                                     commentList.removeAt(change.oldIndex)
                                     commentList.add(change.newIndex, comment)
                                     commentAdapter.notifyItemMoved(change.oldIndex, change.newIndex)
@@ -146,22 +154,29 @@ class PostDetailActivity : AppCompatActivity() {
                                 }
                             }
                             com.google.firebase.firestore.DocumentChange.Type.REMOVED -> {
-                                // 댓글이 삭제되었을 때
                                 commentList.removeAt(change.oldIndex)
                                 commentAdapter.notifyItemRemoved(change.oldIndex)
                             }
                         }
                     }
-                    // 모든 변경 사항이 처리된 후 스크롤
-                    rvComments.scrollToPosition(commentList.size - 1)
+
+                    // 모든 변경 사항이 처리된 후 스크롤 및 댓글 수 업데이트
+                    if (commentList.isNotEmpty()) {
+                        rvComments.scrollToPosition(commentList.size - 1)
+                    }
+                    updateCommentCount(commentList.size)
                 }
             }
+    }
+
+    private fun updateCommentCount(count: Int) {
+        tvCommentCount.text = "($count)"
     }
 
     private fun addCommentToFirestore(postId: String, content: String) {
         val currentUser = auth.currentUser
         if (currentUser == null) {
-            // TODO: 사용자에게 로그인 필요 메시지 표시
+            // 사용자에게 로그인 필요 메시지 표시
             return
         }
 
@@ -181,11 +196,10 @@ class PostDetailActivity : AppCompatActivity() {
         db.collection("posts").document(postId).collection("comments")
             .add(newComment)
             .addOnSuccessListener {
-                // 댓글이 성공적으로 추가되면 게시물의 commentCount를 1 증가시킴
                 postRef.update("commentCount", FieldValue.increment(1))
             }
             .addOnFailureListener {
-                // 댓글 추가 실패
+                // 실패
             }
     }
 
@@ -250,10 +264,9 @@ class PostDetailActivity : AppCompatActivity() {
         if (comment.commentId.isEmpty()) return
         val commentRef = db.collection("posts").document(comment.postId).collection("comments").document(comment.commentId)
 
-        db.runTransaction {
-            transaction ->
+        db.runTransaction { transaction ->
             val snapshot = transaction.get(commentRef)
-            val newLikes = snapshot.getDouble("likes")!! + 1
+            val newLikes = (snapshot.getDouble("likes") ?: 0.0) + 1
             transaction.update(commentRef, "likes", newLikes)
             null
         }.addOnSuccessListener {  }
@@ -268,7 +281,7 @@ class PostDetailActivity : AppCompatActivity() {
 
         builder.setTitle("대댓글 작성")
             .setView(dialogLayout)
-            .setPositiveButton("작성") { dialog, which ->
+            .setPositiveButton("작성") { _, _ ->
                 val replyText = editText.text.toString().trim()
                 if (replyText.isNotEmpty()) {
                     addReplyToComment(comment, replyText)
@@ -292,17 +305,6 @@ class PostDetailActivity : AppCompatActivity() {
 
         val commentRef = db.collection("posts").document(comment.postId).collection("comments").document(comment.commentId)
         commentRef.update("replies", FieldValue.arrayUnion(reply))
-    }
-
-    // 뒤로가기 버튼 클릭 이벤트 처리
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            android.R.id.home -> {
-                finish()
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
-        }
     }
 
     private fun formatRelativeTime(date: Date): String {

@@ -75,9 +75,11 @@ class PostAdapter(
         if (post.isLiked) {
             holder.likeButton.setImageResource(R.drawable.ic_like_filled)
             holder.likeButton.setColorFilter(ContextCompat.getColor(holder.itemView.context, R.color.red))
+            holder.likeCountTextView.setTextColor(ContextCompat.getColor(holder.itemView.context, R.color.red))
         } else {
             holder.likeButton.setImageResource(R.drawable.ic_like_border)
             holder.likeButton.setColorFilter(ContextCompat.getColor(holder.itemView.context, R.color.dark_gray))
+            holder.likeCountTextView.setTextColor(ContextCompat.getColor(holder.itemView.context, R.color.dark_gray))
         }
 
         // 좋아요 버튼 클릭 리스너 설정
