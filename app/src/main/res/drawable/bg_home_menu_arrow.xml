@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="oval">
+
+    <!-- 내부 채우기 색 -->
+    <solid android:color="#80D9D9D9" />
+
+</shape>

@@ -33,5 +33,9 @@
         <item name="android:popupBackground">@drawable/rounded_menu_background</item>
     </style>
 
+    <style name="App.Custom.Indicator" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
+        <item name="android:color">#80FF922B</item>
+    </style>
+
     <style name="Theme.Mokathon" parent="Base.Theme.Mokathon" />
 </resources>

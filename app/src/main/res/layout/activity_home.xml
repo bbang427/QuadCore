@@ -33,10 +33,10 @@
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_nav"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="73dp"
         android:background="#FAF6F5"
         app:itemRippleColor="@null"
-        app:itemActiveIndicatorStyle="@null"
+        app:itemActiveIndicatorStyle="@style/App.Custom.Indicator"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"

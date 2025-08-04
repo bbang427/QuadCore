@@ -3,5 +3,5 @@
     <!-- 선택됐을 때 -->
     <item android:color="#010101" android:state_checked="true"/>
     <!-- 선택 안 됐을 때 -->
-    <item android:color="#999999" />
+    <item android:color="#666666" />
 </selector>
