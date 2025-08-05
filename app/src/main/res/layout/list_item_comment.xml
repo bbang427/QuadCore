@@ -67,14 +67,15 @@
         android:orientation="horizontal"
         android:layout_marginTop="8dp">
 
-        <ImageButton
+        <ImageView
             android:id="@+id/button_like"
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:scaleType="fitCenter"
             android:src="@drawable/ic_like_border"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="@string/like_icon_description" />
+            android:contentDescription="@string/like_icon_description"
+            android:clickable="true"
+            android:focusable="true" />
 
         <TextView
             android:id="@+id/text_like_count"
@@ -114,7 +115,5 @@
                 android:textColor="@color/dark_gray" />
 
         </LinearLayout>
-
     </LinearLayout>
-
 </LinearLayout>

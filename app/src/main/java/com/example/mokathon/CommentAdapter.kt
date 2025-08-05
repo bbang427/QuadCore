@@ -7,6 +7,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.PopupMenu
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import java.text.SimpleDateFormat
@@ -52,10 +53,23 @@ class CommentAdapter(
 
         holder.authorTextView.text = comment.authorName
         holder.contentTextView.text = comment.content
-        holder.likeCountTextView.text = comment.likes.toString()
 
         comment.createdAt?.let {
             holder.timestampTextView.text = formatRelativeTime(it)
+        }
+
+        // 좋아요 UI 업데이트 로직 추가
+        holder.likeCountTextView.text = comment.likeCount.toString()
+        val isLiked = currentUserId?.let { comment.likers.contains(it) } ?: false
+
+        if (isLiked) {
+            holder.likeButton.setImageResource(R.drawable.ic_like_filled)
+            holder.likeButton.setColorFilter(ContextCompat.getColor(context, R.color.red))
+            holder.likeCountTextView.setTextColor(ContextCompat.getColor(context, R.color.red))
+        } else {
+            holder.likeButton.setImageResource(R.drawable.ic_like_border)
+            holder.likeButton.setColorFilter(ContextCompat.getColor(context, R.color.dark_gray))
+            holder.likeCountTextView.setTextColor(ContextCompat.getColor(context, R.color.dark_gray))
         }
 
         // '...' 아이콘으로 수정/삭제 기능 통합
@@ -68,7 +82,6 @@ class CommentAdapter(
                 popup.setOnMenuItemClickListener { menuItem ->
                     when (menuItem.itemId) {
                         R.id.action_edit_post -> {
-                            // 팝업 메뉴 대신 onEditClick 리스너를 직접 호출
                             onEditClick(comment)
                             true
                         }
@@ -85,6 +98,7 @@ class CommentAdapter(
             holder.optionsButton.visibility = View.GONE
         }
 
+        // 좋아요 버튼 클릭 리스너
         holder.likeButton.setOnClickListener { onLikeClick(comment) }
 
         // 답글 달기 버튼 클릭 리스너 (LinearLayout에 연결)
