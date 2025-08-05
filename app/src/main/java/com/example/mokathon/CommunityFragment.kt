@@ -91,8 +91,11 @@ class CommunityFragment : Fragment() {
             },
             object : PostAdapter.OnEditClickListener {
                 override fun onEditClick(post: Post) {
-                    val intent = Intent(activity, WritePostActivity::class.java)
-                    intent.putExtra("post", post)
+                    val intent = Intent(activity, WritePostActivity::class.java).apply {
+                        // 게시글 수정 모드임을 명시적으로 알리는 플래그 추가
+                        putExtra("isEditing", true)
+                        putExtra("post", post)
+                    }
                     startActivity(intent)
                 }
             },

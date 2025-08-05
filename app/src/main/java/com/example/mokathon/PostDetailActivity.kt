@@ -15,7 +15,6 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.Query
-import com.google.firebase.firestore.DocumentSnapshot
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -27,6 +26,9 @@ import android.content.Context
 import android.view.inputmethod.InputMethodManager
 import android.widget.LinearLayout
 import android.view.View
+import android.widget.PopupMenu
+import android.content.Intent
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 
 class PostDetailActivity : AppCompatActivity() {
 
@@ -48,15 +50,16 @@ class PostDetailActivity : AppCompatActivity() {
     private var currentPost: Post? = null
     private var currentPostId: String? = null
 
-    // 수정 및 답글 모드 관련 변수
     private var isEditingComment = false
     private var editingCommentId: String? = null
     private var isReplyingToComment = false
     private var replyingToCommentId: String? = null
 
-    // 댓글 수정 UI 관련 변수
     private lateinit var editModeHeader: LinearLayout
     private lateinit var editCancelButton: TextView
+    private lateinit var postOptionsButton: ImageView
+
+    private lateinit var swipeRefreshLayout: SwipeRefreshLayout // 새로 추가된 변수
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -81,9 +84,16 @@ class PostDetailActivity : AppCompatActivity() {
         ivSendComment = findViewById(R.id.iv_send_comment)
         tvCommentHeaderCount = findViewById(R.id.tv_comment_count)
 
-        // 새로 추가된 UI 요소 바인딩
         editModeHeader = findViewById(R.id.edit_mode_header)
         editCancelButton = findViewById(R.id.tv_edit_cancel)
+
+        postOptionsButton = findViewById(R.id.iv_post_options)
+
+        // SwipeRefreshLayout 초기화 및 리스너 설정
+        swipeRefreshLayout = findViewById(R.id.swipe_refresh_layout)
+        swipeRefreshLayout.setOnRefreshListener {
+            refreshData()
+        }
 
         val post = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             intent.getSerializableExtra("post", Post::class.java)
@@ -103,6 +113,21 @@ class PostDetailActivity : AppCompatActivity() {
             }
             updateLikeUI(post)
             updateCommentCountUI(post)
+
+            val postAuthorId = post.authorId
+            val currentUserId = auth.currentUser?.uid
+
+            if (postAuthorId != null && postAuthorId == currentUserId) {
+                postOptionsButton.visibility = View.VISIBLE
+            } else {
+                postOptionsButton.visibility = View.GONE
+            }
+
+            postOptionsButton.setOnClickListener { view ->
+                showPostOptionsMenu(view)
+            }
+        } else {
+            postOptionsButton.visibility = View.GONE
         }
 
         ivDetailLikeIcon.setOnClickListener {
@@ -130,15 +155,62 @@ class PostDetailActivity : AppCompatActivity() {
         }
     }
 
+    private fun showPostOptionsMenu(view: View) {
+        val popupMenu = PopupMenu(this, view)
+        popupMenu.menuInflater.inflate(R.menu.post_options_menu, popupMenu.menu)
+
+        popupMenu.setOnMenuItemClickListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.action_edit_post -> {
+                    val intent = Intent(this, WritePostActivity::class.java).apply {
+                        putExtra("isEditing", true)
+                        putExtra("post", currentPost)
+                    }
+                    startActivity(intent)
+                    return@setOnMenuItemClickListener true
+                }
+                R.id.action_delete_post -> {
+                    showDeletePostDialog()
+                    return@setOnMenuItemClickListener true
+                }
+                else -> false
+            }
+        }
+        popupMenu.show()
+    }
+
+    private fun showDeletePostDialog() {
+        AlertDialog.Builder(this)
+            .setTitle("게시글 삭제")
+            .setMessage("정말로 이 게시글을 삭제하시겠습니까?")
+            .setPositiveButton("삭제") { _, _ ->
+                deletePost()
+            }
+            .setNegativeButton("취소", null)
+            .show()
+    }
+
+    private fun deletePost() {
+        currentPostId?.let { postId ->
+            db.collection("posts").document(postId)
+                .delete()
+                .addOnSuccessListener {
+                    Log.d("PostDetailActivity", "게시글이 성공적으로 삭제되었습니다.")
+                    finish()
+                }
+                .addOnFailureListener { e ->
+                    Log.e("PostDetailActivity", "게시글 삭제 실패", e)
+                }
+        }
+    }
+
     private fun setupCommentsRecyclerView() {
         val onEditClick: (Comment) -> Unit = { comment ->
-            // 댓글 수정 모드 활성화 및 상태 저장
             isEditingComment = true
             editingCommentId = comment.commentId
             isReplyingToComment = false
             replyingToCommentId = null
 
-            // UI 변경: 수정 모드 헤더 보이기
             editModeHeader.visibility = View.VISIBLE
             etCommentInput.setText(comment.content)
             etCommentInput.hint = "댓글을 수정하세요."
@@ -157,7 +229,6 @@ class PostDetailActivity : AppCompatActivity() {
             etCommentInput.text.clear()
             etCommentInput.hint = "${comment.authorName}님에게 답글을 남겨주세요."
 
-            // 답글 모드에서는 수정 모드 헤더 숨기기
             editModeHeader.visibility = View.GONE
 
             etCommentInput.requestFocus()
@@ -178,7 +249,6 @@ class PostDetailActivity : AppCompatActivity() {
         )
         rvComments.adapter = commentAdapter
 
-        // '취소' 버튼 클릭 리스너 추가
         editCancelButton.setOnClickListener {
             resetCommentInputUI()
         }
@@ -196,13 +266,11 @@ class PostDetailActivity : AppCompatActivity() {
                     addCommentToFirestore(currentPostId!!, commentText)
                 }
 
-                // 작업 완료 후 UI 및 상태 초기화
                 resetCommentInputUI()
             }
         }
     }
 
-    // UI 및 상태를 초기화하는 새로운 함수 추가
     private fun resetCommentInputUI() {
         isEditingComment = false
         editingCommentId = null
@@ -438,4 +506,54 @@ class PostDetailActivity : AppCompatActivity() {
             }
         }
     }
+
+    /**
+     * 데이터를 새로고침하는 함수. SwipeRefreshLayout에 연결됩니다.
+     */
+    private fun refreshData() {
+        Log.d("PostDetailActivity", "Refreshing data...")
+        if (currentPostId != null) {
+            // 게시글 데이터 재로드
+            db.collection("posts").document(currentPostId!!)
+                .get()
+                .addOnSuccessListener { snapshot ->
+                    if (snapshot.exists()) {
+                        currentPost = snapshot.toObject(Post::class.java)?.apply {
+                            postId = snapshot.id
+                        }
+                        currentPost?.let {
+                            // 1. 게시글의 UI를 업데이트하는 코드 추가
+                            findViewById<TextView>(R.id.tv_detail_title).text = it.title
+                            findViewById<TextView>(R.id.tv_detail_author).text = it.authorName
+                            findViewById<TextView>(R.id.tv_detail_content).text = it.content
+                            it.createdAt?.let { date ->
+                                findViewById<TextView>(R.id.tv_detail_timestamp).text = formatRelativeTime(date)
+                            }
+
+                            // 2. 좋아요 및 댓글 카운트 UI 업데이트 (기존 코드)
+                            updateLikeUI(it)
+                            updateCommentCountUI(it)
+                        }
+                    }
+
+                    // 댓글 목록 초기화 후 재로드 (기존 코드)
+                    commentList.clear()
+                    commentAdapter.notifyDataSetChanged()
+                    loadComments(currentPostId!!)
+
+                    // 새로고침 완료 후 아이콘 숨기기
+                    swipeRefreshLayout.isRefreshing = false
+                    Log.d("PostDetailActivity", "Refresh complete.")
+                }
+                .addOnFailureListener { e ->
+                    Log.e("PostDetailActivity", "Refresh failed", e)
+                    // 실패 시에도 아이콘 숨기기
+                    swipeRefreshLayout.isRefreshing = false
+                }
+        } else {
+            // 게시글 ID가 없을 경우 바로 새로고침 중지
+            swipeRefreshLayout.isRefreshing = false
+        }
+    }
+
 }

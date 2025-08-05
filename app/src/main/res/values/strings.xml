@@ -9,6 +9,7 @@
     <string name="reply_label">답글 달기</string>
     <string name="reply_button_description">답글 달기 버튼</string>
     <string name="comment_options_description">댓글 옵션 버튼</string>
+    <string name="post_options_description">게시글 옵션 버튼</string>
     <string name="chatbot">챗봇</string>
     <string name="message_input_hint">메시지를 입력하세요</string>
     <string name="chatbot_msg_input_hint">AI에게 물어보세요</string>

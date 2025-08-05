@@ -1,5 +1,7 @@
 package com.example.mokathon
 
+import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
@@ -7,22 +9,23 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.google.firebase.auth.FirebaseAuth // Firebase 인증을 위한 import
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import java.util.Date
 
 class WritePostActivity : AppCompatActivity() {
 
-    // Firebase Firestore와 Auth 인스턴스를 미리 선언합니다.
     private val db = Firebase.firestore
     private val auth = FirebaseAuth.getInstance()
 
-    // UI 요소들을 전역 변수로 선언하여 다른 함수에서도 사용 가능하게 합니다.
     private lateinit var etTitle: EditText
     private lateinit var etContent: EditText
+    private lateinit var btnSubmitPost: Button
+    private lateinit var ivBack: ImageView
 
     private var existingPost: Post? = null
+    private var isEditing: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,17 +33,30 @@ class WritePostActivity : AppCompatActivity() {
 
         etTitle = findViewById(R.id.et_post_title)
         etContent = findViewById(R.id.et_post_content)
-        val btnSubmitPost: Button = findViewById(R.id.btn_submit_post)
+        btnSubmitPost = findViewById(R.id.btn_submit_post)
+        ivBack = findViewById(R.id.iv_back)
 
-        existingPost = intent.getSerializableExtra("post") as? Post
+        // PostDetailActivity에서 전달한 인텐트 데이터 받기
+        // isEditing 플래그를 사용하여 수정 모드인지 확인
+        isEditing = intent.getBooleanExtra("isEditing", false)
 
-        if (existingPost != null) {
+        // 안드로이드 버전별로 직렬화된 Post 객체를 안전하게 가져오는 코드
+        existingPost = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            intent.getSerializableExtra("post", Post::class.java)
+        } else {
+            @Suppress("DEPRECATION")
+            intent.getSerializableExtra("post") as? Post
+        }
+
+        // 수정 모드일 경우 UI에 기존 게시글 내용 채우기
+        if (isEditing && existingPost != null) {
             etTitle.setText(existingPost!!.title)
             etContent.setText(existingPost!!.content)
             btnSubmitPost.text = "수정"
+        } else {
+            btnSubmitPost.text = "작성"
         }
 
-        val ivBack: ImageView = findViewById(R.id.iv_back)
         ivBack.setOnClickListener { finish() }
 
         btnSubmitPost.setOnClickListener { savePost() }
@@ -55,8 +71,8 @@ class WritePostActivity : AppCompatActivity() {
             return
         }
 
-        if (existingPost != null) {
-            // 게시물 수정
+        if (isEditing && existingPost != null) {
+            // 게시물 수정 로직
             val updatedData = mapOf(
                 "title" to title,
                 "content" to content
@@ -68,11 +84,16 @@ class WritePostActivity : AppCompatActivity() {
                     finish()
                 }
                 .addOnFailureListener { e ->
+                    Log.e("WritePostActivity", "게시물 수정 실패", e)
                     Toast.makeText(this, "게시물 수정에 실패했습니다.", Toast.LENGTH_SHORT).show()
                 }
         } else {
-            // 새 게시물 작성
-            val currentUser = auth.currentUser ?: return
+            // 새 게시물 작성 로직
+            val currentUser = auth.currentUser
+            if (currentUser == null) {
+                Toast.makeText(this, "로그인 정보가 없습니다.", Toast.LENGTH_SHORT).show()
+                return
+            }
             val authorName = currentUser.displayName ?: "익명"
 
             val newPost = Post(
@@ -90,6 +111,7 @@ class WritePostActivity : AppCompatActivity() {
                     finish()
                 }
                 .addOnFailureListener { e ->
+                    Log.e("WritePostActivity", "게시물 작성 실패", e)
                     Toast.makeText(this, "게시물 작성에 실패했습니다.", Toast.LENGTH_SHORT).show()
                 }
         }
