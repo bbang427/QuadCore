@@ -9,4 +9,60 @@
     android:fitsSystemWindows="true"
     tools:context=".ReportActivity">
 
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_text_greeting_v"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.05" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_text_greeting_v_end"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.95" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_text_greeting_h"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.015" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_text_greeting_h_end"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.053" />
+
+    <ImageView
+        android:id="@+id/btn_back"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:src="@drawable/ic_arrow_back"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackground"
+        app:layout_constraintWidth_percent="0.07"
+        app:layout_constraintHeight_percent="0.037"
+        app:layout_constraintTop_toTopOf="@id/guideline_text_greeting_h"
+        app:layout_constraintBottom_toBottomOf="@id/guideline_text_greeting_h_end"
+        app:layout_constraintStart_toStartOf="@id/guideline_text_greeting_v" />
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="의심되는 전화번호를 제보하면\n다른 사용자들에게 큰 도움이 돼요"
+        android:fontFamily="@font/pretendard_gov_medium"
+        android:textSize="20sp"
+        android:textColor="#010101"
+        android:lineSpacingExtra="4sp"
+        app:layout_constraintTop_toTopOf="@id/guideline_text_greeting_h_end"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@id/guideline_text_greeting_v"
+        app:layout_constraintVertical_bias="0.06"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
