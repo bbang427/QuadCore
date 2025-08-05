@@ -3,6 +3,7 @@ package com.example.mokathon
 import android.graphics.LinearGradient
 import android.graphics.Shader
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,13 +12,12 @@ import android.widget.ImageButton
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.firebase.database.ChildEventListener
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
+import com.google.ai.client.generativeai.GenerativeModel
+import com.google.ai.client.generativeai.type.content
+import kotlinx.coroutines.launch
 
 class ChatbotFragment : Fragment() {
 
@@ -28,8 +28,7 @@ class ChatbotFragment : Fragment() {
     private lateinit var startMessageTextView: TextView
     private lateinit var messageAdapter: MessageAdapter
     private val messages = mutableListOf<Message>()
-    private val database = FirebaseDatabase.getInstance().getReference("messages")
-    private var isFirstMessageLoaded = false
+    private lateinit var generativeModel: GenerativeModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -62,19 +61,16 @@ class ChatbotFragment : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.adapter = messageAdapter
 
-        database.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                if (snapshot.childrenCount.toInt() == 0) {
-                    startMessageTextView.visibility = View.VISIBLE
-                } else {
-                    startMessageTextView.animate()
-                        .alpha(0f)
-                        .setDuration(500)
-                        .withEndAction { startMessageTextView.visibility = View.GONE }
-                }
-            }
-            override fun onCancelled(error: DatabaseError) {}
-        })
+        if (messages.isEmpty()) {
+            startMessageTextView.visibility = View.VISIBLE
+        } else {
+            startMessageTextView.visibility = View.GONE
+        }
+
+        generativeModel = GenerativeModel(
+            modelName = "gemini-1.5-flash",
+            apiKey = BuildConfig.GEMINI_API_KEY
+        )
 
         sendButton.setOnClickListener {
             val messageText = editText.text.toString().trim()
@@ -88,57 +84,44 @@ class ChatbotFragment : Fragment() {
             clearChatHistory()
         }
 
-        listenForMessages()
-
         return view
     }
 
     private fun sendMessage(text: String) {
-        val message = Message(text, System.currentTimeMillis(), "user")
-        database.push().setValue(message)
+        val userMessage = Message(text, "user", System.currentTimeMillis())
+        messages.add(userMessage)
+        messageAdapter.notifyItemInserted(messages.size - 1)
+        recyclerView.scrollToPosition(messages.size - 1)
+        startMessageTextView.visibility = View.GONE
+
+        lifecycleScope.launch {
+            try {
+                val botMessage = Message("", "model", System.currentTimeMillis())
+                messages.add(botMessage)
+                val botMessageIndex = messages.size - 1
+                messageAdapter.notifyItemInserted(botMessageIndex)
+                recyclerView.scrollToPosition(botMessageIndex)
+
+                var fullResponse = ""
+                generativeModel.generateContentStream(text).collect { chunk ->
+                    fullResponse += chunk.text
+                    messages[botMessageIndex] = botMessage.copy(text = fullResponse)
+                    messageAdapter.notifyItemChanged(botMessageIndex)
+                    recyclerView.scrollToPosition(botMessageIndex)
+                }
+            } catch (e: Exception) {
+                Log.e("ChatbotFragment", "Error sending message", e)
+                val errorMessage = Message("Error: " + e.message, "model", System.currentTimeMillis())
+                messages.add(errorMessage)
+                messageAdapter.notifyItemInserted(messages.size - 1)
+                recyclerView.scrollToPosition(messages.size - 1)
+            }
+        }
     }
 
     private fun clearChatHistory() {
-        database.removeValue()
         messages.clear()
         messageAdapter.notifyDataSetChanged()
-
-        if (startMessageTextView.visibility != View.VISIBLE) {
-            startMessageTextView.animate()
-                .alpha(1f)
-                .setDuration(500)
-                .withStartAction { startMessageTextView.visibility = View.VISIBLE }
-        }
-
-        isFirstMessageLoaded = false
-    }
-
-    private fun listenForMessages() {
-        database.addChildEventListener(object : ChildEventListener {
-            override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
-                val message = snapshot.getValue(Message::class.java)
-                if (message != null) {
-                    if (!isFirstMessageLoaded) {
-                        if (messages.isEmpty()) {
-                            startMessageTextView.animate()
-                                .alpha(0f)
-                                .setDuration(500)
-                                .withEndAction { startMessageTextView.visibility = View.GONE }
-                        }
-                        isFirstMessageLoaded = true
-                    }
-
-                    messages.add(message)
-                    messageAdapter.notifyItemInserted(messages.size - 1)
-                    recyclerView.post {
-                        recyclerView.scrollToPosition(messages.size - 1)
-                    }
-                }
-            }
-            override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {}
-            override fun onChildRemoved(snapshot: DataSnapshot) {}
-            override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {}
-            override fun onCancelled(error: DatabaseError) {}
-        })
+        startMessageTextView.visibility = View.VISIBLE
     }
 }
