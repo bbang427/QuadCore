@@ -23,7 +23,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.95" />
+        app:layout_constraintGuide_percent="0.9537713" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline_text_greeting_h"

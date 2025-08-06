@@ -6,12 +6,12 @@
     android:shape="rectangle">
 
     <!-- 배경 색상 지정 -->
-    <solid android:color="#90999999"/>
+    <solid android:color="#FAF6F5"/>
 
     <!-- 상단만 곡률 주기 (하단은 0) -->
     <corners
-        android:topLeftRadius="16dp"
-        android:topRightRadius="16dp"
-        android:bottomLeftRadius="16dp"
-        android:bottomRightRadius="16dp"/>
+        android:topLeftRadius="24dp"
+        android:topRightRadius="24dp"
+        android:bottomLeftRadius="24dp"
+        android:bottomRightRadius="24dp"/>
 </shape>

@@ -9,4 +9,269 @@
     android:fitsSystemWindows="true"
     tools:context=".SearchNumActivity">
 
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_text_greeting_v"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.05" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_text_greeting_v_end"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.95" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_text_greeting_h"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.015" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_text_greeting_h_end"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.053" />
+
+    <ImageView
+        android:id="@+id/btn_back"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:src="@drawable/ic_arrow_back"
+        android:clickable="true"
+        android:focusable="true"
+        app:layout_constraintWidth_percent="0.07"
+        app:layout_constraintHeight_percent="0.037"
+        app:layout_constraintTop_toTopOf="@id/guideline_text_greeting_h"
+        app:layout_constraintBottom_toBottomOf="@id/guideline_text_greeting_h_end"
+        app:layout_constraintStart_toStartOf="@id/guideline_text_greeting_v" />
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="전기통신금융사기 통합신고대응센터에서\n제공하는 전화번호에요"
+        android:fontFamily="@font/pretendard_gov_medium"
+        android:textSize="20sp"
+        android:textColor="#010101"
+        android:lineSpacingExtra="4sp"
+        app:layout_constraintTop_toTopOf="@id/guideline_text_greeting_h_end"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@id/guideline_text_greeting_v"
+        app:layout_constraintVertical_bias="0.06"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/view_upload"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/bg_menu_activityview"
+        android:elevation="1dp"
+        android:translationZ="2dp"
+        app:layout_constraintWidth_percent="0.9"
+        app:layout_constraintHeight_percent="0.6"
+        app:layout_constraintStart_toStartOf="@id/guideline_text_greeting_v"
+        app:layout_constraintEnd_toEndOf="@id/guideline_text_greeting_v_end"
+        app:layout_constraintTop_toTopOf="@id/guideline_text_greeting_h_end"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintVertical_bias="0.52">
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:src="@drawable/ic_searchnum"
+            app:layout_constraintWidth_percent="0.25"
+            app:layout_constraintHeight_percent="0.25"
+            app:layout_constraintTop_toTopOf="@id/view_upload"
+            app:layout_constraintBottom_toBottomOf="@id/view_upload"
+            app:layout_constraintStart_toStartOf="@id/view_upload"
+            app:layout_constraintEnd_toEndOf="@id/view_upload"
+            app:layout_constraintVertical_bias="0.06" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="번호 검색하기"
+            android:fontFamily="@font/pretendard_gov_medium"
+            android:textSize="24sp"
+            android:textColor="#010101"
+            app:layout_constraintTop_toTopOf="@id/view_upload"
+            app:layout_constraintBottom_toBottomOf="@id/view_upload"
+            app:layout_constraintStart_toStartOf="@id/view_upload"
+            app:layout_constraintEnd_toEndOf="@id/view_upload"
+            app:layout_constraintVertical_bias="0.3"/>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/view_searchbar"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@drawable/bg_menu_searchbar"
+            app:layout_constraintWidth_percent="0.85"
+            app:layout_constraintHeight_percent="0.11"
+            app:layout_constraintTop_toTopOf="@id/view_upload"
+            app:layout_constraintBottom_toBottomOf="@id/view_upload"
+            app:layout_constraintStart_toStartOf="@id/view_upload"
+            app:layout_constraintEnd_toEndOf="@id/view_upload"
+            app:layout_constraintVertical_bias="0.47">
+
+            <EditText
+                android:id="@+id/tv_search"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="'-'을 제외하고 입력해주세요"
+                android:letterSpacing="0.03"
+                android:textSize="16sp"
+                android:textColor="#010101"
+                android:textColorHint="#999999"
+                android:fontFamily="@font/pretendard_gov_medium"
+                android:inputType="number"
+                android:imeOptions="actionDone"
+                android:background="@null"
+                android:textCursorDrawable="@drawable/edittext_cursor"
+                app:layout_constraintTop_toTopOf="@id/view_searchbar"
+                app:layout_constraintBottom_toBottomOf="@id/view_searchbar"
+                app:layout_constraintStart_toStartOf="@id/view_searchbar"
+                app:layout_constraintEnd_toEndOf="@id/view_searchbar"
+                app:layout_constraintHorizontal_bias="0.3"/>
+
+            <ImageView
+                android:id="@+id/iv_search"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:src="@drawable/ic_search"
+                android:clickable="true"
+                android:focusable="true"
+                app:layout_constraintWidth_percent="0.09"
+                app:layout_constraintHeight_percent="0.6"
+                app:layout_constraintTop_toTopOf="@id/view_searchbar"
+                app:layout_constraintBottom_toBottomOf="@id/view_searchbar"
+                app:layout_constraintStart_toStartOf="@id/view_searchbar"
+                app:layout_constraintEnd_toEndOf="@id/view_searchbar"
+                app:layout_constraintHorizontal_bias="0.93"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/tv_result_number"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="123-123456-12345"
+            android:fontFamily="@font/pretendard_gov_medium"
+            android:textSize="20sp"
+            android:textColor="#010101"
+            android:letterSpacing="0.03"
+            android:visibility="gone"
+            app:layout_constraintTop_toTopOf="@id/view_upload"
+            app:layout_constraintBottom_toBottomOf="@id/view_upload"
+            app:layout_constraintStart_toStartOf="@id/view_upload"
+            app:layout_constraintEnd_toEndOf="@id/view_upload"
+            app:layout_constraintVertical_bias="0.63" />
+
+        <TextView
+            android:id="@+id/tv_result_message_main"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="이 번호는               번호에요"
+            android:fontFamily="@font/pretendard_gov_medium"
+            android:textSize="20sp"
+            android:textColor="#010101"
+            android:visibility="gone"
+            app:layout_constraintTop_toTopOf="@id/view_upload"
+            app:layout_constraintBottom_toBottomOf="@id/view_upload"
+            app:layout_constraintStart_toStartOf="@id/view_upload"
+            app:layout_constraintEnd_toEndOf="@id/view_upload"
+            app:layout_constraintVertical_bias="0.75" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/view_result_indicator_danger"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@drawable/bg_result_danger"
+            android:visibility="gone"
+            app:layout_constraintWidth_percent="0.2"
+            app:layout_constraintHeight_percent="0.08"
+            app:layout_constraintTop_toTopOf="@id/view_upload"
+            app:layout_constraintBottom_toBottomOf="@id/view_upload"
+            app:layout_constraintStart_toStartOf="@id/view_upload"
+            app:layout_constraintEnd_toEndOf="@id/view_upload"
+            app:layout_constraintVertical_bias="0.755"
+            app:layout_constraintHorizontal_bias="0.51">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="위험"
+                android:fontFamily="@font/pretendard_gov_semibold"
+                android:textSize="20sp"
+                android:textColor="#FAF6F5"
+                app:layout_constraintTop_toTopOf="@id/view_result_indicator_danger"
+                app:layout_constraintBottom_toBottomOf="@id/view_result_indicator_danger"
+                app:layout_constraintStart_toStartOf="@id/view_result_indicator_danger"
+                app:layout_constraintEnd_toEndOf="@id/view_result_indicator_danger"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/view_result_indicator_safe"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@drawable/bg_result_safe"
+            android:visibility="gone"
+            app:layout_constraintWidth_percent="0.2"
+            app:layout_constraintHeight_percent="0.08"
+            app:layout_constraintTop_toTopOf="@id/view_upload"
+            app:layout_constraintBottom_toBottomOf="@id/view_upload"
+            app:layout_constraintStart_toStartOf="@id/view_upload"
+            app:layout_constraintEnd_toEndOf="@id/view_upload"
+            app:layout_constraintVertical_bias="0.755"
+            app:layout_constraintHorizontal_bias="0.51">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="안전"
+                android:fontFamily="@font/pretendard_gov_semibold"
+                android:textSize="20sp"
+                android:textColor="#FAF6F5"
+                app:layout_constraintTop_toTopOf="@id/view_result_indicator_safe"
+                app:layout_constraintBottom_toBottomOf="@id/view_result_indicator_safe"
+                app:layout_constraintStart_toStartOf="@id/view_result_indicator_safe"
+                app:layout_constraintEnd_toEndOf="@id/view_result_indicator_safe"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/tv_result_danger"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="즉시 연락을 중단하고 공식기관에 추가로\n확인해보는 것을 권장해요."
+            android:textColor="#666666"
+            android:textSize="14sp"
+            android:gravity="center"
+            android:lineSpacingExtra="2sp"
+            android:visibility="gone"
+            app:layout_constraintTop_toTopOf="@id/view_upload"
+            app:layout_constraintBottom_toBottomOf="@id/view_upload"
+            app:layout_constraintStart_toStartOf="@id/view_upload"
+            app:layout_constraintEnd_toEndOf="@id/view_upload"
+            app:layout_constraintVertical_bias="0.92"/>
+
+        <TextView
+            android:id="@+id/tv_result_safe"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="안심하고 연락해도 괜찮아요."
+            android:textColor="#666666"
+            android:textSize="14sp"
+            android:visibility="gone"
+            app:layout_constraintTop_toTopOf="@id/view_upload"
+            app:layout_constraintBottom_toBottomOf="@id/view_upload"
+            app:layout_constraintStart_toStartOf="@id/view_upload"
+            app:layout_constraintEnd_toEndOf="@id/view_upload"
+            app:layout_constraintVertical_bias="0.9"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
