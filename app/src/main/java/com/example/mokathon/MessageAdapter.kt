@@ -34,24 +34,41 @@ class MessageAdapter(private val messages: List<Message>) : RecyclerView.Adapter
         private var typingJob: Job? = null
 
         fun bind(message: Message) {
-            messageText.text = message.text
-            val params = messageText.layoutParams as LinearLayout.LayoutParams
-            if (message.role == "user") {
-                messageLayout.gravity = Gravity.END
-                messageText.setBackgroundResource(R.drawable.chat_bubble_user)
-                messageText.setTextColor(ContextCompat.getColor(itemView.context, android.R.color.white))
-                messageText.paint.shader = null
-                profileImage.visibility = View.GONE
-                params.width = ViewGroup.LayoutParams.WRAP_CONTENT
-                messageText.layoutParams = params
-            } else {
+            if (message.isLoading) {
+                messageText.text = ""
                 messageLayout.gravity = Gravity.START
-                messageText.background = null
-                messageText.setTextColor(ContextCompat.getColor(itemView.context, android.R.color.black))
-                messageText.paint.shader = null
+                messageText.setBackgroundResource(R.drawable.chat_bubble_loading)
                 profileImage.visibility = View.VISIBLE
-                params.width = ViewGroup.LayoutParams.MATCH_PARENT
-                messageText.layoutParams = params
+                typingJob = CoroutineScope(Dispatchers.Main).launch {
+                    val dots = listOf(".", "..", "...")
+                    var dotIndex = 0
+                    while (isActive) {
+                        messageText.text = dots[dotIndex]
+                        dotIndex = (dotIndex + 1) % dots.size
+                        delay(500)
+                    }
+                }
+            } else {
+                typingJob?.cancel()
+                messageText.text = message.text
+                val params = messageText.layoutParams as LinearLayout.LayoutParams
+                if (message.role == "user") {
+                    messageLayout.gravity = Gravity.END
+                    messageText.setBackgroundResource(R.drawable.chat_bubble_user)
+                    messageText.setTextColor(ContextCompat.getColor(itemView.context, android.R.color.white))
+                    messageText.paint.shader = null
+                    profileImage.visibility = View.GONE
+                    params.width = ViewGroup.LayoutParams.WRAP_CONTENT
+                    messageText.layoutParams = params
+                } else {
+                    messageLayout.gravity = Gravity.START
+                    messageText.background = null
+                    messageText.setTextColor(ContextCompat.getColor(itemView.context, android.R.color.black))
+                    messageText.paint.shader = null
+                    profileImage.visibility = View.VISIBLE
+                    params.width = ViewGroup.LayoutParams.MATCH_PARENT
+                    messageText.layoutParams = params
+                }
             }
         }
     }

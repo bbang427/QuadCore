@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.ai.client.generativeai.GenerativeModel
 import com.google.ai.client.generativeai.type.content
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.launch
 
 class ChatbotFragment : Fragment() {
@@ -28,7 +29,7 @@ class ChatbotFragment : Fragment() {
     private lateinit var startMessageTextView: TextView
     private lateinit var messageAdapter: MessageAdapter
     private val messages = mutableListOf<Message>()
-    private lateinit var generativeModel: GenerativeModel
+    private var generativeModel: GenerativeModel? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -67,10 +68,7 @@ class ChatbotFragment : Fragment() {
             startMessageTextView.visibility = View.GONE
         }
 
-        generativeModel = GenerativeModel(
-            modelName = "gemini-1.5-flash",
-            apiKey = BuildConfig.GEMINI_API_KEY
-        )
+        fetchApiKeyAndInitChatbot()
 
         sendButton.setOnClickListener {
             val messageText = editText.text.toString().trim()
@@ -87,6 +85,33 @@ class ChatbotFragment : Fragment() {
         return view
     }
 
+    private fun fetchApiKeyAndInitChatbot() {
+        val db = FirebaseFirestore.getInstance()
+        db.collection("settings").document("apiKeys")
+            .get()
+            .addOnSuccessListener { document ->
+                if (document != null) {
+                    val apiKey = document.getString("geminiKey")
+                    if (apiKey != null) {
+                        generativeModel = GenerativeModel(
+                            modelName = "gemini-1.5-flash",
+                            apiKey = apiKey
+                        )
+                    } else {
+                        Log.e("ChatbotFragment", "API key is null")
+                        showApiKeyError()
+                    }
+                } else {
+                    Log.e("ChatbotFragment", "No such document")
+                    showApiKeyError()
+                }
+            }
+            .addOnFailureListener { exception ->
+                Log.e("ChatbotFragment", "Error getting documents: ", exception)
+                showApiKeyError()
+            }
+    }
+
     private fun sendMessage(text: String) {
         val userMessage = Message(text, "user", System.currentTimeMillis())
         messages.add(userMessage)
@@ -95,28 +120,43 @@ class ChatbotFragment : Fragment() {
         startMessageTextView.visibility = View.GONE
 
         lifecycleScope.launch {
+            val botMessage = Message("", "model", System.currentTimeMillis(), isLoading = true)
+            messages.add(botMessage)
+            val botMessageIndex = messages.size - 1
+            messageAdapter.notifyItemInserted(botMessageIndex)
+            recyclerView.scrollToPosition(botMessageIndex)
+
             try {
-                val botMessage = Message("", "model", System.currentTimeMillis())
-                messages.add(botMessage)
-                val botMessageIndex = messages.size - 1
-                messageAdapter.notifyItemInserted(botMessageIndex)
-                recyclerView.scrollToPosition(botMessageIndex)
+                if (generativeModel == null) {
+                    val errorMessage = Message("API 키를 가져오는 데 실패했습니다. 잠시 후 다시 시도해주세요.", "model", System.currentTimeMillis())
+                    messages[botMessageIndex] = errorMessage
+                    messageAdapter.notifyItemChanged(botMessageIndex)
+                    recyclerView.scrollToPosition(botMessageIndex)
+                    return@launch
+                }
 
                 var fullResponse = ""
-                generativeModel.generateContentStream(text).collect { chunk ->
+                generativeModel?.generateContentStream(text)?.collect { chunk ->
                     fullResponse += chunk.text
-                    messages[botMessageIndex] = botMessage.copy(text = fullResponse)
+                    messages[botMessageIndex] = botMessage.copy(text = fullResponse, isLoading = false)
                     messageAdapter.notifyItemChanged(botMessageIndex)
                     recyclerView.scrollToPosition(botMessageIndex)
                 }
             } catch (e: Exception) {
                 Log.e("ChatbotFragment", "Error sending message", e)
                 val errorMessage = Message("Error: " + e.message, "model", System.currentTimeMillis())
-                messages.add(errorMessage)
-                messageAdapter.notifyItemInserted(messages.size - 1)
-                recyclerView.scrollToPosition(messages.size - 1)
+                messages[botMessageIndex] = errorMessage
+                messageAdapter.notifyItemChanged(botMessageIndex)
+                recyclerView.scrollToPosition(botMessageIndex)
             }
         }
+    }
+
+    private fun showApiKeyError() {
+        val errorMessage = Message("API 키를 불러오는 중 오류가 발생했습니다. 앱을 다시 시작하거나 관리자에게 문의하세요.", "model", System.currentTimeMillis())
+        messages.add(errorMessage)
+        messageAdapter.notifyItemInserted(messages.size - 1)
+        recyclerView.scrollToPosition(messages.size - 1)
     }
 
     private fun clearChatHistory() {
