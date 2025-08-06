@@ -50,7 +50,6 @@
         android:src="@drawable/ic_logout"
         android:clickable="true"
         android:focusable="true"
-        android:foreground="?attr/selectableItemBackground"
         app:layout_constraintWidth_percent="0.07"
         app:layout_constraintHeight_percent="0.04"
         app:layout_constraintTop_toTopOf="@id/guideline_text_greeting_h"
@@ -90,10 +89,10 @@
         android:fontFamily="@font/pretendard_gov_semibold"
         android:textSize="24sp"
         android:textColor="#010101"
-        app:layout_constraintVertical_bias="0.04"
+        app:layout_constraintVertical_bias="0.22"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/iv_profile_pic"
+        app:layout_constraintTop_toBottomOf="@id/guideline_text_greeting_h_end"
         app:layout_constraintBottom_toBottomOf="parent"/>
 
     <TextView
@@ -104,10 +103,10 @@
         android:fontFamily="@font/pretendard_gov_medium"
         android:textSize="12sp"
         android:textColor="#999999"
-        app:layout_constraintVertical_bias="0.01"
+        app:layout_constraintVertical_bias="0.28"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_profile_name"
+        app:layout_constraintTop_toBottomOf="@id/guideline_text_greeting_h_end"
         app:layout_constraintBottom_toBottomOf="parent"/>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -123,12 +122,12 @@
         android:translationZ="2dp"
         app:layout_constraintHeight_percent="0.13"
         app:layout_constraintWidth_percent="0.3"
-        app:layout_constraintTop_toBottomOf="@id/tv_profile_email"
+        app:layout_constraintTop_toTopOf="@id/guideline_text_greeting_h_end"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="@id/guideline_text_greeting_v"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0"
-        app:layout_constraintVertical_bias="0.06" >
+        app:layout_constraintVertical_bias="0.385" >
 
         <TextView
             android:id="@+id/tv_dashboard_first_num"
@@ -185,11 +184,11 @@
         android:translationZ="2dp"
         app:layout_constraintHeight_percent="0.13"
         app:layout_constraintWidth_percent="0.3"
-        app:layout_constraintTop_toBottomOf="@id/tv_profile_email"
+        app:layout_constraintTop_toTopOf="@id/guideline_text_greeting_h_end"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@id/profile_dashboard_first"
         app:layout_constraintEnd_toStartOf="@id/profile_dashboard_third"
-        app:layout_constraintVertical_bias="0.06" >
+        app:layout_constraintVertical_bias="0.385" >
 
         <TextView
             android:id="@+id/tv_dashboard_second_num"
@@ -246,11 +245,11 @@
         android:translationZ="2dp"
         app:layout_constraintHeight_percent="0.13"
         app:layout_constraintWidth_percent="0.3"
-        app:layout_constraintTop_toBottomOf="@id/tv_profile_email"
+        app:layout_constraintTop_toTopOf="@id/guideline_text_greeting_h_end"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@id/profile_dashboard_second"
         app:layout_constraintEnd_toStartOf="@id/guideline_text_greeting_v_end"
-        app:layout_constraintVertical_bias="0.06">
+        app:layout_constraintVertical_bias="0.385">
 
         <TextView
             android:id="@+id/tv_dashboard_third_num"
@@ -332,7 +331,7 @@
                 android:layout_height="wrap_content"
                 android:text="이전 분석 기록 확인하기"
                 android:fontFamily="@font/pretendard_gov_medium"
-                android:textSize="16sp"
+                android:textSize="14sp"
                 android:textColor="#FAF6F5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -357,11 +356,11 @@
         android:translationZ="2dp"
         app:layout_constraintWidth_percent="0.9"
         app:layout_constraintHeight_percent="0.07"
-        app:layout_constraintTop_toBottomOf="@id/profile_dashboard_bottom"
+        app:layout_constraintTop_toTopOf="@id/guideline_text_greeting_h_end"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintVertical_bias="0.08">
+        app:layout_constraintVertical_bias="0.65">
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline_text_settings"

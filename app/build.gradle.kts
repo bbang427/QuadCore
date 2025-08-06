@@ -88,5 +88,6 @@ dependencies {
     implementation("com.google.ai.client.generativeai:generativeai:0.5.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
 
-    
+    // Lotti
+    implementation("com.airbnb.android:lottie:6.6.7")
 }

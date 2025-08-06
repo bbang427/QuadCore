@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 커서 너비 -->
+    <size android:width="2dp"/>
+    <!-- 원하는 커서 색 -->
+    <solid android:color="#999999"/>
+</shape>
