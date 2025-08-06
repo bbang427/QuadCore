@@ -18,7 +18,7 @@ import java.util.concurrent.TimeUnit
 class CommentAdapter(
     private val commentList: MutableList<Comment>,
     private val onEditClick: (Comment) -> Unit,
-    private val onDeleteClick: (Comment) -> Unit,
+    private val onDeleteClick: (String, Comment) -> Unit, // Modified to include parent comment ID
     private val onLikeClick: (Comment) -> Unit,
     private val onReplyClick: (Comment) -> Unit
 ) :
@@ -39,6 +39,7 @@ class CommentAdapter(
 
         // 답글 달기 버튼 (아이콘 + 텍스트)
         val replyActionLayout: LinearLayout = itemView.findViewById(R.id.reply_action_layout)
+        val repliesRecyclerView: RecyclerView = itemView.findViewById(R.id.rv_replies)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CommentViewHolder {
@@ -86,7 +87,7 @@ class CommentAdapter(
                             true
                         }
                         R.id.action_delete_post -> {
-                            onDeleteClick(comment)
+                            onDeleteClick(comment.commentId, comment)
                             true
                         }
                         else -> false
@@ -103,6 +104,15 @@ class CommentAdapter(
 
         // 답글 달기 버튼 클릭 리스너 (LinearLayout에 연결)
         holder.replyActionLayout.setOnClickListener { onReplyClick(comment) }
+
+        // 답글 처리
+        if (comment.replies.isNotEmpty()) {
+            holder.repliesRecyclerView.visibility = View.VISIBLE
+            val replyAdapter = ReplyAdapter(comment.commentId, comment.replies.toMutableList(), onEditClick, onDeleteClick)
+            holder.repliesRecyclerView.adapter = replyAdapter
+        } else {
+            holder.repliesRecyclerView.visibility = View.GONE
+        }
     }
 
     override fun getItemCount(): Int = commentList.size

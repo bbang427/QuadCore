@@ -54,6 +54,8 @@ class PostDetailActivity : AppCompatActivity() {
     private var editingCommentId: String? = null
     private var isReplyingToComment = false
     private var replyingToCommentId: String? = null
+    private var isEditingReply = false
+    private var editingReplyId: String? = null
 
     private lateinit var editModeHeader: LinearLayout
     private lateinit var editCancelButton: TextView
@@ -206,14 +208,32 @@ class PostDetailActivity : AppCompatActivity() {
 
     private fun setupCommentsRecyclerView() {
         val onEditClick: (Comment) -> Unit = { comment ->
-            isEditingComment = true
-            editingCommentId = comment.commentId
-            isReplyingToComment = false
-            replyingToCommentId = null
+            // 답글/댓글 수정 로직 통합
+            val isReply = commentList.any { parentComment -> parentComment.replies.contains(comment) }
 
-            editModeHeader.visibility = View.VISIBLE
-            etCommentInput.setText(comment.content)
-            etCommentInput.hint = "댓글을 수정하세요."
+            if (isReply) {
+                isEditingReply = true
+                editingReplyId = comment.commentId
+                isEditingComment = false
+                editingCommentId = null
+                isReplyingToComment = false
+                replyingToCommentId = null
+
+                editModeHeader.visibility = View.VISIBLE
+                etCommentInput.setText(comment.content)
+                etCommentInput.hint = "답글을 수정하세요."
+            } else { // It's a comment
+                isEditingComment = true
+                editingCommentId = comment.commentId
+                isReplyingToComment = false
+                replyingToCommentId = null
+                isEditingReply = false
+                editingReplyId = null
+
+                editModeHeader.visibility = View.VISIBLE
+                etCommentInput.setText(comment.content)
+                etCommentInput.hint = "댓글을 수정하세요."
+            }
 
             etCommentInput.requestFocus()
             val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -236,8 +256,8 @@ class PostDetailActivity : AppCompatActivity() {
             imm.showSoftInput(etCommentInput, InputMethodManager.SHOW_IMPLICIT)
         }
 
-        val onDeleteClick: (Comment) -> Unit = { comment -> showDeleteCommentDialog(comment) }
-        val onLikeClick: (Comment) -> Unit = { comment -> toggleLike(comment) }
+        val onDeleteClick: (String, Comment) -> Unit = { parentCommentId, comment -> showDeleteCommentDialog(parentCommentId, comment) }
+        val onLikeClick: (Comment) -> Unit = { comment -> toggleCommentLike(comment) }
 
         rvComments.layoutManager = LinearLayoutManager(this)
         commentAdapter = CommentAdapter(
@@ -262,6 +282,8 @@ class PostDetailActivity : AppCompatActivity() {
                     updateComment(editingCommentId!!, commentText)
                 } else if (isReplyingToComment) {
                     addReplyToComment(replyingToCommentId!!, commentText)
+                } else if (isEditingReply) {
+                    updateReply(editingReplyId!!, commentText)
                 } else {
                     addCommentToFirestore(currentPostId!!, commentText)
                 }
@@ -399,6 +421,40 @@ class PostDetailActivity : AppCompatActivity() {
             }
     }
 
+    private fun updateReply(replyId: String, updatedContent: String) {
+        // This is a simplified implementation. You might need to adjust it based on your data structure.
+        // This assumes that you can uniquely identify the reply with replyId.
+        // You might need to find the parent comment first and then update the specific reply.
+        // For now, we will assume a similar structure to updateComment.
+        db.collection("posts").document(currentPostId!!).collection("comments")
+            .get()
+            .addOnSuccessListener { documents ->
+                for (document in documents) {
+                    val comment = document.toObject(Comment::class.java)
+                    val reply = comment.replies.find { it.commentId == replyId }
+                    if (reply != null) {
+                        val updatedReplies = comment.replies.map {
+                            if (it.commentId == replyId) {
+                                it.copy(content = updatedContent)
+                            } else {
+                                it
+                            }
+                        }
+                        db.collection("posts").document(currentPostId!!).collection("comments").document(document.id)
+                            .update("replies", updatedReplies)
+                            .addOnSuccessListener {
+                                Log.d("PostDetailActivity", "Reply updated successfully")
+                                refreshData()
+                            }
+                            .addOnFailureListener { e ->
+                                Log.e("PostDetailActivity", "Error updating reply", e)
+                            }
+                        break
+                    }
+                }
+            }
+    }
+
     private fun toggleLike(post: Post) {
         val currentUser = auth.currentUser ?: return
         val postRef = db.collection("posts").document(post.postId)
@@ -435,38 +491,81 @@ class PostDetailActivity : AppCompatActivity() {
             }
     }
 
-    private fun showDeleteCommentDialog(comment: Comment) {
+    private fun showDeleteCommentDialog(parentCommentId: String, comment: Comment) {
         AlertDialog.Builder(this)
-            .setTitle("댓글 삭제")
-            .setMessage("정말로 이 댓글을 삭제하시겠습니까?")
+            .setTitle("삭제")
+            .setMessage("정말로 삭제하시겠습니까?")
             .setPositiveButton("삭제") { _, _ ->
-                deleteComment(comment)
+                deleteComment(parentCommentId, comment)
             }
             .setNegativeButton("취소", null)
             .show()
     }
 
-    private fun deleteComment(comment: Comment) {
-        if (comment.commentId.isEmpty()) return
-        db.collection("posts").document(comment.postId).collection("comments")
-            .document(comment.commentId)
-            .delete()
-            .addOnSuccessListener {
-                db.collection("posts").document(comment.postId)
+    private fun deleteComment(parentCommentId: String, comment: Comment) {
+        if (comment.commentId.isEmpty() && comment.content.isEmpty()) return
+
+        if (parentCommentId == comment.commentId) { // It's a comment
+            db.collection("posts").document(comment.postId).collection("comments")
+                .document(comment.commentId)
+                .delete()
+                .addOnSuccessListener {
+                    db.collection("posts").document(comment.postId)
+                        .update("commentCount", FieldValue.increment(-(1 + comment.replies.size).toLong()))
+                    refreshData()
+                }
+                .addOnFailureListener {
+                }
+        } else { // It's a reply
+            val commentRef = db.collection("posts").document(currentPostId!!).collection("comments").document(parentCommentId)
+            db.runTransaction { transaction ->
+                val snapshot = transaction.get(commentRef)
+                val replies = snapshot.get("replies") as? MutableList<HashMap<String, Any>> ?: mutableListOf()
+
+                val replyToRemove = if (comment.commentId.isNotEmpty()) {
+                    replies.find { it["commentId"] == comment.commentId }
+                } else {
+                    // Fallback for old replies without a commentId
+                    replies.find {
+                        val content = it["content"] as? String
+                        val createdAt = (it["createdAt"] as? com.google.firebase.Timestamp)?.toDate()
+                        content == comment.content && createdAt == comment.createdAt
+                    }
+                }
+
+                if (replyToRemove != null) {
+                    replies.remove(replyToRemove)
+                    transaction.update(commentRef, "replies", replies)
+                }
+                null
+            }.addOnSuccessListener {
+                db.collection("posts").document(currentPostId!!)
                     .update("commentCount", FieldValue.increment(-1))
+                Log.d("PostDetailActivity", "Reply deleted successfully")
+                refreshData()
+            }.addOnFailureListener { e ->
+                Log.e("PostDetailActivity", "Error deleting reply", e)
             }
-            .addOnFailureListener {
-            }
+        }
     }
 
-    private fun toggleLike(comment: Comment) {
+    private fun toggleCommentLike(comment: Comment) {
         if (comment.commentId.isEmpty()) return
         val commentRef = db.collection("posts").document(comment.postId).collection("comments").document(comment.commentId)
 
         db.runTransaction { transaction ->
             val snapshot = transaction.get(commentRef)
-            val newLikes = (snapshot.getDouble("likes") ?: 0.0) + 1
-            transaction.update(commentRef, "likes", newLikes)
+            val likers = snapshot.get("likers") as? MutableList<String> ?: mutableListOf()
+            val currentUserId = auth.currentUser?.uid
+            if (currentUserId != null) {
+                if (likers.contains(currentUserId)) {
+                    likers.remove(currentUserId)
+                } else {
+                    likers.add(currentUserId)
+                }
+                transaction.update(commentRef, "likers", likers)
+                transaction.update(commentRef, "likeCount", likers.size.toLong())
+            }
             null
         }.addOnSuccessListener {  }
             .addOnFailureListener {  }
@@ -476,7 +575,9 @@ class PostDetailActivity : AppCompatActivity() {
         val currentUser = auth.currentUser ?: return
         val authorName = currentUser.displayName ?: "익명"
 
+        val replyId = db.collection("posts").document().id // Generate a unique ID for the reply
         val reply = Comment(
+            commentId = replyId, // Assign the unique ID
             postId = currentPostId!!,
             authorId = currentUser.uid,
             authorName = authorName,
@@ -486,6 +587,11 @@ class PostDetailActivity : AppCompatActivity() {
 
         val commentRef = db.collection("posts").document(currentPostId!!).collection("comments").document(commentId)
         commentRef.update("replies", FieldValue.arrayUnion(reply))
+            .addOnSuccessListener {
+                val postRef = db.collection("posts").document(currentPostId!!)
+                postRef.update("commentCount", FieldValue.increment(1))
+                refreshData()
+            }
     }
 
     private fun formatRelativeTime(date: Date): String {
