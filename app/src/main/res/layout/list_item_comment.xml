@@ -15,29 +15,56 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:gravity="center_vertical">
+        android:gravity="start">
 
-        <TextView
-            android:id="@+id/tv_comment_author"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="14sp"
-            android:textStyle="bold"
-            tools:text="작성자" />
+        <ImageView
+            android:id="@+id/iv_comment_profile_image"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/ic_default_profile"
+            android:contentDescription="@string/profile_image" />
 
-        <TextView
-            android:id="@+id/tv_comment_timestamp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:textSize="12sp"
-            android:textColor="@android:color/darker_gray"
-            tools:text="1분 전" />
-
-        <View
+        <LinearLayout
             android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_weight="1" />
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_marginStart="8dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/tv_comment_author"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    tools:text="작성자" />
+
+                <TextView
+                    android:id="@+id/tv_comment_timestamp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:textSize="12sp"
+                    android:textColor="@android:color/darker_gray"
+                    tools:text="1분 전" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tv_comment_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:textSize="14sp"
+                tools:text="이것은 댓글 내용입니다." />
+
+        </LinearLayout>
 
         <ImageView
             android:id="@+id/iv_comment_options"
@@ -53,21 +80,14 @@
 
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/tv_comment_content"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:textSize="14sp"
-        tools:text="이것은 댓글 내용입니다." />
-
     <LinearLayout
         android:id="@+id/reply_action_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_marginTop="8dp"
-        android:gravity="center_vertical">
+        android:gravity="center_vertical"
+        android:layout_marginStart="40dp">
 
         <ImageView
             android:id="@+id/iv_like"
@@ -78,14 +98,14 @@
             android:focusable="true"
             android:background="?attr/selectableItemBackgroundBorderless"
             app:tint="@color/black"
-            android:contentDescription="좋아요 버튼" />
+            android:contentDescription="@string/like_icon_description" />
 
         <TextView
             android:id="@+id/tv_like_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
-            android:text="0"
+            android:text="@string/default_count"
             android:textSize="12sp"
             android:textColor="@color/black" />
 
@@ -99,7 +119,7 @@
             android:focusable="true"
             android:background="?attr/selectableItemBackgroundBorderless"
             app:tint="@color/black"
-            android:contentDescription="댓글 버튼" />
+            android:contentDescription="@string/comment_icon_description" />
 
         <TextView
             android:id="@+id/tv_reply_text"
