@@ -34,8 +34,8 @@ class CommentAdapter(
         // 수정/삭제 버튼을 대체하는 '...' 아이콘
         val optionsButton: ImageView = itemView.findViewById(R.id.iv_comment_options)
 
-        val likeButton: ImageView = itemView.findViewById(R.id.button_like)
-        val likeCountTextView: TextView = itemView.findViewById(R.id.text_like_count)
+        val likeButton: ImageView = itemView.findViewById(R.id.iv_like)
+        val likeCountTextView: TextView = itemView.findViewById(R.id.tv_like_count)
 
         // 답글 달기 버튼 (아이콘 + 텍스트)
         val replyActionLayout: LinearLayout = itemView.findViewById(R.id.reply_action_layout)

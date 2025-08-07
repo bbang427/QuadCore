@@ -542,7 +542,6 @@ class PostDetailActivity : AppCompatActivity() {
                 db.collection("posts").document(currentPostId!!)
                     .update("commentCount", FieldValue.increment(-1))
                 Log.d("PostDetailActivity", "Reply deleted successfully")
-                refreshData()
             }.addOnFailureListener { e ->
                 Log.e("PostDetailActivity", "Error deleting reply", e)
             }

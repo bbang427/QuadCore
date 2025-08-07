@@ -62,59 +62,53 @@
         tools:text="이것은 댓글 내용입니다." />
 
     <LinearLayout
+        android:id="@+id/reply_action_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginTop="8dp">
+        android:layout_marginTop="8dp"
+        android:gravity="center_vertical">
 
         <ImageView
-            android:id="@+id/button_like"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:id="@+id/iv_like"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
             android:src="@drawable/ic_like_border"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="@string/like_icon_description"
             android:clickable="true"
-            android:focusable="true" />
+            android:focusable="true"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            app:tint="@color/black"
+            android:contentDescription="좋아요 버튼" />
 
         <TextView
-            android:id="@+id/text_like_count"
+            android:id="@+id/tv_like_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
-            android:text="@string/default_count"
-            android:textColor="@android:color/darker_gray"
-            tools:text="0" />
+            android:text="0"
+            android:textSize="12sp"
+            android:textColor="@color/black" />
 
-        <LinearLayout
-            android:id="@+id/reply_action_layout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
+        <ImageView
+            android:id="@+id/iv_reply"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
             android:layout_marginStart="16dp"
-            android:gravity="center_vertical"
+            android:src="@drawable/ic_reply"
             android:clickable="true"
             android:focusable="true"
-            android:background="?attr/selectableItemBackgroundBorderless">
+            android:background="?attr/selectableItemBackgroundBorderless"
+            app:tint="@color/black"
+            android:contentDescription="댓글 버튼" />
 
-            <ImageView
-                android:id="@+id/iv_reply"
-                android:layout_width="18dp"
-                android:layout_height="18dp"
-                android:src="@drawable/ic_reply"
-                app:tint="@color/dark_gray"
-                android:contentDescription="@string/reply_button_description" />
-
-            <TextView
-                android:id="@+id/tv_reply_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
-                android:text="@string/reply_label"
-                android:textSize="14sp"
-                android:textColor="@color/dark_gray" />
-
-        </LinearLayout>
+        <TextView
+            android:id="@+id/tv_reply_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:text="@string/reply_label"
+            android:textSize="12sp"
+            android:textColor="@color/black" />
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
