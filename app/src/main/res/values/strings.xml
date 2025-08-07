@@ -20,6 +20,10 @@
     <string name="chatbot_greeting">대화를 시작해보세요!</string>
     <string name="like_icon_description">좋아요 버튼</string>
     <string name="default_count">0</string>
+    <string name="community">커뮤니티</string>
+    <string name="latest">최신순</string>
+    <string name="likest">공감순</string>
+    <string name="writing">글쓰기</string>
     <!--
     <string name="default_web_client_id">
         587604470952-5nf3d82t09nbqg68tqmtic6j1c14ro69.apps.googleusercontent.com </string>
