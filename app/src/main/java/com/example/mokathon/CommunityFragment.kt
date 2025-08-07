@@ -229,9 +229,14 @@ class CommunityFragment : Fragment() {
         if (isLoading) return
         isLoading = true
 
-        var query = db.collection("posts")
-            .orderBy(if (currentSort == Sort.LATEST) "createdAt" else "likeCount", Query.Direction.DESCENDING)
-            .limit(PAGE_SIZE.toLong())
+        var query = if (currentSort == Sort.LATEST) {
+            db.collection("posts")
+                .orderBy("createdAt", Query.Direction.DESCENDING)
+        } else {
+            db.collection("posts")
+                .orderBy("likeCount", Query.Direction.DESCENDING)
+                .orderBy("createdAt", Query.Direction.DESCENDING)
+        }.limit(PAGE_SIZE.toLong())
 
         if (lastVisible != null) {
             query = query.startAfter(lastVisible!!)

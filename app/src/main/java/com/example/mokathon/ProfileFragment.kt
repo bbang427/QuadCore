@@ -1,9 +1,11 @@
 package com.example.mokathon
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import com.google.firebase.auth.FirebaseAuth
 import coil3.load
@@ -31,6 +33,12 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         val tvProfileEmail: TextView = view.findViewById(R.id.tv_profile_email)
         val tvMyPostsCount: TextView = view.findViewById(R.id.tv_dashboard_first_num)
         val tvLikedPostsCount: TextView = view.findViewById(R.id.tv_dashboard_second_num)
+        val myPostsLayout: ConstraintLayout = view.findViewById(R.id.profile_dashboard_first)
+
+        myPostsLayout.setOnClickListener {
+            val intent = Intent(activity, MyPostsActivity::class.java)
+            startActivity(intent)
+        }
 
         val user = auth.currentUser
         val name = user?.displayName ?: user?.email?.substringBefore("@") ?: "사용자"
