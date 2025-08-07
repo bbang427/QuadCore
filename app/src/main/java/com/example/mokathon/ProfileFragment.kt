@@ -35,8 +35,15 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         val tvLikedPostsCount: TextView = view.findViewById(R.id.tv_dashboard_second_num)
         val myPostsLayout: ConstraintLayout = view.findViewById(R.id.profile_dashboard_first)
 
+        val likedPostsLayout: ConstraintLayout = view.findViewById(R.id.profile_dashboard_second)
+
         myPostsLayout.setOnClickListener {
             val intent = Intent(activity, MyPostsActivity::class.java)
+            startActivity(intent)
+        }
+
+        likedPostsLayout.setOnClickListener {
+            val intent = Intent(activity, LikedPostsActivity::class.java)
             startActivity(intent)
         }
 
