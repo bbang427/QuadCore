@@ -1,6 +1,5 @@
 package com.example.mokathon
 
-import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -13,6 +12,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import java.util.Date
+import android.widget.TextView
 
 class WritePostActivity : AppCompatActivity() {
 
@@ -53,8 +53,10 @@ class WritePostActivity : AppCompatActivity() {
             etTitle.setText(existingPost!!.title)
             etContent.setText(existingPost!!.content)
             btnSubmitPost.text = "수정"
+            findViewById<TextView>(R.id.tv_toolbar_title).text = "게시글 수정"
         } else {
             btnSubmitPost.text = "작성"
+            findViewById<TextView>(R.id.tv_toolbar_title).text = "게시글 작성"
         }
 
         ivBack.setOnClickListener { finish() }

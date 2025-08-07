@@ -66,7 +66,7 @@ class MessageAdapter(private val messages: List<Message>) : RecyclerView.Adapter
                     messageText.setTextColor(ContextCompat.getColor(itemView.context, android.R.color.black))
                     messageText.paint.shader = null
                     profileImage.visibility = View.VISIBLE
-                    params.width = ViewGroup.LayoutParams.MATCH_PARENT
+                    params.width = ViewGroup.LayoutParams.WRAP_CONTENT
                     messageText.layoutParams = params
                 }
             }

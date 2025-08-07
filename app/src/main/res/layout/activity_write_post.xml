@@ -19,6 +19,16 @@
             android:layout_height="wrap_content"
             android:src="@drawable/ic_arrow_back" />
 
+        <TextView
+            android:id="@+id/tv_toolbar_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textColor="@android:color/black"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            tools:text="게시글 작성" />
+
     </androidx.appcompat.widget.Toolbar>
 
     <EditText
