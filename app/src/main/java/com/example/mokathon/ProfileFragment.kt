@@ -12,21 +12,25 @@ import coil3.request.error
 import coil3.request.transformations
 import coil3.transform.CircleCropTransformation
 import com.google.android.material.imageview.ShapeableImageView
-import com.google.firebase.Firebase
-import com.google.firebase.auth.auth
+import com.google.firebase.ktx.Firebase
+
+import com.google.firebase.firestore.ktx.firestore
 
 class ProfileFragment : Fragment(R.layout.fragment_profile) {
 
     private val TAG = "ProfileFragment"
     private lateinit var auth: FirebaseAuth
+    private val db = Firebase.firestore
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        auth = Firebase.auth
+        auth = FirebaseAuth.getInstance()
 
         val tvProfileName: TextView = view.findViewById(R.id.tv_profile_name)
         val tvProfileEmail: TextView = view.findViewById(R.id.tv_profile_email)
+        val tvMyPostsCount: TextView = view.findViewById(R.id.tv_dashboard_first_num)
+        val tvLikedPostsCount: TextView = view.findViewById(R.id.tv_dashboard_second_num)
 
         val user = auth.currentUser
         val name = user?.displayName ?: user?.email?.substringBefore("@") ?: "사용자"
@@ -35,11 +39,39 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         tvProfileName.text = "$name 님"
         tvProfileEmail.text = email
 
+        loadUserPostCounts(tvMyPostsCount, tvLikedPostsCount)
+
         try {
             setupProfileImage(view)
         } catch (e: Exception) {
             Log.e(TAG, "Error setting up profile image", e)
         }
+    }
+
+    private fun loadUserPostCounts(myPostsCountTextView: TextView, likedPostsCountTextView: TextView) {
+        val userId = auth.currentUser?.uid ?: return
+
+        // 내가 쓴 글 수 가져오기
+        db.collection("posts")
+            .whereEqualTo("authorId", userId)
+            .get()
+            .addOnSuccessListener { documents ->
+                myPostsCountTextView.text = documents.size().toString()
+            }
+            .addOnFailureListener { exception ->
+                Log.w(TAG, "Error getting documents: ", exception)
+            }
+
+        // 공감한 글 수 가져오기
+        db.collection("posts")
+            .whereArrayContains("likers", userId)
+            .get()
+            .addOnSuccessListener { documents ->
+                likedPostsCountTextView.text = documents.size().toString()
+            }
+            .addOnFailureListener { exception ->
+                Log.w(TAG, "Error getting documents: ", exception)
+            }
     }
 
     private fun setupProfileImage(view: View) {

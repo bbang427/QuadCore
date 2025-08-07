@@ -52,6 +52,10 @@ android {
 }
 
 dependencies {
+    // Firebase BOM은 다른 Firebase 라이브러리들보다 먼저 선언
+    implementation(platform("com.google.firebase:firebase-bom:33.13.0"))
+    implementation(platform("org.jetbrains.kotlin:kotlin-bom:1.8.0"))
+
     // AndroidX & UI libraries
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
@@ -62,23 +66,20 @@ dependencies {
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
 
     // Firebase libraries
-    implementation(platform("com.google.firebase:firebase-bom:33.13.0")) // 최신 버전으로 업데이트
     implementation("com.google.firebase:firebase-firestore-ktx")
-    implementation("com.google.firebase:firebase-auth")
+    implementation("com.google.firebase:firebase-auth-ktx") // Kotlin KTX 버전 사용
     implementation("com.google.firebase:firebase-analytics")
-    implementation("com.google.firebase:firebase-database:21.0.0")
+    implementation("com.google.firebase:firebase-database")
     implementation("com.google.firebase:firebase-functions-ktx")
 
     // Google Sign-in & Authentication
     implementation("androidx.credentials:credentials:1.5.0")
-    implementation("androidx.credentials:credentials-play-services-auth:1.3.0")
-    implementation("com.google.android.libraries.identity.googleid:googleid:1.1.1")
-    implementation("androidx.credentials:credentials-play-services-auth:1.0.0-alpha01")
+    implementation("androidx.credentials:credentials-play-services-auth:1.3.0") // 최신 버전만 남김
     implementation("com.google.android.gms:play-services-auth:21.2.0")
+    implementation("com.google.android.libraries.identity.googleid:googleid:1.1.1")
 
-    // Image loading (Coil)
-    implementation("io.coil-kt.coil3:coil-compose:3.3.0")
-    implementation("io.coil-kt.coil3:coil-network-okhttp:3.3.0")
+    // Image loading (Coil 3 - Android 전용)
+    implementation("io.coil-kt.coil3:coil-android:3.3.0")
 
     // Unit & Instrumentation tests
     testImplementation(libs.junit)
@@ -88,6 +89,6 @@ dependencies {
     implementation("com.google.ai.client.generativeai:generativeai:0.5.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
 
-    // Lotti
+    // Lottie
     implementation("com.airbnb.android:lottie:6.6.7")
 }
