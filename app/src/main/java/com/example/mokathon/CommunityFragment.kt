@@ -6,6 +6,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -16,7 +18,7 @@ import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 
 class CommunityFragment : Fragment() {
 
@@ -26,6 +28,15 @@ class CommunityFragment : Fragment() {
     private var postList = mutableListOf<Post>()
     private lateinit var postAdapter: PostAdapter
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
+    private lateinit var tvSortLatest: TextView
+    private lateinit var tvSortLikes: TextView
+
+    private var currentSort = Sort.LATEST // 현재 정렬 상태
+
+    enum class Sort {
+        LATEST,
+        LIKES
+    }
 
     // 페이지네이션을 위한 변수들
     private var lastVisible: DocumentSnapshot? = null
@@ -143,6 +154,45 @@ class CommunityFragment : Fragment() {
             val intent = Intent(activity, WritePostActivity::class.java)
             startActivity(intent)
         }
+
+        // 정렬 버튼 초기화 및 리스너 설정
+        tvSortLatest = view.findViewById(R.id.tv_sort_latest)
+        tvSortLikes = view.findViewById(R.id.tv_sort_likes)
+
+        tvSortLatest.setOnClickListener {
+            currentSort = Sort.LATEST
+            updateSortButtons()
+            resetAndFetchPosts()
+        }
+
+        tvSortLikes.setOnClickListener {
+            currentSort = Sort.LIKES
+            updateSortButtons()
+            resetAndFetchPosts()
+        }
+
+        updateSortButtons()
+    }
+
+    private fun updateSortButtons() {
+        val context = requireContext() // 안전하게 Context를 가져옵니다.
+
+        when (currentSort) {
+            Sort.LATEST -> {
+                tvSortLatest.setTextColor(ContextCompat.getColor(context, R.color.black))
+                tvSortLatest.typeface = ResourcesCompat.getFont(context, R.font.pretendard_gov_semibold)
+
+                tvSortLikes.setTextColor(ContextCompat.getColor(context, R.color.gray))
+                tvSortLikes.typeface = ResourcesCompat.getFont(context, R.font.pretendard_gov_medium)
+            }
+            Sort.LIKES -> {
+                tvSortLatest.setTextColor(ContextCompat.getColor(context, R.color.gray))
+                tvSortLatest.typeface = ResourcesCompat.getFont(context, R.font.pretendard_gov_medium)
+
+                tvSortLikes.setTextColor(ContextCompat.getColor(context, R.color.black))
+                tvSortLikes.typeface = ResourcesCompat.getFont(context, R.font.pretendard_gov_semibold)
+            }
+        }
     }
 
     override fun onResume() {
@@ -180,7 +230,7 @@ class CommunityFragment : Fragment() {
         isLoading = true
 
         var query = db.collection("posts")
-            .orderBy("createdAt", Query.Direction.DESCENDING)
+            .orderBy(if (currentSort == Sort.LATEST) "createdAt" else "likeCount", Query.Direction.DESCENDING)
             .limit(PAGE_SIZE.toLong())
 
         if (lastVisible != null) {

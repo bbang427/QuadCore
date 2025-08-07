@@ -42,6 +42,36 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.053" />
 
+    <LinearLayout
+        android:id="@+id/ll_sort_buttons"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/guideline_text_greeting_h"
+        app:layout_constraintBottom_toBottomOf="@id/guideline_text_greeting_h_end"
+        android:layout_marginEnd="16dp">
+
+        <TextView
+            android:id="@+id/tv_sort_latest"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="최신순"
+            android:textSize="16sp"
+            android:textColor="@color/gray"
+            android:fontFamily="@font/pretendard_gov_semibold"
+            android:layout_marginEnd="8dp"/>
+
+        <TextView
+            android:id="@+id/tv_sort_likes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textColor="@color/gray"
+            android:fontFamily="@font/pretendard_gov_semibold"
+            android:text="공감순"/>
+    </LinearLayout>
+
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipe_refresh_layout"
         android:layout_width="0dp"
