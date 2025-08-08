@@ -9,7 +9,6 @@ plugins {
 android {
     namespace = "com.example.mokathon"
     compileSdk = 35
-
     val localProperties = Properties()
     val localPropertiesFile = rootProject.file("local.properties")
     if (localPropertiesFile.exists()) {
@@ -22,7 +21,6 @@ android {
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
-
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         // local.properties에서 Gemini API 키를 가져와 BuildConfig 필드로 설정
         buildConfigField("String", "GEMINI_API_KEY", "\"${localProperties.getProperty("GEMINI_API_KEY")}\"")
@@ -42,20 +40,20 @@ android {
             )
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
+
     kotlinOptions {
         jvmTarget = "11"
     }
 }
-
 dependencies {
     // Firebase BOM은 다른 Firebase 라이브러리들보다 먼저 선언
     implementation(platform("com.google.firebase:firebase-bom:33.13.0"))
     implementation(platform("org.jetbrains.kotlin:kotlin-bom:1.8.0"))
-
     // AndroidX & UI libraries
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
@@ -65,38 +63,42 @@ dependencies {
     implementation("androidx.cardview:cardview:1.0.0")
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
 
-    // Firebase libraries
+// Firebase libraries
     implementation("com.google.firebase:firebase-firestore-ktx")
     implementation("com.google.firebase:firebase-auth-ktx") // Kotlin KTX 버전 사용
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-database")
     implementation("com.google.firebase:firebase-functions-ktx")
 
-    // Google Sign-in & Authentication
+// Google Sign-in & Authentication
     implementation("androidx.credentials:credentials:1.5.0")
     implementation("androidx.credentials:credentials-play-services-auth:1.3.0") // 최신 버전만 남김
     implementation("com.google.android.gms:play-services-auth:21.2.0")
     implementation("com.google.android.libraries.identity.googleid:googleid:1.1.1")
 
-    // Image loading (Coil 3 - Android 전용)
+// Image loading (Coil 3 - Android 전용)
     implementation("io.coil-kt.coil3:coil-android:3.3.0")
 
-    // Unit & Instrumentation tests
+// Unit & Instrumentation tests
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
 
-    // Gemini API
+// Gemini API
     implementation("com.google.ai.client.generativeai:generativeai:0.5.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
 
-    // Retrofit (네트워크 통신)
+// Retrofit (네트워크 통신)
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-scalars:2.9.0") // HTML/Text 응답을 받기 위해 필요
-    // Jsoup (HTML 파싱)
+
+// Jsoup (HTML 파싱)
     implementation("org.jsoup:jsoup:1.17.2")
-    // Coroutines (비동기 처리)
+
+// Coroutines (비동기 처리)
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2") // lifecycleScope 사용
-    // Lottie
+
+// Lottie
     implementation("com.airbnb.android:lottie:6.6.7")
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
 }
