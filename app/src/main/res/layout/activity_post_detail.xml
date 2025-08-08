@@ -271,7 +271,9 @@
             android:hint="@string/comment_input_hint"
             android:padding="12dp"
             android:background="@drawable/rounded_edittext"
-            android:layout_marginEnd="8dp" />
+            android:layout_marginEnd="8dp"
+            android:autofillHints="comment"
+            android:inputType="textMultiLine" />
 
         <ImageView
             android:id="@+id/iv_send_comment"

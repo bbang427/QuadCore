@@ -1,6 +1,6 @@
 package com.example.mokathon
 
-import com.google.firebase.firestore.Exclude // 이 한 줄을 추가합니다.
+import com.google.firebase.firestore.Exclude
 import java.io.Serializable
 import java.util.Date
 
