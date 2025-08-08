@@ -89,6 +89,14 @@ dependencies {
     implementation("com.google.ai.client.generativeai:generativeai:0.5.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
 
+    // Retrofit (네트워크 통신)
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-scalars:2.9.0") // HTML/Text 응답을 받기 위해 필요
+    // Jsoup (HTML 파싱)
+    implementation("org.jsoup:jsoup:1.17.2")
+    // Coroutines (비동기 처리)
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2") // lifecycleScope 사용
     // Lottie
     implementation("com.airbnb.android:lottie:6.6.7")
 }
