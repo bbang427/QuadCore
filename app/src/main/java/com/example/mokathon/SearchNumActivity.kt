@@ -7,6 +7,9 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import com.example.mokathon.databinding.ActivitySearchNumBinding
 import kotlinx.coroutines.Dispatchers
@@ -26,8 +29,17 @@ class SearchNumActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val windowInsetsController = WindowCompat.getInsetsController(window, window.decorView)
+        windowInsetsController.isAppearanceLightStatusBars = true
         binding = ActivitySearchNumBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            insets
+        }
 
         setupListeners()
     }
@@ -147,15 +159,16 @@ class SearchNumActivity : AppCompatActivity() {
                         val smsCount = jsonObject.getInt("smsCnt")
 
                         // 2. 기존 메시지 아래에 두 줄 띄고 검색 기간 정보를 추가합니다.
-                        val message = "총 ${totalCount}건의 신고 이력이 있습니다.\n(전화: ${voiceCount}건, 문자: ${smsCount}건)\n\n$searchPeriod"
+                        val message = "총 ${totalCount}건의 신고 이력이 있어요.\n(전화: ${voiceCount}건, 문자: ${smsCount}건)"
                         PhoneQueryResult(isDangerous = true, displayMessage = message)
                     } else {
                         // '안전' 케이스
                         val safeMessage = "안심하고 연락해도 괜찮아요."
 
                         // 3. 안전 메시지 아래에도 검색 기간 정보를 추가합니다.
-                        val message = "$safeMessage\n\n$searchPeriod"
-                        PhoneQueryResult(isDangerous = false, displayMessage = message)
+
+                        //val message = "$safeMessage\n\n$searchPeriod"
+                        PhoneQueryResult(isDangerous = false, displayMessage = safeMessage)
                     }
                 }
             } catch (e: Exception) {

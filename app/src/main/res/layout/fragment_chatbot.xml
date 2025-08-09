@@ -9,6 +9,34 @@
     android:background="#F0F0F0"
     tools:context=".ChatbotFragment">
 
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_text_greeting_v"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.05" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_text_greeting_v_end"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.95" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_text_greeting_h"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.015" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_text_greeting_h_end"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.053" />
+
     <TextView
         android:id="@+id/tv_start_message"
         android:layout_width="wrap_content"
@@ -26,27 +54,30 @@
 
     <TextView
         android:id="@+id/tv_greeting"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/chatbot"
+        android:text="챗봇"
         android:fontFamily="@font/pretendard_gov_semibold"
         android:textSize="24sp"
         android:textColor="#010101"
-        android:padding="16dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintStart_toStartOf="@id/guideline_text_greeting_v"
+        app:layout_constraintTop_toTopOf="@id/guideline_text_greeting_h"
+        app:layout_constraintBottom_toBottomOf="@id/guideline_text_greeting_h_end"/>
 
-    <ImageButton
+    <ImageView
         android:id="@+id/button_delete_history"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:src="@drawable/ic_delete"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:layout_marginEnd="16dp"
+        android:clickable="true"
+        android:focusable="true"
+        app:layout_constraintWidth_percent="0.07"
+        app:layout_constraintHeight_percent="0.04"
+        app:layout_constraintTop_toTopOf="@id/guideline_text_greeting_h"
+        app:layout_constraintBottom_toBottomOf="@id/guideline_text_greeting_h_end"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/tv_greeting"
-        app:layout_constraintBottom_toBottomOf="@id/tv_greeting" />
+        app:layout_constraintHorizontal_bias="0.95" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView_chatbot"
@@ -80,8 +111,14 @@
             android:layout_weight="1"
             android:hint="@string/chatbot_msg_input_hint"
             android:inputType="textMultiLine"
+            android:textSize="16sp"
+            android:textColor="#010101"
+            android:textColorHint="#999999"
+            android:letterSpacing="0.02"
+            android:fontFamily="@font/pretendard_gov_medium"
             android:maxLines="4"
-            android:background="@android:color/transparent"
+            android:background="@null"
+            android:textCursorDrawable="@drawable/edittext_cursor"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
             android:paddingTop="8dp"

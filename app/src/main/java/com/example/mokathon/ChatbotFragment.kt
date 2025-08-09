@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -24,7 +25,7 @@ class ChatbotFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var editText: EditText
     private lateinit var sendButton: ImageButton
-    private lateinit var deleteHistoryButton: ImageButton
+    private lateinit var deleteHistoryButton: ImageView
     private lateinit var startMessageTextView: TextView
     private lateinit var messageAdapter: MessageAdapter
     private val messages = mutableListOf<Message>()

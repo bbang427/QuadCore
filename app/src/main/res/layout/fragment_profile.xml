@@ -133,7 +133,7 @@
             android:id="@+id/tv_dashboard_first_num"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="8"
+            tools:text="8"
             android:textSize="22sp"
             android:textColor="#010101"
             android:fontFamily="@font/pretendard_gov_medium"
@@ -141,21 +141,21 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintVertical_bias="0.25"/>
+            app:layout_constraintVertical_bias="0.27"/>
 
         <TextView
             android:id="@+id/tv_dashboard_first"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="내가 쓴 글"
-            android:textSize="14sp"
+            android:textSize="13sp"
             android:textColor="#555555"
             android:fontFamily="@font/pretendard_gov_medium"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintVertical_bias="0.8"/>
+            app:layout_constraintVertical_bias="0.77"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -194,7 +194,7 @@
             android:id="@+id/tv_dashboard_second_num"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="17"
+            tools:text="17"
             android:textSize="22sp"
             android:textColor="#010101"
             android:fontFamily="@font/pretendard_gov_medium"
@@ -202,21 +202,21 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintVertical_bias="0.25"/>
+            app:layout_constraintVertical_bias="0.27"/>
 
         <TextView
             android:id="@+id/tv_dashboard_second"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="공감한 글"
-            android:textSize="14sp"
+            android:textSize="13sp"
             android:textColor="#555555"
             android:fontFamily="@font/pretendard_gov_medium"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintVertical_bias="0.8"/>
+            app:layout_constraintVertical_bias="0.77"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -263,21 +263,21 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintVertical_bias="0.25"/>
+            app:layout_constraintVertical_bias="0.27"/>
 
         <TextView
             android:id="@+id/tv_dashboard_third"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="제보 횟수"
-            android:textSize="14sp"
+            android:textSize="13sp"
             android:textColor="#555555"
             android:fontFamily="@font/pretendard_gov_medium"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintVertical_bias="0.8"/>
+            app:layout_constraintVertical_bias="0.77"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

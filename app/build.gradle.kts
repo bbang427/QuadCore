@@ -80,6 +80,7 @@ dependencies {
 
     // Image loading (Coil 3 - Android 전용)
     implementation("io.coil-kt.coil3:coil-android:3.3.0")
+    implementation("io.coil-kt.coil3:coil-network-okhttp:3.3.0")
 
     // Unit & Instrumentation tests
     testImplementation(libs.junit)
@@ -92,11 +93,14 @@ dependencies {
     // Retrofit (네트워크 통신)
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-scalars:2.9.0") // HTML/Text 응답을 받기 위해 필요
+
     // Jsoup (HTML 파싱)
     implementation("org.jsoup:jsoup:1.17.2")
+
     // Coroutines (비동기 처리)
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2") // lifecycleScope 사용
+
     // Lottie
     implementation("com.airbnb.android:lottie:6.6.7")
 }
