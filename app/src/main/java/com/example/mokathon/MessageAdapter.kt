@@ -1,7 +1,6 @@
 package com.example.mokathon
 
-import android.graphics.LinearGradient
-import android.graphics.Shader
+
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
