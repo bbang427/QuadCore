@@ -63,6 +63,7 @@ class SearchNumActivity : AppCompatActivity() {
     }
 
     private fun handleSearch() {
+        // 입력된 전화번호를 가져오는 코드
         val phoneNumber = binding.tvSearch.text.toString().trim()
 
         if (phoneNumber.isBlank()) {
