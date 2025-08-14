@@ -15,6 +15,9 @@ import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class HomeFragment : Fragment(R.layout.fragment_home) {
 
@@ -29,24 +32,45 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     private var isLastPage = false
     private val displaySize = 10
 
-    // ▼▼▼ 캐시 시간 관리 변수 수정 ▼▼▼
+    // ▼▼▼ 날짜 기준 캐시 관리 변수로 수정 ▼▼▼
     private val prefsName = "news_prefs"
-    private val lastFetchTimeKey = "last_fetch_time"
-    private val cacheDurationMillis = 24 * 60 * 60 * 1000L // 1일 (24시간)
-    // ▲▲▲ 캐시 시간 관리 변수 수정 ▲▲▲
+    private val lastUpdateDateKey = "last_update_date"
+    // ▲▲▲ 날짜 기준 캐시 관리 변수로 수정 ▲▲▲
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // --- 기존 코드 (수정 없음) ---
+        // --- Firebase Auth 및 인사말 코드 ---
         auth = Firebase.auth
         val tvGreeting: TextView = view.findViewById(R.id.tv_greeting)
         val user = auth.currentUser
         val name = user?.displayName ?: user?.email?.substringBefore("@") ?: "사용자"
         tvGreeting.text = "안녕하세요, $name 님"
-        // ... (메뉴 버튼 클릭 리스너 코드) ...
-        // ------------------------------
 
+        // --- 메뉴 버튼 클릭 리스너 ---
+        val clFirst = view.findViewById<ConstraintLayout>(R.id.cl_menu_first)
+        val clSecond = view.findViewById<ConstraintLayout>(R.id.cl_menu_second)
+        val clThird = view.findViewById<ConstraintLayout>(R.id.cl_menu_third)
+        val clFourth = view.findViewById<ConstraintLayout>(R.id.cl_menu_fourth)
+
+        clFirst.setOnClickListener {
+            val intent = Intent(requireContext(), UploadActivity::class.java)
+            startActivity(intent)
+        }
+        clSecond.setOnClickListener {
+            val intent = Intent(requireContext(), SearchAccActivity::class.java)
+            startActivity(intent)
+        }
+        clThird.setOnClickListener {
+            val intent = Intent(requireContext(), SearchNumActivity::class.java)
+            startActivity(intent)
+        }
+        clFourth.setOnClickListener {
+            val intent = Intent(requireContext(), ReportActivity::class.java)
+            startActivity(intent)
+        }
+
+        // --- 뉴스 카드 로직 초기화 ---
         viewPagerNews = view.findViewById(R.id.viewpager_news)
         progressBar = view.findViewById(R.id.progressBar)
         viewPagerNews.adapter = newsAdapter
@@ -56,14 +80,22 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     }
 
     private fun initializeNewsFeed() {
-        val lastFetchTime = requireActivity().getSharedPreferences(prefsName, Context.MODE_PRIVATE)
-            .getLong(lastFetchTimeKey, 0)
-        val currentTime = System.currentTimeMillis()
-
-        if ((currentTime - lastFetchTime > cacheDurationMillis) || newsAdapter.currentList.isEmpty()) {
+        // 현재 뉴스 목록이 비어있거나, 날짜가 바뀌었다면 새로고침
+        if (newsAdapter.currentList.isEmpty() || shouldUpdateByDate()) {
             resetAndFetchFirstPage()
         }
     }
+
+    // ▼▼▼ 날짜 비교 로직 함수 ▼▼▼
+    private fun shouldUpdateByDate(): Boolean {
+        val prefs = requireActivity().getSharedPreferences(prefsName, Context.MODE_PRIVATE)
+        val lastUpdateDate = prefs.getString(lastUpdateDateKey, null)
+        val todayDate = SimpleDateFormat("yyyy-MM-dd", Locale.KOREA).format(Date())
+
+        // 마지막으로 저장된 날짜가 오늘 날짜와 다르면 true 반환
+        return lastUpdateDate != todayDate
+    }
+    // ▲▲▲ 날짜 비교 로직 함수 ▲▲▲
 
     private fun resetAndFetchFirstPage() {
         currentPage = 1
@@ -110,8 +142,9 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                         currentList.addAll(newItems)
                         newsAdapter.submitList(currentList)
                     }
+                    // 첫 페이지 로드 성공 시에만 마지막 업데이트 날짜 저장
                     if (page == 1) {
-                        saveLastFetchTimestamp()
+                        saveLastUpdateDate()
                     }
                 } else {
                     Toast.makeText(requireContext(), "뉴스를 가져오는데 실패했습니다.", Toast.LENGTH_SHORT).show()
@@ -126,9 +159,12 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         }
     }
 
-    private fun saveLastFetchTimestamp() {
+    // ▼▼▼ 날짜 저장 함수로 수정 ▼▼▼
+    private fun saveLastUpdateDate() {
         val prefs = requireActivity().getSharedPreferences(prefsName, Context.MODE_PRIVATE).edit()
-        prefs.putLong(lastFetchTimeKey, System.currentTimeMillis())
+        val todayDate = SimpleDateFormat("yyyy-MM-dd", Locale.KOREA).format(Date())
+        prefs.putString(lastUpdateDateKey, todayDate)
         prefs.apply()
     }
+    // ▲▲▲ 날짜 저장 함수로 수정 ▲▲▲
 }
