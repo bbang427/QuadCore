@@ -6,6 +6,12 @@ plugins {
     id("com.google.gms.google-services")
 }
 
+val localProperties = Properties()
+val localPropertiesFile = rootProject.file("local.properties")
+if (localPropertiesFile.exists()) {
+    localProperties.load(localPropertiesFile.inputStream())
+}
+
 android {
     namespace = "com.example.mokathon"
     compileSdk = 35
@@ -26,6 +32,9 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         // local.properties에서 Gemini API 키를 가져와 BuildConfig 필드로 설정
         buildConfigField("String", "GEMINI_API_KEY", "\"${localProperties.getProperty("GEMINI_API_KEY")}\"")
+
+        buildConfigField("String", "NAVER_CLIENT_ID", "\"${localProperties.getProperty("NAVER_CLIENT_ID")}\"")
+        buildConfigField("String", "NAVER_CLIENT_SECRET", "\"${localProperties.getProperty("NAVER_CLIENT_SECRET")}\"")
     }
 
     buildFeatures {
@@ -98,6 +107,7 @@ dependencies {
 
 // Jsoup (HTML 파싱)
     implementation("org.jsoup:jsoup:1.17.2")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
 
 // Coroutines (비동기 처리)
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
@@ -106,4 +116,12 @@ dependencies {
 // Lottie
     implementation("com.airbnb.android:lottie:6.6.7")
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
+
+    //viewPager2
+    implementation("androidx.viewpager2:viewpager2:1.0.0")
+
+    // OkHttp Logging Interceptor (통신 로그 확인용 - 개발에 유용)
+    implementation("com.squareup.okhttp3:logging-interceptor:4.11.0")
+
+    implementation("com.google.android.material:material:1.11.0")
 }

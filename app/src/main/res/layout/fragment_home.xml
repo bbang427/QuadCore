@@ -77,152 +77,28 @@
         app:layout_constraintStart_toStartOf="@id/guideline_text_greeting_v"
         app:layout_constraintVertical_bias="0.02"/>
 
-    <!-- 여기서 부터 다음 주석까지 카드 뉴스. 해당 레이아웃은 단순 배치용이며
-     개발 시 처음부터 새로 시작해야 함 -->
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/iv_temp"
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/viewpager_news"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@drawable/bg_home_news"
-        android:elevation="1dp"
-        android:translationZ="2dp"
         app:layout_constraintWidth_percent="0.9"
         app:layout_constraintHeight_percent="0.4"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_live_news"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintVertical_bias="0.04" >
+        app:layout_constraintVertical_bias="0.04" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/bg_news_indicator"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:background="@drawable/bg_news_indicator"
-            android:elevation="1dp"
-            app:layout_constraintWidth_percent="0.10"
-            app:layout_constraintHeight_percent="0.07"
-            app:layout_constraintStart_toStartOf="@id/iv_news_thumbnail"
-            app:layout_constraintEnd_toEndOf="@id/iv_news_thumbnail"
-            app:layout_constraintTop_toTopOf="@id/iv_news_thumbnail"
-            app:layout_constraintBottom_toBottomOf="@id/iv_news_thumbnail"
-            app:layout_constraintHorizontal_bias="0.96"
-            app:layout_constraintVertical_bias="0.08"
-            >
-
-            <TextView
-                android:id="@+id/tv_news_indicator"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="1 / 5"
-                android:fontFamily="@font/pretendard_gov_medium"
-                android:textColor="#FAF6F5"
-                android:textSize="10sp"
-                app:layout_constraintStart_toStartOf="@id/bg_news_indicator"
-                app:layout_constraintEnd_toEndOf="@id/bg_news_indicator"
-                app:layout_constraintTop_toTopOf="@id/bg_news_indicator"
-                app:layout_constraintBottom_toBottomOf="@id/bg_news_indicator"/>
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <ImageView
-            android:id="@+id/iv_news_thumbnail"
-            android:src="@drawable/temp"
-            android:background="@drawable/bg_news_thumbnail"
-            android:scaleType="centerCrop"
-            android:adjustViewBounds="false"
-            android:clipToOutline="true"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:layout_constraintWidth_percent="0.93"
-            app:layout_constraintHeight_percent="0.5"
-            app:layout_constraintStart_toStartOf="@id/iv_temp"
-            app:layout_constraintEnd_toEndOf="@id/iv_temp"
-            app:layout_constraintTop_toTopOf="@id/iv_temp"
-            app:layout_constraintBottom_toBottomOf="@id/iv_temp"
-            app:layout_constraintVertical_bias="0.09"/>
-
-        <TextView
-            android:id="@+id/tv_news_company"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="TV조선"
-            android:fontFamily="@font/pretendard_gov_medium"
-            android:textColor="#666666"
-            android:textSize="13sp"
-            app:layout_constraintStart_toStartOf="@id/iv_temp"
-            app:layout_constraintEnd_toEndOf="@id/iv_temp"
-            app:layout_constraintTop_toTopOf="@id/iv_temp"
-            app:layout_constraintBottom_toBottomOf="@id/iv_temp"
-            app:layout_constraintVertical_bias="0.63"
-            app:layout_constraintHorizontal_bias="0.05"/>
-
-        <TextView
-            android:id="@+id/tv_news_date"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="08.04"
-            android:fontFamily="@font/pretendard_gov_medium"
-            android:textColor="#666666"
-            android:textSize="13sp"
-            app:layout_constraintStart_toStartOf="@id/iv_temp"
-            app:layout_constraintEnd_toEndOf="@id/iv_temp"
-            app:layout_constraintTop_toTopOf="@id/iv_temp"
-            app:layout_constraintBottom_toBottomOf="@id/iv_temp"
-            app:layout_constraintVertical_bias="0.63"
-            app:layout_constraintHorizontal_bias="0.95"/>
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="[단독] &quot;승객이 보이스피싱범 같다&quot;...5천만 원 피해 막은 택시기사"
-            android:fontFamily="@font/pretendard_gov_medium"
-            android:textColor="#010101"
-            android:textSize="17sp"
-            android:lineSpacingExtra="2dp"
-            app:layout_constraintWidth_percent="0.93"
-            app:layout_constraintStart_toStartOf="@id/iv_temp"
-            app:layout_constraintEnd_toEndOf="@id/iv_temp"
-            app:layout_constraintTop_toTopOf="@id/iv_temp"
-            app:layout_constraintBottom_toBottomOf="@id/iv_temp"
-            app:layout_constraintVertical_bias="0.83"/>
-
-        <TextView
-            android:id="@+id/tv_news_caster"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="허유하 기자"
-            android:fontFamily="@font/pretendard_gov_medium"
-            android:textColor="#666666"
-            android:textSize="13sp"
-            app:layout_constraintStart_toStartOf="@id/iv_temp"
-            app:layout_constraintEnd_toEndOf="@id/iv_temp"
-            app:layout_constraintTop_toTopOf="@id/iv_temp"
-            app:layout_constraintBottom_toBottomOf="@id/iv_temp"
-            app:layout_constraintHorizontal_bias="0.05"
-            app:layout_constraintVertical_bias="0.96"/>
-
-        <TextView
-            android:id="@+id/tv_news_link"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="네이버뉴스 바로가기"
-            android:fontFamily="@font/pretendard_gov_medium"
-            android:textColor="#666666"
-            android:textSize="13sp"
-            android:clickable="true"
-            android:focusable="true"
-            android:foreground="?attr/selectableItemBackground"
-            app:layout_constraintStart_toStartOf="@id/iv_temp"
-            app:layout_constraintEnd_toEndOf="@id/iv_temp"
-            app:layout_constraintTop_toTopOf="@id/iv_temp"
-            app:layout_constraintBottom_toBottomOf="@id/iv_temp"
-            app:layout_constraintHorizontal_bias="0.95"
-            app:layout_constraintVertical_bias="0.96"/>
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-    <!-- 카드 뉴스 끝 -->
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="@id/viewpager_news"
+        app:layout_constraintBottom_toBottomOf="@id/viewpager_news"
+        app:layout_constraintStart_toStartOf="@id/viewpager_news"
+        app:layout_constraintEnd_toEndOf="@id/viewpager_news"
+        tools:visibility="visible" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_menu_first"
@@ -239,7 +115,7 @@
         app:layout_constraintHeight_percent="0.2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@id/guideline_text_greeting_v"
-        app:layout_constraintTop_toBottomOf="@id/iv_temp"
+        app:layout_constraintTop_toBottomOf="@id/viewpager_news"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintVertical_bias="0.1"
         app:layout_constraintHorizontal_bias="0">
@@ -315,7 +191,7 @@
         app:layout_constraintWidth_percent="0.435"
         app:layout_constraintHeight_percent="0.2"
         app:layout_constraintEnd_toStartOf="@id/guideline_text_greeting_v_end"
-        app:layout_constraintTop_toBottomOf="@id/iv_temp"
+        app:layout_constraintTop_toBottomOf="@id/viewpager_news"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintVertical_bias="0.1"
         app:layout_constraintHorizontal_bias="0">
@@ -391,7 +267,7 @@
         app:layout_constraintHeight_percent="0.2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@id/guideline_text_greeting_v"
-        app:layout_constraintTop_toBottomOf="@id/iv_temp"
+        app:layout_constraintTop_toBottomOf="@id/viewpager_news"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintVertical_bias="0.9"
         app:layout_constraintHorizontal_bias="0">
@@ -466,7 +342,7 @@
         app:layout_constraintWidth_percent="0.435"
         app:layout_constraintHeight_percent="0.2"
         app:layout_constraintEnd_toStartOf="@id/guideline_text_greeting_v_end"
-        app:layout_constraintTop_toBottomOf="@id/iv_temp"
+        app:layout_constraintTop_toBottomOf="@id/viewpager_news"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintVertical_bias="0.9">
 
@@ -527,9 +403,4 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>
-
-
