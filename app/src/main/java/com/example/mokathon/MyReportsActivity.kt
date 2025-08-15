@@ -56,6 +56,14 @@ class MyReportsActivity : AppCompatActivity() {
                     report
                 }
                 myReportsAdapter.updateData(reportList)
+
+                if (reportList.isEmpty()) {
+                    binding.recyclerView.visibility = android.view.View.GONE
+                    binding.tvEmptyList.visibility = android.view.View.VISIBLE
+                } else {
+                    binding.recyclerView.visibility = android.view.View.VISIBLE
+                    binding.tvEmptyList.visibility = android.view.View.GONE
+                }
             }
             .addOnFailureListener { exception ->
                 // Handle error
