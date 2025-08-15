@@ -33,6 +33,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         val tvProfileEmail: TextView = view.findViewById(R.id.tv_profile_email)
         val tvMyPostsCount: TextView = view.findViewById(R.id.tv_dashboard_first_num)
         val tvLikedPostsCount: TextView = view.findViewById(R.id.tv_dashboard_second_num)
+        val tvReportCount: TextView = view.findViewById(R.id.tv_dashboard_third_num)
         val myPostsLayout: ConstraintLayout = view.findViewById(R.id.profile_dashboard_first)
 
         val likedPostsLayout: ConstraintLayout = view.findViewById(R.id.profile_dashboard_second)
@@ -54,7 +55,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         tvProfileName.text = "$name 님"
         tvProfileEmail.text = email
 
-        loadUserPostCounts(tvMyPostsCount, tvLikedPostsCount)
+        loadUserDashboardCounts(tvMyPostsCount, tvLikedPostsCount, tvReportCount)
 
         try {
             setupProfileImage(view)
@@ -63,29 +64,45 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         }
     }
 
-    private fun loadUserPostCounts(myPostsCountTextView: TextView, likedPostsCountTextView: TextView) {
+    private fun loadUserDashboardCounts(myPostsCountTextView: TextView, likedPostsCountTextView: TextView, reportCountTextView: TextView) {
         val userId = auth.currentUser?.uid ?: return
 
         // 내가 쓴 글 수 가져오기
         db.collection("posts")
             .whereEqualTo("authorId", userId)
             .get()
-            .addOnSuccessListener { documents ->
-                myPostsCountTextView.text = documents.size().toString()
+            .addOnSuccessListener {
+                myPostsCountTextView.text = it.size().toString()
             }
-            .addOnFailureListener { exception ->
-                Log.w(TAG, "Error getting documents: ", exception)
+            .addOnFailureListener { 
+                Log.w(TAG, "Error getting documents: ", it)
             }
 
         // 공감한 글 수 가져오기
         db.collection("posts")
             .whereArrayContains("likers", userId)
             .get()
-            .addOnSuccessListener { documents ->
-                likedPostsCountTextView.text = documents.size().toString()
+            .addOnSuccessListener {
+                likedPostsCountTextView.text = it.size().toString()
             }
-            .addOnFailureListener { exception ->
-                Log.w(TAG, "Error getting documents: ", exception)
+            .addOnFailureListener { 
+                Log.w(TAG, "Error getting documents: ", it)
+            }
+
+        // 제보 횟수 가져오기
+        db.collection("users").document(userId)
+            .get()
+            .addOnSuccessListener { document ->
+                if (document != null && document.exists()) {
+                    val reportCount = document.getLong("reportCount") ?: 0
+                    reportCountTextView.text = reportCount.toString()
+                } else {
+                    reportCountTextView.text = "0"
+                }
+            }
+            .addOnFailureListener { 
+                Log.w(TAG, "Error getting user document: ", it)
+                reportCountTextView.text = "0"
             }
     }
 

@@ -99,6 +99,18 @@ class ReportActivity : AppCompatActivity() {
             .add(reportData)
             .addOnSuccessListener {
                 Log.d("Firestore", "DocumentSnapshot added with ID: ${it.id}")
+
+                // --- 제보 횟수 업데이트 ---
+                val userRef = db.collection("users").document(userId)
+                val data = hashMapOf("reportCount" to FieldValue.increment(1))
+                userRef.set(data, com.google.firebase.firestore.SetOptions.merge())
+                    .addOnSuccessListener {
+                        Log.d("Firestore", "User report count updated successfully")
+                    }
+                    .addOnFailureListener { e ->
+                        Log.w("Firestore", "Error updating user report count", e)
+                    }
+                // --- 애니메이션 및 UI 업데이트 ---
                 binding.tvSearch.text.clear()
                 binding.checkmarkAnimationView.visibility = View.VISIBLE
                 binding.tvRegisterNoti.visibility = View.VISIBLE
