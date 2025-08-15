@@ -50,6 +50,7 @@
         </activity>
     <activity android:name=".LikedPostsActivity" />
         <activity android:name=".MyPostsActivity" />
+        <activity android:name=".MyReportsActivity" />
     </application>
 
 </manifest>

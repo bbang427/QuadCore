@@ -24,6 +24,10 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
     private lateinit var auth: FirebaseAuth
     private val db = Firebase.firestore
 
+    private lateinit var tvMyPostsCount: TextView
+    private lateinit var tvLikedPostsCount: TextView
+    private lateinit var tvReportCount: TextView
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -31,12 +35,12 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
 
         val tvProfileName: TextView = view.findViewById(R.id.tv_profile_name)
         val tvProfileEmail: TextView = view.findViewById(R.id.tv_profile_email)
-        val tvMyPostsCount: TextView = view.findViewById(R.id.tv_dashboard_first_num)
-        val tvLikedPostsCount: TextView = view.findViewById(R.id.tv_dashboard_second_num)
-        val tvReportCount: TextView = view.findViewById(R.id.tv_dashboard_third_num)
+        tvMyPostsCount = view.findViewById(R.id.tv_dashboard_first_num)
+        tvLikedPostsCount = view.findViewById(R.id.tv_dashboard_second_num)
+        tvReportCount = view.findViewById(R.id.tv_dashboard_third_num)
         val myPostsLayout: ConstraintLayout = view.findViewById(R.id.profile_dashboard_first)
-
         val likedPostsLayout: ConstraintLayout = view.findViewById(R.id.profile_dashboard_second)
+        val reportCountLayout: ConstraintLayout = view.findViewById(R.id.profile_dashboard_third)
 
         myPostsLayout.setOnClickListener {
             val intent = Intent(activity, MyPostsActivity::class.java)
@@ -48,6 +52,11 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
             startActivity(intent)
         }
 
+        reportCountLayout.setOnClickListener {
+            val intent = Intent(activity, MyReportsActivity::class.java)
+            startActivity(intent)
+        }
+
         val user = auth.currentUser
         val name = user?.displayName ?: user?.email?.substringBefore("@") ?: "사용자"
         val email = user?.email ?: "이메일 정보 없음"
@@ -55,13 +64,16 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         tvProfileName.text = "$name 님"
         tvProfileEmail.text = email
 
-        loadUserDashboardCounts(tvMyPostsCount, tvLikedPostsCount, tvReportCount)
-
         try {
             setupProfileImage(view)
         } catch (e: Exception) {
             Log.e(TAG, "Error setting up profile image", e)
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        loadUserDashboardCounts(tvMyPostsCount, tvLikedPostsCount, tvReportCount)
     }
 
     private fun loadUserDashboardCounts(myPostsCountTextView: TextView, likedPostsCountTextView: TextView, reportCountTextView: TextView) {
