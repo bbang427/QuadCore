@@ -1,3 +1,4 @@
+import org.gradle.kotlin.dsl.implementation
 import java.util.Properties
 
 plugins {
@@ -116,6 +117,7 @@ dependencies {
 // Lottie
     implementation("com.airbnb.android:lottie:6.6.7")
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
+    implementation("com.squareup.okhttp3:okhttp-urlconnection:4.10.0")
 
     //viewPager2
     implementation("androidx.viewpager2:viewpager2:1.0.0")
