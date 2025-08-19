@@ -105,6 +105,9 @@ dependencies {
     // Retrofit (네트워크 통신)
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-scalars:2.9.0") // HTML/Text 응답을 받기 위해 필요
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0") // JSON 변환기
+    implementation("com.squareup.okhttp3:logging-interceptor:4.11.0") // 통신 로그 확인용 (선택사항)
+    implementation("com.squareup.okhttp3:okhttp:4.11.0") // toMediaTypeOrNull 함수가 포함된 핵심 라이브러리
 
 // Jsoup (HTML 파싱)
     implementation("org.jsoup:jsoup:1.17.2")

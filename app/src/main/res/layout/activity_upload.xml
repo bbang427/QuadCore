@@ -5,8 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F0F0F0"
-    android:fitsSystemWindows="true"
+    android:background="@android:color/white"
     tools:context=".UploadActivity">
 
     <androidx.constraintlayout.widget.Guideline
@@ -15,21 +14,18 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.05" />
-
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline_text_greeting_v_end"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.95" />
-
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline_text_greeting_h"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.015" />
-
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline_text_greeting_h_end"
         android:layout_width="wrap_content"
@@ -44,18 +40,17 @@
         android:src="@drawable/ic_arrow_back"
         android:clickable="true"
         android:focusable="true"
+        android:contentDescription="뒤로가기"
         app:layout_constraintWidth_percent="0.07"
         app:layout_constraintHeight_percent="0.037"
         app:layout_constraintTop_toTopOf="@id/guideline_text_greeting_h"
         app:layout_constraintBottom_toBottomOf="@id/guideline_text_greeting_h_end"
         app:layout_constraintStart_toStartOf="@id/guideline_text_greeting_v" />
 
-
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="KLUE의 RoBERTa 모델을 통해\n보이스피싱 여부를 분석해드려요"
-        android:fontFamily="@font/pretendard_gov_medium"
         android:textSize="20sp"
         android:textColor="#010101"
         android:lineSpacingExtra="4sp"
@@ -79,50 +74,57 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintVertical_bias="0.4">
 
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/group_initial_upload"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:constraint_referenced_ids="upload_icon, upload_title, upload_description"
+            android:visibility="visible"/>
 
         <ImageView
+            android:id="@+id/upload_icon"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:src="@drawable/ic_uploadfile"
+            android:contentDescription="업로드 아이콘"
             app:layout_constraintWidth_percent="0.25"
             app:layout_constraintHeight_percent="0.25"
-            app:layout_constraintTop_toTopOf="@id/view_upload"
-            app:layout_constraintBottom_toBottomOf="@id/view_upload"
-            app:layout_constraintStart_toStartOf="@id/view_upload"
-            app:layout_constraintEnd_toEndOf="@id/view_upload"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintVertical_bias="0.1" />
 
         <TextView
+            android:id="@+id/upload_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="파일 업로드하기"
-            android:fontFamily="@font/pretendard_gov_medium"
             android:textSize="24sp"
             android:textColor="#010101"
-            app:layout_constraintTop_toTopOf="@id/view_upload"
-            app:layout_constraintBottom_toBottomOf="@id/view_upload"
-            app:layout_constraintStart_toStartOf="@id/view_upload"
-            app:layout_constraintEnd_toEndOf="@id/view_upload"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintVertical_bias="0.37"/>
 
         <TextView
+            android:id="@+id/upload_description"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="한 번에 하나의 파일만 업로드할 수 있어요.\nMP3 또는 M4A 형식만 지원해요."
-            android:fontFamily="@font/pretendard_gov_medium"
             android:textSize="12sp"
             android:textColor="#999999"
             android:gravity="center"
             android:lineSpacingExtra="5sp"
-            app:layout_constraintTop_toTopOf="@id/view_upload"
-            app:layout_constraintBottom_toBottomOf="@id/view_upload"
-            app:layout_constraintStart_toStartOf="@id/view_upload"
-            app:layout_constraintEnd_toEndOf="@id/view_upload"
-            app:layout_constraintVertical_bias="0.55"
-            />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintVertical_bias="0.55" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/view_upload_button"
+            android:id="@+id/uploadButton"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:background="@drawable/bg_upload_button"
@@ -132,39 +134,119 @@
             android:clipToOutline="true"
             app:layout_constraintHeight_percent="0.18"
             app:layout_constraintWidth_percent="0.85"
-            app:layout_constraintTop_toTopOf="@id/view_upload"
-            app:layout_constraintBottom_toBottomOf="@id/view_upload"
-            app:layout_constraintStart_toStartOf="@id/view_upload"
-            app:layout_constraintEnd_toEndOf="@id/view_upload"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintVertical_bias="0.92">
-
             <ImageView
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:src="@drawable/ic_upload_flie_button"
                 app:layout_constraintWidth_percent="0.1"
                 app:layout_constraintHeight_percent="0.5"
-                app:layout_constraintTop_toTopOf="@id/view_upload_button"
-                app:layout_constraintBottom_toBottomOf="@id/view_upload_button"
-                app:layout_constraintStart_toStartOf="@id/view_upload_button"
-                app:layout_constraintEnd_toEndOf="@id/view_upload_button"
-                app:layout_constraintHorizontal_bias="0.25"/>
-
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.25"
+                android:contentDescription="업로드 버튼 아이콘"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="눌러서 업로드"
-                android:fontFamily="@font/pretendard_gov_medium"
                 android:textSize="14sp"
                 android:textColor="#666666"
                 android:gravity="center"
-                app:layout_constraintTop_toTopOf="@id/view_upload_button"
-                app:layout_constraintBottom_toBottomOf="@id/view_upload_button"
-                app:layout_constraintStart_toStartOf="@id/view_upload_button"
-                app:layout_constraintEnd_toEndOf="@id/view_upload_button"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.55" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/fileNameTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="24dp"
+            android:ellipsize="middle"
+            android:singleLine="true"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@id/uploadButton"
+            app:layout_constraintEnd_toEndOf="@id/uploadButton"
+            app:layout_constraintStart_toStartOf="@id/uploadButton"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.6"
+            tools:text="long_file_name_example.m4a" />
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/resultGroup"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:visibility="gone"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/resultCard"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:cardElevation="4dp"
+                app:cardCornerRadius="12dp"
+                app:strokeWidth="0dp"
+                app:layout_constraintWidth_percent="0.9"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="24dp">
+
+                    <ImageView
+                        android:id="@+id/resultIcon"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:layout_gravity="center_horizontal"
+                        tools:src="@drawable/ic_warning"
+                        android:contentDescription="결과 아이콘"/>
+
+                    <TextView
+                        android:id="@+id/resultStatusTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="16dp"
+                        android:textSize="22sp"
+                        android:textStyle="bold"
+                        tools:text="보이스피싱일 가능성이 높습니다."/>
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -172,7 +254,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="이 서비스는 모델의 정확도를 지속적으로 개선하고 있지만, 100%의\n정확도를 보장하지 않아요. 결과는 참조용으로만 사용해 주세요."
-        android:fontFamily="@font/pretendard_gov_medium"
         android:textSize="12sp"
         android:textColor="#999999"
         android:gravity="center"
@@ -183,13 +264,28 @@
         app:layout_constraintEnd_toEndOf="@id/guideline_text_greeting_v_end"
         app:layout_constraintVertical_bias="0.85" />
 
+    <Button
+        android:id="@+id/resetButton"
+        style="@style/Widget.Material3.Button.TextButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="다른 파일 분석하기"
+        android:textSize="16sp"
+        android:visibility="gone"
+        app:layout_constraintWidth_percent="0.9"
+        app:layout_constraintBottom_toTopOf="@id/analyzeButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginBottom="8dp"/>
+
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/btn_checkupload"
+        android:id="@+id/analyzeButton"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@drawable/bg_profile_dashboardbutton"
         android:clickable="true"
         android:focusable="true"
+        android:enabled="false"
         android:foreground="?attr/selectableItemBackground"
         android:clipToOutline="true"
         app:layout_constraintHeight_percent="0.07"
@@ -199,19 +295,16 @@
         app:layout_constraintStart_toStartOf="@id/guideline_text_greeting_v"
         app:layout_constraintEnd_toEndOf="@id/guideline_text_greeting_v_end"
         app:layout_constraintVertical_bias="0.96" >
-
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="분석 결과 확인하기"
-            android:fontFamily="@font/pretendard_gov_medium"
             android:textSize="16sp"
             android:textColor="#FAF6F5"
-            app:layout_constraintTop_toTopOf="@id/btn_checkupload"
-            app:layout_constraintBottom_toBottomOf="@id/btn_checkupload"
-            app:layout_constraintStart_toStartOf="@id/btn_checkupload"
-            app:layout_constraintEnd_toEndOf="@id/btn_checkupload" />
-
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
