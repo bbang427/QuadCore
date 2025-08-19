@@ -3,6 +3,10 @@ package com.example.mokathon
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Color
+import android.media.MediaCodec
+import android.media.MediaExtractor
+import android.media.MediaFormat
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -22,11 +26,10 @@ import androidx.constraintlayout.widget.Group
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.card.MaterialCardView
-import com.google.android.material.progressindicator.LinearProgressIndicator
 import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.OkHttpClient
 import okhttp3.MultipartBody
+import okhttp3.OkHttpClient
 import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Response
@@ -35,8 +38,10 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.Part
-import android.graphics.Color
-
+import java.io.File
+import java.io.FileOutputStream
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 // --- 네트워크 관련 코드 ---
 data class PredictionResult(
@@ -83,9 +88,8 @@ class UploadActivity : AppCompatActivity() {
     private lateinit var fileNameTextView: TextView
     private lateinit var progressBar: ProgressBar
     private lateinit var groupInitialUpload: Group
-    // 새로 추가된 UI 변수들
     private lateinit var resultGroup: ConstraintLayout
-    private lateinit var resultCard: MaterialCardView // ✅ 추가됨
+    private lateinit var resultCard: MaterialCardView
     private lateinit var resultIcon: ImageView
     private lateinit var resultStatusTextView: TextView
     private lateinit var resetButton: Button
@@ -95,7 +99,7 @@ class UploadActivity : AppCompatActivity() {
     private val requestPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
             if (isGranted) {
-                Toast.makeText(this, "권한이 허용되었습니다. 다시 버튼을 눌러주세요.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "권한이 허용되었습니다.", Toast.LENGTH_SHORT).show()
                 openFilePicker()
             } else {
                 Toast.makeText(this, "파일 접근 권한이 거부되었습니다.", Toast.LENGTH_SHORT).show()
@@ -118,7 +122,6 @@ class UploadActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_upload)
 
-        // UI 요소 초기화
         val backBtn = findViewById<ImageView>(R.id.btn_back)
         uploadButton = findViewById(R.id.uploadButton)
         analyzeButton = findViewById(R.id.analyzeButton)
@@ -126,44 +129,63 @@ class UploadActivity : AppCompatActivity() {
         progressBar = findViewById(R.id.progressBar)
         groupInitialUpload = findViewById(R.id.group_initial_upload)
         resultGroup = findViewById(R.id.resultGroup)
-        resultCard = findViewById(R.id.resultCard) // ✅ 추가됨
+        resultCard = findViewById(R.id.resultCard)
         resultIcon = findViewById(R.id.resultIcon)
         resultStatusTextView = findViewById(R.id.resultStatusTextView)
         resetButton = findViewById(R.id.resetButton)
 
-        // 리스너 설정
         backBtn.setOnClickListener { finish() }
+        resetButton.setOnClickListener { showUiState(UiState.INITIAL) }
         uploadButton.setOnClickListener { checkPermissionAndOpenFilePicker() }
+
+        // ✅ [수정됨] 파일 변환 로직이 포함된 클릭 리스너
         analyzeButton.setOnClickListener {
             selectedFileUri?.let { uri ->
-                uploadFileAndAnalyze(uri)
-            } ?: Toast.makeText(this, "분석할 파일을 먼저 선택해주세요.", Toast.LENGTH_SHORT).show()
-        }
-        resetButton.setOnClickListener {
-            showUiState(UiState.INITIAL)
+                lifecycleScope.launch {
+                    // 1. 버튼을 누르는 즉시 UI를 로딩 상태로 변경합니다.
+                    showUiState(UiState.LOADING)
+                    Toast.makeText(this@UploadActivity, "파일 처리 중... 잠시만 기다려주세요.", Toast.LENGTH_SHORT).show()
+
+                    // 2. withContext(Dispatchers.IO)를 사용해 파일 변환/복사 작업을 백그라운드에서 처리합니다.
+                    val fileToUpload: File? = withContext(Dispatchers.IO) {
+                        val fileName = getFileName(uri)
+                        if (fileName.endsWith(".m4a", ignoreCase = true)) {
+                            // M4A 파일이면 WAV로 변환
+                            convertM4aToWav(uri)
+                        } else {
+                            // 다른 파일이면 임시 파일로 복사
+                            File(cacheDir, fileName).also {
+                                contentResolver.openInputStream(uri)?.use { input ->
+                                    it.outputStream().use { output ->
+                                        input.copyTo(output)
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    // 3. 백그라운드 작업이 끝나면, 결과 파일을 서버로 업로드합니다.
+                    if (fileToUpload != null) {
+                        uploadFileAndAnalyze(fileToUpload)
+                    } else {
+                        Toast.makeText(this@UploadActivity, "파일 처리 중 오류가 발생했습니다.", Toast.LENGTH_LONG).show()
+                        showUiState(UiState.FILE_SELECTED) // UI를 이전 상태로 복귀
+                    }
+                }
+            } ?: run {
+                Toast.makeText(this, "분석할 파일을 먼저 선택해주세요.", Toast.LENGTH_SHORT).show()
+            }
         }
 
-        // 초기 상태 설정
         showUiState(UiState.INITIAL)
     }
 
-    // uploadFileAndAnalyze 함수 전체를 이 코드로 교체하세요.
-
-    private fun uploadFileAndAnalyze(uri: Uri) {
-        showUiState(UiState.LOADING)
+    // ✅ [수정됨] 파라미터가 Uri에서 File로 변경됨
+    private fun uploadFileAndAnalyze(file: File) {
         lifecycleScope.launch {
             try {
-                val inputStream = contentResolver.openInputStream(uri)
-                val fileRequestBody = inputStream?.readBytes()?.toRequestBody("audio/*".toMediaTypeOrNull())
-                inputStream?.close()
-
-                if (fileRequestBody == null) {
-                    Toast.makeText(applicationContext, "파일을 읽을 수 없습니다.", Toast.LENGTH_SHORT).show()
-                    showUiState(UiState.FILE_SELECTED)
-                    return@launch
-                }
-
-                val multipartBody = MultipartBody.Part.createFormData("voice_file", getFileName(uri), fileRequestBody)
+                val fileRequestBody = file.readBytes().toRequestBody("audio/*".toMediaTypeOrNull())
+                val multipartBody = MultipartBody.Part.createFormData("voice_file", file.name, fileRequestBody)
                 val response = apiService.uploadAudio(multipartBody)
 
                 if (response.isSuccessful) {
@@ -174,16 +196,15 @@ class UploadActivity : AppCompatActivity() {
 
                         if (isPhishing) {
                             resultIcon.setImageResource(R.drawable.ic_warning)
-                            resultStatusTextView.text = "   보이스피싱일 가능성이\n            높습니다!"
+                            resultStatusTextView.text = "보이스피싱일 확률이 높습니다!"
                             resultStatusTextView.setTextColor(ContextCompat.getColor(this@UploadActivity, android.R.color.holo_red_dark))
                             resultCard.setCardBackgroundColor(Color.parseColor("#FFEADD"))
                         } else {
                             resultIcon.setImageResource(R.drawable.ic_check_circle)
-                            resultStatusTextView.text = "   보이스피싱일 가능성이\n            낮습니다."
+                            resultStatusTextView.text = "보이스피싱일 확률이 낮습니다."
                             resultStatusTextView.setTextColor(ContextCompat.getColor(this@UploadActivity, android.R.color.holo_green_dark))
                             resultCard.setCardBackgroundColor(Color.parseColor("#E0F7FA"))
                         }
-
                     } else {
                         Toast.makeText(this@UploadActivity, "분석 오류: ${serverResponse?.status}", Toast.LENGTH_LONG).show()
                     }
@@ -197,11 +218,11 @@ class UploadActivity : AppCompatActivity() {
                 val toastMessage = "결과는 참조용으로만 사용해 주세요."
                 Toast.makeText(this@UploadActivity, toastMessage, Toast.LENGTH_LONG).show()
                 showUiState(UiState.RESULT)
+                file.delete() // ✅ 작업이 끝난 후 임시 파일 삭제
             }
         }
     }
 
-    // ... (이하 나머지 함수들은 보내주신 코드와 동일하게 유지)
     private fun checkPermissionAndOpenFilePicker() {
         val permission = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             Manifest.permission.READ_MEDIA_AUDIO
@@ -293,5 +314,109 @@ class UploadActivity : AppCompatActivity() {
                 uploadButton.visibility = View.GONE
             }
         }
+    }
+
+    // ✅ [추가됨] M4A를 WAV로 변환하는 함수와 헬퍼 함수들
+    private fun convertM4aToWav(sourceUri: Uri): File? {
+        val tempWavFile = File(cacheDir, "temp_audio_${System.currentTimeMillis()}.wav")
+        return try {
+            val extractor = MediaExtractor()
+            extractor.setDataSource(this, sourceUri, null)
+            val trackIndex = findAudioTrack(extractor)
+            if (trackIndex == -1) return null
+
+            extractor.selectTrack(trackIndex)
+            val format = extractor.getTrackFormat(trackIndex)
+            val mime = format.getString(MediaFormat.KEY_MIME) ?: return null
+            val codec = MediaCodec.createDecoderByType(mime)
+            codec.configure(format, null, null, 0)
+            codec.start()
+
+            val bufferInfo = MediaCodec.BufferInfo()
+            val pcmData = mutableListOf<Byte>()
+            var isEOS = false
+
+            while (!isEOS) {
+                val inputBufferIndex = codec.dequeueInputBuffer(10000)
+                if (inputBufferIndex >= 0) {
+                    val inputBuffer = codec.getInputBuffer(inputBufferIndex)!!
+                    val sampleSize = extractor.readSampleData(inputBuffer, 0)
+                    if (sampleSize < 0) {
+                        codec.queueInputBuffer(inputBufferIndex, 0, 0, 0, MediaCodec.BUFFER_FLAG_END_OF_STREAM)
+                    } else {
+                        codec.queueInputBuffer(inputBufferIndex, 0, sampleSize, extractor.sampleTime, 0)
+                        extractor.advance()
+                    }
+                }
+
+                var outputBufferIndex = codec.dequeueOutputBuffer(bufferInfo, 10000)
+                while (outputBufferIndex >= 0) {
+                    if (bufferInfo.flags and MediaCodec.BUFFER_FLAG_END_OF_STREAM != 0) {
+                        isEOS = true
+                    } else if (bufferInfo.size != 0) {
+                        val outputBuffer = codec.getOutputBuffer(outputBufferIndex)!!
+                        val chunk = ByteArray(bufferInfo.size)
+                        outputBuffer.get(chunk)
+                        outputBuffer.clear()
+                        pcmData.addAll(chunk.toList())
+                    }
+                    codec.releaseOutputBuffer(outputBufferIndex, false)
+                    outputBufferIndex = codec.dequeueOutputBuffer(bufferInfo, 10000)
+                }
+            }
+
+            val pcmByteArray = pcmData.toByteArray()
+            FileOutputStream(tempWavFile).use { out ->
+                val sampleRate = format.getInteger(MediaFormat.KEY_SAMPLE_RATE)
+                val channelCount = format.getInteger(MediaFormat.KEY_CHANNEL_COUNT)
+                writeWavHeader(out, pcmByteArray.size, sampleRate, channelCount)
+                out.write(pcmByteArray)
+            }
+
+            codec.stop()
+            codec.release()
+            extractor.release()
+            tempWavFile
+        } catch (e: Exception) {
+            e.printStackTrace()
+            tempWavFile.delete()
+            null
+        }
+    }
+
+    private fun findAudioTrack(extractor: MediaExtractor): Int {
+        for (i in 0 until extractor.trackCount) {
+            val format = extractor.getTrackFormat(i)
+            val mime = format.getString(MediaFormat.KEY_MIME)
+            if (mime?.startsWith("audio/") == true) {
+                return i
+            }
+        }
+        return -1
+    }
+
+    private fun writeWavHeader(out: FileOutputStream, pcmDataSize: Int, sampleRate: Int, channels: Int) {
+        val header = ByteArray(44)
+        val totalDataLen = pcmDataSize + 36
+        val byteRate = sampleRate * channels * 2 // 16-bit PCM
+
+        header[0] = 'R'.code.toByte(); header[1] = 'I'.code.toByte(); header[2] = 'F'.code.toByte(); header[3] = 'F'.code.toByte()
+        header[4] = (totalDataLen and 0xff).toByte(); header[5] = (totalDataLen shr 8 and 0xff).toByte()
+        header[6] = (totalDataLen shr 16 and 0xff).toByte(); header[7] = (totalDataLen shr 24 and 0xff).toByte()
+        header[8] = 'W'.code.toByte(); header[9] = 'A'.code.toByte(); header[10] = 'V'.code.toByte(); header[11] = 'E'.code.toByte()
+        header[12] = 'f'.code.toByte(); header[13] = 'm'.code.toByte(); header[14] = 't'.code.toByte(); header[15] = ' '.code.toByte()
+        header[16] = 16; header[17] = 0; header[18] = 0; header[19] = 0 // Sub-chunk size
+        header[20] = 1; header[21] = 0 // PCM
+        header[22] = channels.toByte(); header[23] = 0
+        header[24] = (sampleRate and 0xff).toByte(); header[25] = (sampleRate shr 8 and 0xff).toByte()
+        header[26] = (sampleRate shr 16 and 0xff).toByte(); header[27] = (sampleRate shr 24 and 0xff).toByte()
+        header[28] = (byteRate and 0xff).toByte(); header[29] = (byteRate shr 8 and 0xff).toByte()
+        header[30] = (byteRate shr 16 and 0xff).toByte(); header[31] = (byteRate shr 24 and 0xff).toByte()
+        header[32] = (2 * channels).toByte(); header[33] = 0 // block align
+        header[34] = 16; header[35] = 0 // bits per sample
+        header[36] = 'd'.code.toByte(); header[37] = 'a'.code.toByte(); header[38] = 't'.code.toByte(); header[39] = 'a'.code.toByte()
+        header[40] = (pcmDataSize and 0xff).toByte(); header[41] = (pcmDataSize shr 8 and 0xff).toByte()
+        header[42] = (pcmDataSize shr 16 and 0xff).toByte(); header[43] = (pcmDataSize shr 24 and 0xff).toByte()
+        out.write(header, 0, 44)
     }
 }
