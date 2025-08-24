@@ -110,15 +110,11 @@
 
         <TextView
             android:id="@+id/upload_description"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
+            android:textAlignment="center"
             android:lineSpacingExtra="5sp"
-            android:text=
-                "(주의사항)\n한 번에 하나의 파일만 업로드할 수 있습니다.\n
-                MP3, M4A, wav 형식만 지원합니다.\n
-                해당 ai는 금융 관련 대화만을 정확하게 인식합니다.\n
-                일상적인 대화에서는 정확도가 떨어집니다."
+            android:text="(주의사항)\n한 번에 하나의 파일만 업로드할 수 있습니다.\nMP3, M4A, wav 형식만 지원합니다.\n해당 ai는 금융 관련 대화만을 정확하게 인식합니다.\n일상적인 대화에서는 정확도가 떨어집니다."
             android:textColor="#999999"
             android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="parent"
