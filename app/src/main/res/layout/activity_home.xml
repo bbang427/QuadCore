@@ -9,7 +9,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#F0F0F0"
-    android:fitsSystemWindows="true"
     tools:context=".HomeActivity">
 
     <androidx.fragment.app.FragmentContainerView
@@ -37,6 +36,7 @@
         android:background="#FAF6F5"
         app:itemRippleColor="@null"
         app:itemActiveIndicatorStyle="@style/App.Custom.Indicator"
+        app:paddingBottomSystemWindowInsets="false"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"

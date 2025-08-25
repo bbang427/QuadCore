@@ -33,6 +33,14 @@ class HomeActivity : AppCompatActivity() {
             .commit()
 
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_nav)
+
+        // WindowInsets 리스너 설정
+        ViewCompat.setOnApplyWindowInsetsListener(bottomNav) { view, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            view.setPadding(0, 0, 0, 0) // 하단 패딩 제거
+            insets
+        }
+
         bottomNav.setOnItemSelectedListener { item ->
             val frag = when(item.itemId) {
                 R.id.nav_home -> HomeFragment()
