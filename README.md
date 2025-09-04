@@ -2,9 +2,7 @@
 
 ### RoBERTa 모델을 활용한 보이스피싱 탐지 기반의 금융 사기 예방 애플리케이션
 
-### 2025 모바일앱공모전 출품 프로젝트
-
-
+### 2025 모바일앱공모전 출품 프로젝트 
 
 ## 팀원 소개 및 업무 분장
 
@@ -15,6 +13,8 @@
 방승원 : 경북대학교 전자공학부모바일공학전공 22학번 | **실시간 뉴스, 전화번호 및 계좌번호 유효성 조회, 자연어 처리 모델 개발**
 
 윤태준 : 경북대학교 전자공학부모바일공학전공 22학번 | **백엔드(머신러닝 모델, 파일 업로드)**
+
+<img src="https://github.com/bbang427/QuadCore/blob/master/readmepic/%EB%AA%A8%EB%B0%94%EC%9D%BC%EA%B3%B5%ED%95%99%20%EB%A1%9C%EA%B3%A0_w.jpg" width="100" height="100"> <img src="https://github.com/bbang427/QuadCore/blob/master/readmepic/Samsung%20Mobile%20Engineering.png">
 
 ## 개발 환경 및 기술 스택
 
