@@ -56,4 +56,8 @@
  
 ### 와이어프레임
 
+<img src="https://github.com/bbang427/QuadCore/blob/master/readmepic/noogoo_wireframe_landing1.png" width="200" height="400"> <img src="https://github.com/bbang427/QuadCore/blob/master/readmepic/noogoo_wireframe_landing2.png" width="200" height="400"> <img src="https://github.com/bbang427/QuadCore/blob/master/readmepic/noogoo_wireframe_landing3.png" width="200" height="400"> <img src="https://github.com/bbang427/QuadCore/blob/master/readmepic/noogoo_wireframe_landing4.png" width="200" height="400"> <img src="https://github.com/bbang427/QuadCore/blob/master/readmepic/noogoo_wireframe_landing5.png" width="200" height="400"> <img src="https://github.com/bbang427/QuadCore/blob/master/readmepic/noogoo_wireframe_landing6.png" width="200" height="400">
+
+<img src="https://github.com/bbang427/QuadCore/blob/master/readmepic/noogoo_wireframe_home.png" width="200" height="400"> <img src="https://github.com/bbang427/QuadCore/blob/master/readmepic/noogoo_wirefrme_uploadfile.png" width="200" height="400"> <img src="https://github.com/bbang427/QuadCore/blob/master/readmepic/noogoo_wireframe_searchaccountnum.png" width="200" height="400"> <img src="https://github.com/bbang427/QuadCore/blob/master/readmepic/noogoo_wireframe_searchphonenum.png" width="200" height="400"> <img src="https://github.com/bbang427/QuadCore/blob/master/readmepic/noogoo_wireframe_reportnum.png" width="200" height="400"> <img src="https://github.com/bbang427/QuadCore/blob/master/readmepic/noogoo_wireframe_profile.png">
+
 
