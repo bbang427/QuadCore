@@ -4,19 +4,19 @@
 
 ### 2025 모바일앱공모전 출품 프로젝트 
 
-## 팀원 소개 및 업무 분장
+## Team Introduction and Role Assignment
 
-권관우 : 경북대학교 전자공학부모바일공학전공 24학번 | **와이어프레임 기획, 로그인, 홈, 프로필, 자연어 처리 모델 최적화, RAG**
+권관우 Kwanwoo Kwon : 경북대학교 전자공학부모바일공학전공 24학번 | **와이어프레임 기획, 로그인, 홈, 프로필, 자연어 처리 모델 최적화, RAG**
 
-김한서 : 경북대학교 전자공학부모바일공학전공 22학번 | **커뮤니티, 챗봇, 프로필 연동**
+김한서 Hanseo Kim : 경북대학교 전자공학부모바일공학전공 22학번 | **커뮤니티, 챗봇, 프로필 연동**
 
-방승원 : 경북대학교 전자공학부모바일공학전공 22학번 | **실시간 뉴스, 전화번호 및 계좌번호 유효성 조회, 자연어 처리 모델 개발**
+방승원 Seungwon Bang : 경북대학교 전자공학부모바일공학전공 22학번 | **실시간 뉴스, 전화번호 및 계좌번호 유효성 조회, 자연어 처리 모델 개발**
 
-윤태준 : 경북대학교 전자공학부모바일공학전공 22학번 | **백엔드(머신러닝 모델, 파일 업로드)**
+윤태준 Taejun Yoon : 경북대학교 전자공학부모바일공학전공 22학번 | **백엔드(머신러닝 모델, 파일 업로드)**
 
-<img src="https://github.com/bbang427/QuadCore/blob/master/readmepic/%EB%AA%A8%EB%B0%94%EC%9D%BC%EA%B3%B5%ED%95%99%20%EB%A1%9C%EA%B3%A0_w.jpg" width="100" height="100"> <img src="https://github.com/bbang427/QuadCore/blob/master/readmepic/Samsung%20Mobile%20Engineering.png">
+<img src="https://github.com/bbang427/QuadCore/blob/master/readmepic/Mobile%20Logo_white.png" width="100" height="100"> <img src="https://github.com/bbang427/QuadCore/blob/master/readmepic/Samsung%20Mobile%20Engineering.png" width="260" height="100">
 
-## 개발 환경 및 기술 스택
+## Dev Environment and Tech Stack
 
 **Language**
 
@@ -38,9 +38,9 @@
 
 <img src="https://img.shields.io/badge/Notion-%23000000.svg?style=for-the-badge&logo=notion&logoColor=FFFFFF"> <img src="https://img.shields.io/badge/figma-F24E1E?style=for-the-badge&logo=figma&logoColor=FFFFFF"> <img src="https://img.shields.io/badge/gemini-8E75B2?style=for-the-badge&logo=google%20gemini&logoColor=FFFFFF"> <img src="https://img.shields.io/badge/chatGPT-74aa9c?style=for-the-badge&logo=openai&logoColor=FFFFFF">
 
-## 프로젝트 소개
+## About Project
 
-### 서비스 기능
+### Service
 
 + **통화 녹음 기반 보이스피싱 가능성 제시**
     + 통화 녹음 파일을 업로드하면 RoBERTa 모델이 보이스피싱 위험도를 측정하여 제공
@@ -54,11 +54,8 @@
 + **보이스피싱 경험 공유 커뮤니티**
     + Firebase로 구현한 커뮤니티
  
-### 와이어프레임
+### Wireframe
 
 <img src="https://github.com/bbang427/QuadCore/blob/master/readmepic/noogoo_wireframe_landing1.png" width="200" height="400"> <img src="https://github.com/bbang427/QuadCore/blob/master/readmepic/noogoo_wireframe_landing2.png" width="200" height="400"> <img src="https://github.com/bbang427/QuadCore/blob/master/readmepic/noogoo_wireframe_landing3.png" width="200" height="400"> <img src="https://github.com/bbang427/QuadCore/blob/master/readmepic/noogoo_wireframe_landing4.png" width="200" height="400"> <img src="https://github.com/bbang427/QuadCore/blob/master/readmepic/noogoo_wireframe_landing5.png" width="200" height="400"> <img src="https://github.com/bbang427/QuadCore/blob/master/readmepic/noogoo_wireframe_landing6.png" width="200" height="400">
 
 <img src="https://github.com/bbang427/QuadCore/blob/master/readmepic/noogoo_wireframe_home.png" width="200" height="400"> <img src="https://github.com/bbang427/QuadCore/blob/master/readmepic/noogoo_wireframe_uploadfile.png" width="200" height="400"> <img src="https://github.com/bbang427/QuadCore/blob/master/readmepic/noogoo_wireframe_searchaccountnum.png" width="200" height="400"> <img src="https://github.com/bbang427/QuadCore/blob/master/readmepic/noogoo_wireframe_searchphonenum.png" width="200" height="400"> <img src="https://github.com/bbang427/QuadCore/blob/master/readmepic/noogoo_wireframe_reportnum.png" width="200" height="400"> <img src="https://github.com/bbang427/QuadCore/blob/master/readmepic/noogoo_wireframe_community.png" width="200" height="400"> <img src="https://github.com/bbang427/QuadCore/blob/master/readmepic/noogoo_wireframe_chatbot.png" width="200" height="400"> <img src="https://github.com/bbang427/QuadCore/blob/master/readmepic/noogoo_wireframe_profile.png" width="200" height="400">
-
-
-
