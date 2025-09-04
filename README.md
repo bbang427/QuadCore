@@ -54,8 +54,48 @@
 + **보이스피싱 경험 공유 커뮤니티**
     + Firebase로 구현한 커뮤니티
  
+---
+ 
 ### Wireframe
 
 <img src="https://github.com/bbang427/QuadCore/blob/master/readmepic/noogoo_wireframe_landing1.png" width="200" height="400"> <img src="https://github.com/bbang427/QuadCore/blob/master/readmepic/noogoo_wireframe_landing2.png" width="200" height="400"> <img src="https://github.com/bbang427/QuadCore/blob/master/readmepic/noogoo_wireframe_landing3.png" width="200" height="400"> <img src="https://github.com/bbang427/QuadCore/blob/master/readmepic/noogoo_wireframe_landing4.png" width="200" height="400"> <img src="https://github.com/bbang427/QuadCore/blob/master/readmepic/noogoo_wireframe_landing5.png" width="200" height="400"> <img src="https://github.com/bbang427/QuadCore/blob/master/readmepic/noogoo_wireframe_landing6.png" width="200" height="400">
 
 <img src="https://github.com/bbang427/QuadCore/blob/master/readmepic/noogoo_wireframe_home.png" width="200" height="400"> <img src="https://github.com/bbang427/QuadCore/blob/master/readmepic/noogoo_wireframe_uploadfile.png" width="200" height="400"> <img src="https://github.com/bbang427/QuadCore/blob/master/readmepic/noogoo_wireframe_searchaccountnum.png" width="200" height="400"> <img src="https://github.com/bbang427/QuadCore/blob/master/readmepic/noogoo_wireframe_searchphonenum.png" width="200" height="400"> <img src="https://github.com/bbang427/QuadCore/blob/master/readmepic/noogoo_wireframe_reportnum.png" width="200" height="400"> <img src="https://github.com/bbang427/QuadCore/blob/master/readmepic/noogoo_wireframe_community.png" width="200" height="400"> <img src="https://github.com/bbang427/QuadCore/blob/master/readmepic/noogoo_wireframe_chatbot.png" width="200" height="400"> <img src="https://github.com/bbang427/QuadCore/blob/master/readmepic/noogoo_wireframe_profile.png" width="200" height="400">
+
+
+---
+
+### NLP Model
+
+#### Model Used
+
+klue/RoBERTa
+
+#### HyperParameter
+
++ Batch Size : 64
+  
++ Learning Rate : 3e-5
+
++ Epoch : 5
+
+#### Dataset
+
++ Normal Data : AI Hub - [민간 민원 상담 LLM 사전학습 및 Instruction Tuning 데이터](https://www.aihub.or.kr/aihubdata/data/view.do?currMenu=115&topMenu=100&searchKeyword=%EB%AF%BC%EA%B0%84%20%EB%AF%BC%EC%9B%90%20%EC%83%81%EB%8B%B4%20LLM%20%EC%82%AC%EC%A0%84%ED%95%99%EC%8A%B5%20%EB%B0%8F%20Instruction%20Tuning%20%EB%8D%B0%EC%9D%B4%ED%84%B0&aihubDataSe=data&dataSetSn=71844, "AI Hub")
+
++ Anomalous Data : 금융감독원 - 보이스피싱 체험관 [바로 이 목소리](https://www.fss.or.kr/fss/bbs/B0000203/list.do?menuNo=200686, "금융감독원"), [그놈 목소리](https://www.fss.or.kr/fss/bbs/B0000206/list.do?menuNo=200690, "금융감독원")
+
+#### Result
+
+```Markdown
+             precision    recall  f1-score   support
+
+      Normal       0.95      0.97      0.96     11134
+    Phishing       0.97      0.95      0.96     11120
+
+    accuracy                           0.96     22254
+   macro avg       0.96      0.96      0.96     22254
+weighted avg       0.96      0.96      0.96     22254
+```
+
+**© 2025 QuadCore. All Rights Reserved.**
