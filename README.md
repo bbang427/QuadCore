@@ -4,7 +4,7 @@
 
 ### 2025 모바일앱공모전 출품 프로젝트 
 
-## Team Introduction and Role Assignment
+## 🧑‍🤝‍🧑 Team Introduction and Role Assignment
 
 권관우 Kwanwoo Kwon : 경북대학교 전자공학부모바일공학전공 24학번 | **와이어프레임 기획, 로그인, 홈, 프로필, 자연어 처리 모델 최적화, RAG**
 
@@ -16,7 +16,7 @@
 
 <img src="https://github.com/bbang427/QuadCore/blob/master/readmepic/Mobile%20Logo_white.png" width="100" height="100"> <img src="https://github.com/bbang427/QuadCore/blob/master/readmepic/Samsung%20Mobile%20Engineering.png" width="260" height="100">
 
-## Dev Environment and Tech Stack
+## ⌨️ Dev Environment and Tech Stack
 
 **Language**
 
@@ -38,7 +38,7 @@
 
 <img src="https://img.shields.io/badge/Notion-%23000000.svg?style=for-the-badge&logo=notion&logoColor=FFFFFF"> <img src="https://img.shields.io/badge/figma-F24E1E?style=for-the-badge&logo=figma&logoColor=FFFFFF"> <img src="https://img.shields.io/badge/gemini-8E75B2?style=for-the-badge&logo=google%20gemini&logoColor=FFFFFF"> <img src="https://img.shields.io/badge/chatGPT-74aa9c?style=for-the-badge&logo=openai&logoColor=FFFFFF">
 
-## About Project
+## 📢 About Project
 
 ### Service
 
@@ -73,11 +73,11 @@ klue/RoBERTa
 
 #### HyperParameter
 
-+ Batch Size : 64
++ Batch Size : $64$
   
-+ Learning Rate : 3e-5
++ Learning Rate : $3e-5$
 
-+ Epoch : 5
++ Epoch : $5$
 
 #### Dataset
 
