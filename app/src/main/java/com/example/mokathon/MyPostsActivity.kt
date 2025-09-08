@@ -3,8 +3,12 @@ package com.example.mokathon
 import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
@@ -23,6 +27,22 @@ class MyPostsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_my_posts)
+
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+
+        setContentView(R.layout.activity_my_posts)
+
+        // 2) 상태바 아이콘을 검정색으로 (밝은 배경에 적합)
+        val wic = WindowCompat.getInsetsController(window, window.decorView)
+        wic.isAppearanceLightStatusBars = true
+
+        // 3) 안전 영역 패딩 부여 (컨텐츠 루트에 적용)
+        val target: View = findViewById(android.R.id.content) // activity의 컨텐츠 루트
+        ViewCompat.setOnApplyWindowInsetsListener(target) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            insets
+        }
 
         val toolbar: Toolbar = findViewById(R.id.toolbar_my_posts)
         setSupportActionBar(toolbar)

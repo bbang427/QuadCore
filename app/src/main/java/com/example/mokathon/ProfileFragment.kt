@@ -1,10 +1,13 @@
 package com.example.mokathon
 
+import android.content.ActivityNotFoundException
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.TextView
+import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import com.google.firebase.auth.FirebaseAuth
@@ -41,6 +44,8 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         val myPostsLayout: ConstraintLayout = view.findViewById(R.id.profile_dashboard_first)
         val likedPostsLayout: ConstraintLayout = view.findViewById(R.id.profile_dashboard_second)
         val reportCountLayout: ConstraintLayout = view.findViewById(R.id.profile_dashboard_third)
+        val bottomDashboardButton: ConstraintLayout = view.findViewById(R.id.button_dashboard_bottom)
+        val contactLayout: ConstraintLayout = view.findViewById(R.id.profile_settings_4)
 
         myPostsLayout.setOnClickListener {
             val intent = Intent(activity, MyPostsActivity::class.java)
@@ -55,6 +60,37 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         reportCountLayout.setOnClickListener {
             val intent = Intent(activity, MyReportsActivity::class.java)
             startActivity(intent)
+        }
+
+        bottomDashboardButton.setOnClickListener {
+            Toast.makeText(requireContext(), "추후 업데이트로 만나보실 수 있습니다.", Toast.LENGTH_SHORT).show()
+        }
+
+        contactLayout.setOnClickListener {
+            // 이메일 데이터를 담을 Intent를 생성합니다.
+            // ACTION_SENDTO를 사용하면 이메일 앱만 열리도록 할 수 있습니다.
+            val emailIntent = Intent(Intent.ACTION_SENDTO).apply {
+                // 'mailto:' URI 스킴을 사용하여 이메일 클라이언트를 지정합니다.
+                data = Uri.parse("mailto:")
+
+                // 받는 사람 이메일 주소를 배열 형태로 추가합니다.
+                putExtra(Intent.EXTRA_EMAIL, arrayOf("kwanwoo2005@knu.ac.kr"))
+                // 이메일 제목을 추가합니다.
+                //putExtra(Intent.EXTRA_SUBJECT, "여기에 이메일 제목을 입력하세요")
+                // 이메일 본문 내용을 추가합니다.
+                //putExtra(Intent.EXTRA_TEXT, "여기에 기본 이메일 내용을 입력하세요.")
+            }
+
+            // Gmail 앱을 직접 지정하고 싶다면 아래 주석을 해제하세요.
+            emailIntent.setPackage("com.google.android.gm")
+
+            try {
+                // Intent를 실행하여 이메일 앱을 엽니다.
+                startActivity(emailIntent)
+            } catch (e: ActivityNotFoundException) {
+                // 이메일을 처리할 수 있는 앱이 설치되어 있지 않은 경우 사용자에게 알림을 표시합니다.
+                Toast.makeText(requireContext(), "메일을 보낼 수 있는 앱이 설치되어 있지 않습니다.", Toast.LENGTH_SHORT).show()
+            }
         }
 
         val user = auth.currentUser
