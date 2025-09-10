@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:background="#F0F0F0"
     android:fitsSystemWindows="true"
+    android:id="@+id/postdetailactivity"
     tools:context=".PostDetailActivity">
 
     <androidx.appcompat.widget.Toolbar
