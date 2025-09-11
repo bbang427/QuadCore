@@ -98,4 +98,16 @@ klue/RoBERTa
 weighted avg       0.96      0.96      0.96     22254
 ```
 
+---
+
+### RAG
+
+#### Knowledge Base
+
++ 형법, 전기통신금융사기 피해 방지 및 피해금 환급에 관한 특별법, 전자금융거래법
+
++ 보이스피싱 대응을 위한 일상적인 상담 대화
+
+
+
 **© 2025 QuadCore. All Rights Reserved.**
