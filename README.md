@@ -1,4 +1,4 @@
-# 누구 (Noogoo)
+# <img src="https://github.com/bbang427/QuadCore/blob/master/readmepic/FullLogo_Transparent_bufferless.png" width="40" heihgt="40"> 누구 (Noogoo)
 
 ### RoBERTa 모델을 활용한 보이스피싱 탐지 기반의 금융 사기 예방 애플리케이션
 
