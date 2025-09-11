@@ -108,6 +108,6 @@ weighted avg       0.96      0.96      0.96     22254
 
 + 보이스피싱 대응을 위한 일상적인 상담 대화
 
-
+<img src="https://github.com/bbang427/QuadCore/blob/master/readmepic/rag.png" width="700" height="5500">
 
 **© 2025 QuadCore. All Rights Reserved.**
