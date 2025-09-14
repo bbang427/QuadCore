@@ -1,4 +1,4 @@
-# 누구 (Noogoo)
+# <img src="https://github.com/bbang427/QuadCore/blob/master/readmepic/FullLogo_Transparent_bufferless.png" width="40" heihgt="40"> 누구 (Noogoo)
 
 ### RoBERTa 모델을 활용한 보이스피싱 탐지 기반의 금융 사기 예방 애플리케이션
 
@@ -20,7 +20,7 @@
 
 **Language**
 
-<img src="https://img.shields.io/badge/kotlin-7F52FF?style=for-the-badge&logo=kotlin&logoColor=FFFFFF"> <img src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=FFFFFF">
+<img src="https://img.shields.io/badge/kotlin-7F52FF?style=for-the-badge&logo=kotlin&logoColor=FFFFFF"> <img src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=FFFFFF"> <img src="https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E">
 
 **IDE**
 
@@ -97,5 +97,17 @@ klue/RoBERTa
    macro avg       0.96      0.96      0.96     22254
 weighted avg       0.96      0.96      0.96     22254
 ```
+
+---
+
+### RAG
+
+#### Knowledge Base
+
++ 형법, 전기통신금융사기 피해 방지 및 피해금 환급에 관한 특별법, 전자금융거래법
+
++ 보이스피싱 대응을 위한 일상적인 상담 대화
+
+<img src="https://github.com/bbang427/QuadCore/blob/master/readmepic/rag.png" width="700" height="5500">
 
 **© 2025 QuadCore. All Rights Reserved.**
