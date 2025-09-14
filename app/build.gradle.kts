@@ -129,4 +129,6 @@ dependencies {
     implementation("com.squareup.okhttp3:logging-interceptor:4.11.0")
 
     implementation("com.google.android.material:material:1.11.0")
+
+    implementation("androidx.core:core-splashscreen:1.0.1")
 }
