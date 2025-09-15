@@ -4,6 +4,8 @@
 
 ### 2025 모바일앱공모전 출품 프로젝트 
 
+<img src="https://github.com/bbang427/QuadCore/blob/master/readmepic/logo_splash.gif">
+
 ## 🧑‍🤝‍🧑 Team Introduction and Role Assignment
 
 권관우 Kwanwoo Kwon : 경북대학교 전자공학부모바일공학전공 24학번 | **와이어프레임 기획, 로그인, 홈, 프로필, 자연어 처리 모델 최적화, RAG**
