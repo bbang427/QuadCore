@@ -1,5 +1,6 @@
 package com.example.mokathon
 
+import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
@@ -16,6 +17,7 @@ import coil3.request.placeholder
 import coil3.request.error
 import coil3.request.transformations
 import coil3.transform.CircleCropTransformation
+import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import com.google.android.material.imageview.ShapeableImageView
 import com.google.firebase.ktx.Firebase
 
@@ -46,6 +48,9 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         val reportCountLayout: ConstraintLayout = view.findViewById(R.id.profile_dashboard_third)
         val bottomDashboardButton: ConstraintLayout = view.findViewById(R.id.button_dashboard_bottom)
         val contactLayout: ConstraintLayout = view.findViewById(R.id.profile_settings_4)
+        val licenseMenuView: ConstraintLayout = view.findViewById(R.id.profile_settings_1)
+        val privacyButton: ConstraintLayout = view.findViewById(R.id.profile_settings_2)
+        val termButton: ConstraintLayout = view.findViewById(R.id.profile_settings_3)
 
         myPostsLayout.setOnClickListener {
             val intent = Intent(activity, MyPostsActivity::class.java)
@@ -91,6 +96,24 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                 // 이메일을 처리할 수 있는 앱이 설치되어 있지 않은 경우 사용자에게 알림을 표시합니다.
                 Toast.makeText(requireContext(), "메일을 보낼 수 있는 앱이 설치되어 있지 않습니다.", Toast.LENGTH_SHORT).show()
             }
+        }
+
+        licenseMenuView.setOnClickListener {
+            // 라이선스 목록 액티비티를 시작합니다.
+            val intent = Intent(requireContext(), OssLicensesMenuActivity::class.java)
+            startActivity(intent)
+        }
+
+        privacyButton.setOnClickListener {
+            // PrivacyActivity로 전환하는 Intent 생성
+            val intent = Intent(requireContext(), PersonalInfoActivity::class.java)
+            startActivity(intent)
+        }
+
+        termButton.setOnClickListener {
+            // PrivacyActivity로 전환하는 Intent 생성
+            val intent = Intent(requireContext(), TermActivity::class.java)
+            startActivity(intent)
         }
 
         val user = auth.currentUser

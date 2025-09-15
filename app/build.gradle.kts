@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     id("com.google.gms.google-services")
+    id("com.google.android.gms.oss-licenses-plugin")
 }
 
 val localProperties = Properties()
@@ -64,6 +65,7 @@ android {
 }
 
 dependencies {
+    implementation("com.google.android.gms:play-services-oss-licenses:17.3.0")
     // Firebase BOM은 다른 Firebase 라이브러리들보다 먼저 선언
     implementation(platform("com.google.firebase:firebase-bom:33.13.0"))
     implementation(platform("org.jetbrains.kotlin:kotlin-bom:1.8.0"))
